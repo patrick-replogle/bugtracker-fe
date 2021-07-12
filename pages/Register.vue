@@ -1,0 +1,176 @@
+<template>
+  <div class="formContainer">
+    <h2>Register a new account below:</h2>
+    <b-form @submit="onSubmit" @reset="resetForm">
+      <b-form-group label="Email" label-for="email">
+        <b-form-input
+          id="email"
+          v-model="form.email"
+          type="email"
+          placeholder="Enter email"
+          required
+        ></b-form-input>
+      </b-form-group>
+
+      <b-form-group label="Username" label-for="username">
+        <b-form-input
+          id="username"
+          v-model="form.username"
+          type="text"
+          placeholder="Enter username"
+          required
+        ></b-form-input>
+      </b-form-group>
+
+      <b-form-group label="Password" label-for="password">
+        <b-form-input
+          id="password"
+          v-model="form.password"
+          type="password"
+          placeholder="Enter Password"
+          required
+        ></b-form-input>
+      </b-form-group>
+
+      <b-form-group label="First Name" label-for="firstname">
+        <b-form-input
+          id="firstName"
+          v-model="form.firstname"
+          type="text"
+          placeholder="Enter First Name"
+          required
+        ></b-form-input>
+      </b-form-group>
+
+      <b-form-group label="Last Name" label-for="lastname">
+        <b-form-input
+          id="lastname"
+          v-model="form.lastname"
+          type="text"
+          placeholder="Enter lastname"
+          required
+        ></b-form-input>
+      </b-form-group>
+
+      <b-form-group label="Company Name" label-for="company">
+        <b-form-input
+          id="company"
+          v-model="form.company"
+          type="text"
+          placeholder="Enter Company"
+        ></b-form-input>
+
+        <p v-if="errMessage.length">{{ errMessage }}</p>
+
+        <div class="btnContainer">
+          <b-button type="submit" variant="outline-primary">Submit</b-button>
+          <b-button type="reset" variant="outline-danger">Reset</b-button>
+        </div>
+      </b-form-group>
+    </b-form>
+  </div>
+</template>
+
+<script>
+import axios from 'axios';
+
+export default {
+  layout: 'unauthenticated',
+    data() {
+        return {
+            form: {
+                email: '',
+                firstname: '',
+                lastname: '',
+                company: '',
+                username: '',
+                password: '',
+            },
+            errMessage: '',
+        }
+    },
+    methods: {
+        onSubmit(e) {
+            e.preventDefault();
+            this.errMessage = '';
+
+            axios.post(this.$config.baseURL + '/auth/register', this.form)
+                .then(res => {
+                    console.log(res)
+                })
+                .catch(err => {
+                    this.errMessage = err.response.data.detail;
+                })
+
+        },
+        resetForm(e) {
+            e.preventDefault();
+            this.form.email = '';
+            this.form.username = '';
+            this.form.firstname = '';
+            this.form.lastname = '';
+            this.form.password = '';
+            this.form.company = '';
+            this.errMessage = '';
+        }
+    },
+}
+</script>
+
+<style lang="scss" scoped>
+.formContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-size: 1.6rem;
+
+  h2 {
+    margin: 2% 0;
+  }
+  form {
+    width: 80%;
+    max-width: 900px;
+
+    label {
+      font-weight: 600;
+    }
+
+    input {
+      padding: 10px;
+      height: 40px;
+      font-size: 1.6rem;
+    }
+
+    .btnContainer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 2% 0;
+
+      @media (max-width: 600px) {
+        flex-direction: column;
+      }
+
+      button {
+        height: 40px;
+        font-size: 1.8rem;
+        margin: 0 2%;
+        border-radius: 6px;
+        width: 30%;
+        @media (max-width: 600px) {
+          width: 100%;
+          margin: 2% 0;
+        }
+      }
+    }
+    p {
+      color: crimson;
+      font-size: 1.4rem;
+      text-align: center;
+      margin-top: 1%;
+    }
+  }
+}
+</style>
