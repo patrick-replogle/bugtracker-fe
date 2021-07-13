@@ -64,7 +64,7 @@
 
         <div class="btnContainer">
           <b-button type="submit" variant="outline-primary">Submit</b-button>
-          <b-button type="reset" variant="outline-danger">Reset</b-button>
+          <b-button type="reset" variant="outline-primary">Reset</b-button>
         </div>
       </b-form-group>
     </b-form>
@@ -128,10 +128,15 @@ export default {
 
   h2 {
     margin: 2% 0;
+    @media (max-width: 600px) {
+      margin: 4% 0;
+      font-size: 1.6rem;
+      max-width: 80%;
+    }
   }
   form {
     width: 80%;
-    max-width: 900px;
+    max-width: 800px;
 
     label {
       font-weight: 600;
@@ -161,7 +166,7 @@ export default {
         width: 30%;
         @media (max-width: 600px) {
           width: 100%;
-          margin: 2% 0;
+          margin: 4% 0;
         }
       }
     }

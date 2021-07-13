@@ -1,20 +1,32 @@
 <template>
-  <div class="content">
+  <div id="container">
     <div>
       <AuthenticatedNav />
       <Nuxt />
     </div>
+    <Footer />
   </div>
 </template>
 
 <script>
 import AuthenticatedNav from '../components/AuthenticatedNav.vue'
+import Footer from '../components/Footer.vue'
 
 export default {
   components: {
-      AuthenticatedNav
+      AuthenticatedNav,
+      Footer
   }
 };
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+#container {
+  position: relative;
+  min-height: 100vh;
+
+  div {
+    padding-bottom: 70px;
+  }
+}
+</style>

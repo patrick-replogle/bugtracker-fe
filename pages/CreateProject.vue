@@ -13,13 +13,13 @@
       </b-form-group>
 
       <b-form-group label="Description" label-for="description">
-        <b-form-input
+        <b-form-textarea
           id="description"
           v-model="form.description"
           type="text"
           placeholder="Enter project description"
           required
-        ></b-form-input>
+        ></b-form-textarea>
       </b-form-group>
 
       <b-form-group label="Repository URL" label-for="respositoryurl">
@@ -36,7 +36,7 @@
           id="websiteurl"
           v-model="form.websiteurl"
           type="text"
-          placeholder="Enter delpoyed url"
+          placeholder="Enter deployed url"
         ></b-form-input>
       </b-form-group>
 
@@ -53,7 +53,7 @@
 
         <div class="btnContainer">
           <b-button type="submit" variant="outline-primary">Submit</b-button>
-          <b-button type="reset" variant="outline-danger">Reset</b-button>
+          <b-button type="reset" variant="outline-primary">Reset</b-button>
         </div>
       </b-form-group>
     </b-form>
@@ -114,10 +114,15 @@ export default {
 
   h2 {
     margin: 2% 0;
+    @media (max-width: 600px) {
+      margin: 4% 0;
+      font-size: 1.6rem;
+      max-width: 80%;
+    }
   }
   form {
     width: 80%;
-    max-width: 900px;
+    max-width: 800px;
 
     label {
       font-weight: 600;
@@ -126,6 +131,12 @@ export default {
     input {
       padding: 10px;
       height: 40px;
+      font-size: 1.6rem;
+    }
+
+    textarea {
+            padding: 10px;
+      height: 100px;
       font-size: 1.6rem;
     }
 
@@ -147,7 +158,7 @@ export default {
         width: 30%;
         @media (max-width: 600px) {
           width: 100%;
-          margin: 2% 0;
+          margin: 4% 0;
         }
       }
     }
