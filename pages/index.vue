@@ -4,7 +4,7 @@
       <b-row no-gutters>
         <b-col md="6">
           <b-card-img
-            src="https://picsum.photos/400/400/?image=20"
+            src="~/assets/img/software-development.jpg"
             alt="Image"
             class="rounded-0"
           ></b-card-img>
@@ -14,7 +14,10 @@
             <h1 class="title">Bugtracker</h1>
             <b-card-text class="text">
               Bugtracker is a free web app designed to help you keep of track
-              ongoing bugs, errors or issues in your software.
+              ongoing bugs, errors or issues in your software. Create new
+              projects and add users to your team. Generate and assign tickets
+              to teammates based on priority level. We help you keep track of
+              the details, so you can focus on the big picture.
             </b-card-text>
             <p>Create a new account or login below.</p>
             <b-button
@@ -59,11 +62,17 @@ export default {
 
   .title {
     font-size: 4rem;
+    @media (max-width: 600px) {
+      font-size: 2.5rem;
+    }
   }
 
   .text {
     font-size: 1.6rem;
-    margin-top: 5%;
+    margin: 3.5% 0;
+    @media (max-width: 600px) {
+      font-size: 1.4rem;
+    }
   }
 
   p {
@@ -74,6 +83,11 @@ export default {
     width: 30%;
     font-size: 1.6rem;
     margin: 1%;
+
+    @media (max-width: 600px) {
+      font-size: 1.4rem;
+      width: 45%;
+    }
   }
 }
 </style>
