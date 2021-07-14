@@ -1,13 +1,12 @@
 <template>
   <div class="formContainer">
-    <h2>Login Below:</h2>
+    <h2>Login Below</h2>
     <b-form @submit="onSubmit" @reset="resetForm">
       <b-form-group label="Username" label-for="username">
         <b-form-input
           id="username"
           v-model="form.username"
           type="text"
-          placeholder="Enter username"
           required
         ></b-form-input>
       </b-form-group>
@@ -17,7 +16,6 @@
           id="password"
           v-model="form.password"
           type="password"
-          placeholder="Enter Password"
           required
         ></b-form-input>
       </b-form-group>

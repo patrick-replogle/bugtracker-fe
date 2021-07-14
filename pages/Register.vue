@@ -1,13 +1,12 @@
 <template>
   <div class="formContainer">
-    <h2>Register a new account below:</h2>
+    <h2>Register a new account below</h2>
     <b-form @submit="onSubmit" @reset="resetForm">
       <b-form-group label="Email" label-for="email">
         <b-form-input
           id="email"
           v-model="form.email"
           type="email"
-          placeholder="Enter email"
           required
         ></b-form-input>
       </b-form-group>
@@ -17,7 +16,6 @@
           id="username"
           v-model="form.username"
           type="text"
-          placeholder="Enter username"
           required
         ></b-form-input>
       </b-form-group>
@@ -27,7 +25,6 @@
           id="password"
           v-model="form.password"
           type="password"
-          placeholder="Enter Password"
           required
         ></b-form-input>
       </b-form-group>
@@ -37,7 +34,6 @@
           id="firstName"
           v-model="form.firstname"
           type="text"
-          placeholder="Enter First Name"
           required
         ></b-form-input>
       </b-form-group>
@@ -47,7 +43,6 @@
           id="lastname"
           v-model="form.lastname"
           type="text"
-          placeholder="Enter lastname"
           required
         ></b-form-input>
       </b-form-group>
@@ -57,7 +52,6 @@
           id="company"
           v-model="form.company"
           type="text"
-          placeholder="Enter Company"
         ></b-form-input>
 
         <p v-if="errMessage.length">{{ errMessage }}</p>

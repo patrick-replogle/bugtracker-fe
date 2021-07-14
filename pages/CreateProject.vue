@@ -1,13 +1,12 @@
 <template>
   <div class="formContainer">
-    <h2>Create a new project below:</h2>
+    <h2>Create a new project</h2>
     <b-form @submit="onSubmit" @reset="resetForm">
       <b-form-group label="Name" label-for="name">
         <b-form-input
           id="name"
           v-model="form.name"
           type="text"
-          placeholder="Enter project name"
           required
         ></b-form-input>
       </b-form-group>
@@ -17,7 +16,6 @@
           id="description"
           v-model="form.description"
           type="text"
-          placeholder="Enter project description"
           required
         ></b-form-textarea>
       </b-form-group>
@@ -27,7 +25,6 @@
           id="repositoryurl"
           v-model="form.repositoryurl"
           type="text"
-          placeholder="Enter repository url"
         ></b-form-input>
       </b-form-group>
 
@@ -36,7 +33,6 @@
           id="websiteurl"
           v-model="form.websiteurl"
           type="text"
-          placeholder="Enter deployed url"
         ></b-form-input>
       </b-form-group>
 
@@ -45,7 +41,6 @@
           id="imageurl"
           v-model="form.imageurl"
           type="text"
-          placeholder="Enter image url"
         ></b-form-input>
       </b-form-group>
 

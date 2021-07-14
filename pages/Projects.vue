@@ -5,18 +5,25 @@
   <div v-else class="container">
     <b-card
       v-for="project in user.allProjects"
-      img-src="https://picsum.photos/600/300/?image=25"
+      img-src="~/assets/img/placeholder.jpg"
       img-alt="Image"
       img-top
       tag="article"
       class="card"
+      :key="project.projectid"
     >
+      <img />
       <h3>{{project.name}}</h3>
       <b-card-text>
         {{project.description}}
       </b-card-text>
 
-      <b-button href="#" variant="primary">Open Project</b-button>
+      <b-button
+        href="#"
+        variant="primary"
+        @click="routeToProject(project.projectid)"
+        >Open Project</b-button
+      >
     </b-card>
   </div>
 </template>
@@ -36,6 +43,16 @@ export default {
             return this.$store.state.user.isLoading;
         },
     },
+    methods: {
+        routeToProject(id) {
+            this.$router.push({
+                name: 'project-id',
+                params: {
+                    id
+                }
+            })
+        }
+    }
 }
 </script>
 
