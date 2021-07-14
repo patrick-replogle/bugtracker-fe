@@ -56,7 +56,7 @@ export default {
   justify-content: center;
 
   .card {
-    width: 80%;
+    width: 95%;
     margin-top: 5vh;
   }
 
@@ -80,13 +80,12 @@ export default {
   }
 
   button {
-    width: 30%;
+    width: 46%;
     font-size: 1.6rem;
     margin: 1%;
 
     @media (max-width: 600px) {
       font-size: 1.4rem;
-      width: 45%;
     }
   }
 }

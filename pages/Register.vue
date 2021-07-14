@@ -96,7 +96,7 @@ export default {
 
             axios.post(this.$config.baseURL + '/auth/register', this.form)
                 .then(res => {
-                    console.log(res)
+                    this.$router.push('/login');
                 })
                 .catch(err => {
                     this.errMessage = err.response.data.detail;

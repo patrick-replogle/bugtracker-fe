@@ -58,7 +58,8 @@ export default {
                     }
                 })
                 .then(res => {
-                    console.log(res.data.access_token)
+                    window.localStorage.setItem('token', res.data.access_token);
+                    this.$router.push('/projects');
                 })
                 .catch(err => {
                     this.errMessage = err.response.data.detail;

@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import { axiosWithAuth } from '../util/axiosWithAuth'
 
 export default {
     data() {
@@ -81,12 +81,28 @@ export default {
             e.preventDefault();
             this.errMessage = '';
 
-            axios.post(this.$config.baseURL + '/projects/project', this.form)
+            if (!this.user) return;
+
+            this.form.projectOwner = {
+              userid: this.user.userid,
+              username: this.user.username,
+              email: this.user.email,
+              firstname: this.user.firstname,
+              lastname: this.user.lastname,
+              company: this.user.company
+
+            }
+
+            axiosWithAuth().post(this.$config.baseURL + '/projects/project', this.form )
                 .then(res => {
-                    console.log(res)
+                  console.log(res.data)
+                  this.$store.commit('user/addProject', res.data);
+                  this.$router.push('/projects');
+                    
                 })
                 .catch(err => {
-                    this.errMessage = err.response.data.detail;
+                  console.dir(err);
+                  this.errMessage = 'There was an error processing your request. Please try again.';
                 })
 
         },
@@ -99,6 +115,14 @@ export default {
             this.form.imageurl = '';
             this.errMessage = '';
         }
+    },
+    computed: {
+      user() {
+          return this.$store.state.user.user;
+      },
+      isLoading() {
+          return this.$store.state.user.isLoading;
+      }
     },
 }
 </script>

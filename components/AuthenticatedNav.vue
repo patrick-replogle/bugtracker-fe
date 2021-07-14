@@ -90,7 +90,14 @@
 
 <script>
 export default {
-
+    computed: {
+        user() {
+            return this.$store.state.user.user;
+        },
+    },
+    async created() {
+        await this.$store.dispatch('user/getInitialUserData');
+    }
 }
 </script>
 
@@ -104,6 +111,10 @@ export default {
   display: flex;
   justify-content: space-between;
   width: 100vw;
+
+  @media (max-width: 600px) {
+    padding: 10px 20px;
+  }
 
   .left {
     width: 40%;
@@ -123,6 +134,10 @@ export default {
 
     h3 {
       font-size: 2.5rem;
+
+      @media (max-width: 600px) {
+        font-size: 2rem;
+      }
     }
   }
 
@@ -135,6 +150,10 @@ export default {
       color: white;
       text-decoration: none;
       font-size: 1.6rem;
+
+      @media (max-width: 600px) {
+        font-size: 1.6rem;
+      }
     }
   }
 }
