@@ -1,13 +1,29 @@
 <template>
   <div class="container">
     <div v-if="project" class="card" id="modal">
-      <ProjectDetails :project="project" :toggleModal="toggleModal" />
+      <ProjectDetails
+        :project="project"
+        :toggleModal="toggleModal"
+        :toggleDeleteProjectModal="toggleDeleteProjectModal"
+      />
     </div>
     <div v-if="project" class="tabContainer">
       <ProjectTabs :project="project" />
 
       <b-modal ref="modal" title="Create a ticket" hide-footer>
         <AddTicketForm :toggleModal="toggleModal" :project="project" />
+      </b-modal>
+
+      <b-modal ref="delete-modal" hide-footer class="deleteModal">
+        <p>Are you sure?</p>
+        <b-button
+          variant="outline-primary"
+          @click="deleteProject(project.projectid)"
+          >Delete
+        </b-button>
+        <b-button variant="outline-primary" @click="toggleDeleteProjectModal"
+          >Close
+        </b-button>
       </b-modal>
     </div>
   </div>
@@ -51,6 +67,12 @@ export default {
       toggleModal() {
         this.$refs['modal'].toggle('#modal');
       },
+      toggleDeleteProjectModal() {
+        this.$refs['delete-modal'].toggle('#delete-modal');
+      },
+      deleteProject(id) {
+        this.$store.dispatch('user/deleteProject', id);
+      },
   },
 }
 </script>
@@ -68,5 +90,13 @@ export default {
   .tabContainer {
     width: 100%;
   }
+}
+
+p {
+  font-size: 1.6rem;
+}
+button {
+  font-size: 1.6rem;
+  margin-right: 1%;
 }
 </style>

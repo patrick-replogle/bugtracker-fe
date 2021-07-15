@@ -21,6 +21,7 @@
       target="_blank"
       >Deployed URL
     </a>
+
     <div>
       <b-button variant="primary" @click="toggleModal">Create Ticket</b-button>
       <b-button variant="primary">Add User</b-button>
@@ -32,7 +33,7 @@
       >
       <b-button
         variant="primary"
-        @click="deleteProject(project.projectid)"
+        @click="toggleDeleteProjectModal"
         v-if="user && Number(project.projectOwner.userid) === Number(user.userid)"
         >Delete</b-button
       >
@@ -42,16 +43,13 @@
 
 <script>
 export default {
-    props: ['project', 'toggleModal'],
+    props: ['project', 'toggleModal', 'toggleDeleteProjectModal'],
     computed: {
       user() {
           return this.$store.state.user.user;
       },
     },
     methods: {
-      deleteProject(id) {
-          this.$store.dispatch('user/deleteProject', id);
-      },
       editProject(payload) {
           this.$store.commit('user/toggleProjectEdit', payload);
           this.$router.push('/createproject');

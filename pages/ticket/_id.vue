@@ -5,7 +5,9 @@
       :toggleEditModal="toggleEditModal"
       :toggleCommentModal="toggleCommentModal"
       :setTicket="setTicket"
+      :toggleDeleteTicketModal="toggleDeleteTicketModal"
     />
+
     <b-modal ref="edit-modal" title="Edit Ticket" hide-footer>
       <EditTicketForm
         :toggleEditModal="toggleEditModal"
@@ -13,6 +15,7 @@
         :setTicket="setTicket"
       />
     </b-modal>
+
     <b-modal ref="comment-modal" title="Add Comment" hide-footer>
       <AddCommentForm
         :toggleCommentModal="toggleCommentModal"
@@ -23,6 +26,16 @@
         :commentToEdit="commentToEdit"
         :updateComments="updateComments"
       />
+    </b-modal>
+
+    <b-modal ref="delete-modal" hide-footer class="deleteModal">
+      <p>Are you sure?</p>
+      <b-button variant="outline-primary" @click="deleteTicket(ticket.ticketid)"
+        >Delete
+      </b-button>
+      <b-button variant="outline-primary" @click="toggleDeleteTicketModal"
+        >Close
+      </b-button>
     </b-modal>
 
     <TicketComments
@@ -47,7 +60,7 @@ export default {
         TicketDetails,
         EditTicketForm,
         AddCommentForm,
-        TicketComments
+        TicketComments,
     },
 
     data() {
@@ -79,6 +92,9 @@ export default {
         },
         toggleCommentModal() {
             this.$refs['comment-modal'].toggle('#comment-modal');
+        },
+        toggleDeleteTicketModal() {
+            this.$refs['delete-modal'].toggle('#delete-modal');
         },
         setTicket(changes) {
             this.ticket = {
@@ -114,7 +130,16 @@ export default {
                 console.dir(err)
                 checkErrorStatus(err, this.$router);
             }
-        }
+        },
+        async deleteTicket() {
+            try {
+                await axiosWithAuth().delete(this.$config.baseURL + '/tickets/ticket/' + this.$route.params.id);
+                this.$router.push('/project/' + this.ticket.project.projectid);
+            } catch (err) {
+                console.dir(err);
+                checkErrorStatus(err, this.$router);
+            }
+        },
   }
 }
 </script>
@@ -125,5 +150,14 @@ export default {
   justify-content: center;
   flex-direction: column;
   margin-top: 3%;
+}
+
+p {
+  font-size: 1.6rem;
+}
+
+button {
+  font-size: 1.6rem;
+  margin-right: 1%;
 }
 </style>

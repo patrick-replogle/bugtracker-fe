@@ -8,18 +8,18 @@
     <p v-bind:style="priorityStyle" class="priorityP">
       {{map[ticket.priority]}} Priority
     </p>
-    <p style="font-size: 1.2rem;">
-      Created by {{ticket.ticketOwner.firstname.slice(0, 1).toUpperCase()}}.
-      {{ticket.ticketOwner.lastname}} on
-      {{generateDateString(ticket.createddate)}}
-    </p>
+
+    <nuxt-link :to="`/project/${ticket.project.projectid}`">
+      Full Project Details
+    </nuxt-link>
 
     <p v-if="!ticket.assignedUser" style="font-weight: bold;">
       No one is currently assigned to this ticket
     </p>
+
     <p v-if="ticket.assignedUser" style="font-weight: bold;">
-      {{ticket.assignedUser.firstname}} {{ticket.assignedUser.lastname}} is
-      assigned to this ticket
+      {{ticket.assignedUser.firstname.toUpperCase()}}
+      {{ticket.assignedUser.lastname.toUpperCase()}} is assigned this ticket
     </p>
 
     <div>
@@ -27,10 +27,18 @@
         >Add Comment</b-button
       >
       <b-button variant="primary" @click="toggleEditModal">Edit</b-button>
-      <b-button variant="primary" @click="deleteTicket">Delete</b-button>
       <b-button variant="primary" @click="assignUser">Assign Yourself</b-button>
-      <b-button variant="primary" @click="markCompleted"
-        >Mark Completed</b-button
+      <b-button
+        v-if="!ticket.completed"
+        variant="primary"
+        @click="markCompleted"
+        >Mark Completed
+      </b-button>
+      <b-button v-if="ticket.completed" variant="primary" @click="reopenTicket"
+        >Reopen Ticket
+      </b-button>
+      <b-button variant="primary" @click="toggleDeleteTicketModal"
+        >Delete</b-button
       >
     </div>
   </b-card>
@@ -41,7 +49,7 @@ import { axiosWithAuth } from '../util/axiosWithAuth.js';
 import { generateDateString, generateMinimumUserFields, checkErrorStatus } from '../util/functions';
 
 export default {
-    props: ['ticket', 'toggleEditModal', 'toggleCommentModal', 'setTicket'],
+    props: ['ticket', 'toggleEditModal', 'toggleCommentModal', 'setTicket', 'toggleDeleteTicketModal'],
     data() {
       return {
         generateDateString,
@@ -54,17 +62,7 @@ export default {
         },
     },
     methods: {
-        async deleteTicket() {
-          try {
-              await axiosWithAuth().delete(this.$config.baseURL + '/tickets/ticket/' + this.$route.params.id);
-              this.$router.push('/project/' + this.ticket.project.projectid);
-          } catch (err) {
-              console.dir(err);
-              checkErrorStatus(err, this.$router);
-          }
-        },
         async assignUser() {
-
           const assignedUser = { assignedUser: generateMinimumUserFields(this.$store.state.user.user)};
           try {
             await axiosWithAuth().patch(this.$config.baseURL + '/tickets/ticket/' + this.$route.params.id, assignedUser);
@@ -83,6 +81,19 @@ export default {
             console.dir(err);
             checkErrorStatus(err, this.$router);
           }
+        },
+        async reopenTicket() {
+          const body = { completed: false };
+          try {
+            await axiosWithAuth().patch(this.$config.baseURL + '/tickets/ticket/' + this.$route.params.id, body);
+            this.setTicket(body);
+          } catch (err) {
+            console.dir(err);
+            checkErrorStatus(err, this.$router);
+          }
+        },
+        pushToProject(id) {
+          this.$router.push(`/project/${id}`);
         }
     },
     computed: {
@@ -100,19 +111,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.card,
+h2,
+h3,
+p {
+  margin: 1.5% 0;
+}
 .card {
-  h2,
-  h3,
-  p {
-    margin: 1.5% 0;
+  display: flex;
+  flex-direction: column;
 
-    @media (max-width: 600px) {
-      margin: 3% 0;
-    }
+  @media (max-width: 600px) {
+    margin: 3% 0;
+  }
+
+  a {
+    font-size: 1.6rem;
+    display: block;
   }
 
   .completedText {
-    background-color: #28a745;
+    background-color: #6c757d;
     color: white;
     padding: 10px;
     margin-top: -10px;

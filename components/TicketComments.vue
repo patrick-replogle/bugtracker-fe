@@ -5,12 +5,14 @@
       class="comment"
       :key="comment.commentid"
     >
-      <p>{{comment.comment}}</p>
+      <p style="font-size: 1.4rem; font-weight: bold;">
+        <b-avatar class="mr-3"></b-avatar>
+        {{comment.commentOwner.firstname}}
+        {{comment.commentOwner.lastname}}
+      </p>
+      <p style="font-size: 1.6rem;">{{comment.comment}}</p>
       <p style="font-size: 1.2rem;">
-        Created by
-        {{comment.commentOwner.firstname.slice(0, 1).toUpperCase()}}.
-        {{comment.commentOwner.lastname}} on
-        {{generateDateString(ticket.createddate)}}
+        Last updated {{generateDateString(ticket.lastmodifieddate)}}
       </p>
       <div class="btnContainer">
         <b-button variant="outline-primary" @click="toggleCommentEdit(comment)"
@@ -45,7 +47,7 @@ export default {
   flex-direction: column;
   padding: 10px;
   border: 1px solid rgba(0, 0, 0, 0.125);
-  margin: 1% 0;
+  margin: 0.5% 0;
   border-radius: 6px;
   font-size: 1.6rem;
 

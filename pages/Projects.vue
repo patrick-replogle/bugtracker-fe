@@ -41,7 +41,6 @@ export default {
     },
     computed: {
         user() {
-          console.log(this.$store.state.user.user)
             return this.$store.state.user.user;
         },
         isLoading() {
@@ -82,7 +81,7 @@ export default {
     }
 
     h3 {
-      font-size: 2rem;
+      font-size: 1.8rem;
       font-weight: bold;
     }
 
