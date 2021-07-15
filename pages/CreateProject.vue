@@ -7,6 +7,7 @@
           id="name"
           v-model="form.name"
           type="text"
+          :maxlength="max"
           required
         ></b-form-input>
       </b-form-group>
@@ -16,6 +17,7 @@
           id="description"
           v-model="form.description"
           type="text"
+          :maxlength="max"
           required
         ></b-form-textarea>
       </b-form-group>
@@ -24,6 +26,7 @@
         <b-form-input
           id="repositoryurl"
           v-model="form.repositoryurl"
+          :maxlength="max"
           type="text"
         ></b-form-input>
       </b-form-group>
@@ -32,6 +35,7 @@
         <b-form-input
           id="websiteurl"
           v-model="form.websiteurl"
+          :maxlength="max"
           type="text"
         ></b-form-input>
       </b-form-group>
@@ -40,6 +44,7 @@
         <b-form-input
           id="imageurl"
           v-model="form.imageurl"
+          :maxlength="max"
           type="text"
         ></b-form-input>
       </b-form-group>
@@ -52,11 +57,12 @@
         </div>
       </b-form-group>
     </b-form>
-    {{projectToEdit}}
   </div>
 </template>
 
 <script>
+import { generateMinimumUserFields } from '../util/functions';
+
 export default {
     data() {
         return {
@@ -68,6 +74,7 @@ export default {
                 imageurl: '',
             },
             errMessage: '',
+            max: 255
         }
     },
     methods: {
@@ -77,15 +84,7 @@ export default {
 
             if (!this.user) return;
 
-            this.form.projectOwner = {
-              userid: this.user.userid,
-              username: this.user.username,
-              email: this.user.email,
-              firstname: this.user.firstname,
-              lastname: this.user.lastname,
-              company: this.user.company
-
-            }
+            this.form.projectOwner = generateMinimumUserFields(this.user);
 
             if (!this.isEditing) {
               this.$store.dispatch('user/createProject', this.form);
@@ -102,7 +101,7 @@ export default {
             this.form.websiteurl = '';
             this.form.imageurl = '';
             this.errMessage = '';
-            this.$store.commit('user/cancelEdit')
+            this.$store.commit('user/cancelEdit');
         }
     },
     computed: {
@@ -128,6 +127,9 @@ export default {
         this.form.imageurl = this.projectToEdit.imageurl;
       }
     },
+    beforeDestroy() {
+      this.$store.commit('user/cancelEdit');
+    }
 }
 </script>
 

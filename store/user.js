@@ -5,6 +5,7 @@ export const state = () => ({
     isEditing: false,
     projectToEdit: null,
     isLoading: false,
+    ticketToEdit: null
 });
 
 export const mutations = {
@@ -49,13 +50,17 @@ export const mutations = {
             ownedProjects: state.user.ownedProjects.filter(p => p.projectid !== payload)
         }
     },
-    toggleEdit: (state, payload) => {
+    toggleProjectEdit: (state, payload) => {
         state.isEditing = true;
         state.projectToEdit = payload;
     },
     cancelEdit: (state) => {
         state.isEditing = false;
         state.projectToEdit = null;
+    },
+    toggleTicketEdit: (state, payload) => {
+        state.isEditing = true;
+        state.ticketToEdit = payload;
     }
 };
 
@@ -111,6 +116,7 @@ export const actions = {
         } catch(err) {
             console.dir(err);
         }
-    }
+    },
+
 };
   

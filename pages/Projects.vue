@@ -12,11 +12,9 @@
       class="card"
       :key="project.projectid"
     >
-      <img />
-      <h3>{{project.name}}</h3>
-      <b-card-text>
-        {{project.description}}
-      </b-card-text>
+      <h3>
+        {{project.name.length <= 28 ? project.name : project.name.slice(0, 28)}}
+      </h3>
 
       <b-button
         href="#"
@@ -70,6 +68,18 @@ export default {
     @media (max-width: 600px) {
       width: 95%;
       margin: 1% 0;
+    }
+
+    h3 {
+      font-size: 2rem;
+    }
+
+    p {
+      font-size: 1.6rem;
+    }
+
+    button {
+      font-size: 4rem;
     }
   }
 }
