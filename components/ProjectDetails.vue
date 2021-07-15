@@ -98,8 +98,9 @@ export default {
     }
 
     @media (max-width: 600px) {
-      width: 30%;
+      width: 100%;
       font-size: 1.2rem;
+      margin: 2% 0;
     }
   }
 }

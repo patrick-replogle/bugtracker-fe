@@ -16,10 +16,9 @@
         {{project.name.length <= 28 ? project.name : project.name.slice(0, 28)}}
       </h3>
 
-      <b-button
-        href="#"
-        variant="primary"
-        @click="routeToProject(project.projectid)"
+      <p>Modified on {{generateDateString(project.lastmodifieddate)}}</p>
+
+      <b-button variant="primary" @click="routeToProject(project.projectid)"
         >Open Project</b-button
       >
     </b-card>
@@ -28,13 +27,20 @@
 
 <script>
 import LoadingSpinner  from '../components/LoadingSpinner.vue';
+import { generateDateString } from '../util/functions'
 
 export default {
     components: {
         LoadingSpinner
     },
+    data() {
+      return {
+        generateDateString
+      }
+    },
     computed: {
         user() {
+          console.log(this.$store.state.user.user)
             return this.$store.state.user.user;
         },
         isLoading() {
@@ -65,21 +71,26 @@ export default {
     width: 30%;
     margin: 1%;
 
+    @media (max-width: 800px) {
+      width: 45%;
+    }
+
     @media (max-width: 600px) {
-      width: 95%;
+      width: 98%;
       margin: 1% 0;
     }
 
     h3 {
       font-size: 2rem;
+      font-weight: bold;
     }
 
     p {
-      font-size: 1.6rem;
+      font-size: 1.4rem;
     }
 
     button {
-      font-size: 4rem;
+      font-size: 1.4rem;
     }
   }
 }

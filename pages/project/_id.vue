@@ -2,6 +2,8 @@
   <div class="container">
     <div v-if="project" class="card" id="modal">
       <ProjectDetails :project="project" :toggleModal="toggleModal" />
+    </div>
+    <div v-if="project" class="tabContainer">
       <ProjectTabs :project="project" />
 
       <b-modal ref="modal" title="Create a ticket" hide-footer>
@@ -13,6 +15,7 @@
 
 <script>
 import { axiosWithAuth } from '../../util/axiosWithAuth.js';
+import { checkErrorStatus } from '../../util/functions';
 import ProjectDetails from '../../components/ProjectDetails.vue';
 import ProjectTabs from '../../components/ProjectTabs.vue';
 import AddTicketForm from '../../components/AddTicketForm.vue'
@@ -33,7 +36,10 @@ export default {
   created() {
       axiosWithAuth().get(this.$config.baseURL + '/projects/project/' + this.$route.params.id)
           .then(res => this.project = res.data)
-          .catch(err => console.dir(err))
+          .catch(err => {
+            console.dir(err);
+            checkErrorStatus(err, this.$router);
+          })
   },
   computed: {
       user() {
@@ -43,7 +49,7 @@ export default {
   methods: {
       toggleModal() {
         this.$refs['modal'].toggle('#modal');
-      }
+      },
   },
 }
 </script>
@@ -53,10 +59,12 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   width: 100%;
   margin-top: 2%;
 
-  .card {
+  .card,
+  .tabContainer {
     width: 100%;
   }
 }

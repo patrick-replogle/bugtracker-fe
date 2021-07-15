@@ -1,4 +1,5 @@
 import { axiosWithAuth } from "../util/axiosWithAuth";
+import { checkErrorStatus } from '../util/functions';
 
 export const state = () => ({
     user: null,
@@ -78,7 +79,7 @@ export const actions = {
         } catch(err) {
             console.log(err);
             commit('endRequest');
-            this.$router.push('/login');
+            checkErrorStatus(err, this.$router);
         }
     },
 
@@ -94,6 +95,7 @@ export const actions = {
         } catch(err) {
             console.log(err);
             commit('endRequest');
+            checkErrorStatus(err, this.$router);
         }
     },
 
@@ -105,6 +107,7 @@ export const actions = {
             this.$router.push('/project/' + response.data.projectid);
         } catch (err) {
             console.dir(err);
+            checkErrorStatus(err, this.$router);
         }
     },
 
@@ -115,6 +118,7 @@ export const actions = {
             this.$router.push('/projects');
         } catch(err) {
             console.dir(err);
+            checkErrorStatus(err, this.$router);
         }
     },
 };

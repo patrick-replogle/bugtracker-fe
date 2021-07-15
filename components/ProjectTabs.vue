@@ -10,7 +10,28 @@
           <p>
             {{ticket.title.length <= 110 ? ticket.title : ticket.title.slice(0, 110) + '...'}}
           </p>
-          <p style="font-weight: bold;">{{map[ticket.priority]}} Priority</p>
+          <p style="font-weight: bold;">
+            {{map[ticket.priority]}} Priority
+            <svg
+              v-if="ticket.completed"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              aria-hidden="true"
+              focusable="false"
+              width="2em"
+              height="2em"
+              style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"
+              preserveAspectRatio="xMidYMid meet"
+              viewBox="0 0 12 12"
+            >
+              <g fill="none">
+                <path
+                  d="M1 6a5 5 0 1 1 10 0A5 5 0 0 1 1 6zm7.354-.896a.5.5 0 1 0-.708-.708L5.5 6.543L4.354 5.396a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l2.5-2.5z"
+                  fill="#28a745"
+                />
+              </g>
+            </svg>
+          </p>
           <p style="font-size: 1.2rem;">
             Created by
             {{ticket.ticketOwner.firstname.slice(0, 1).toUpperCase()}}.
@@ -45,7 +66,7 @@
     <b-tab title="Users" class="tab">
       <b-list-group>
         <b-list-group-item
-          class="d-flex align-items-center"
+          class="ticket"
           v-for="user in project.users"
           :key="user.userid"
         >
@@ -68,13 +89,24 @@ export default {
     data() {
       return {
         map: { 'LOW': 'Low', 'MEDIUM': 'Medium', 'HIGH': 'High'},
-        generateDateString
+        generateDateString,
       }
     },
     computed: {
         user() {
             return this.$store.state.user.user;
         },
+        textDecoration(ticket) {
+          if (ticket.completed) {
+            return {
+              'text-decoration': 'line-through'
+            };
+          } else {
+            return {
+              'text-decoration': 'none'
+            };
+          }
+        }
     },
     methods: {
         routeToTicket(id) {
@@ -85,6 +117,15 @@ export default {
                 }
             })
         },
+        progress(ticket) {
+          if (ticket.completed) {
+            return 'Completed';
+          } else if (!ticket.completed && !ticket.assignedUser) {
+            return 'Not started';
+          } else {
+            return 'In progress';
+          }
+        }
     },
 }
 </script>
@@ -92,11 +133,15 @@ export default {
 <style lang="scss" scoped>
 .tabs {
   font-size: 1.6rem;
+  margin-top: 1.5%;
 
   .tab {
     .ticket {
       display: flex;
       justify-content: space-between;
+      border: 1px solid rgba(0, 0, 0, 0.125);
+      margin: 1% 0;
+      border-radius: 6px;
 
       @media (max-width: 600px) {
         flex-direction: column;

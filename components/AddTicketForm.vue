@@ -56,7 +56,7 @@
 
 <script>
 import { axiosWithAuth } from '../util/axiosWithAuth.js';
-import { generateMinimumUserFields, generateMinimumProjectFields } from '../util/functions';
+import { generateMinimumUserFields, generateMinimumProjectFields, checkErrorStatus } from '../util/functions';
 
 export default {
     props: ['toggleModal', 'project'],
@@ -92,6 +92,7 @@ export default {
         this.project.tickets.push(response.data);
       } catch (err) {
         this.errMessage = 'There was an error. Please try again.'
+        checkErrorStatus(err, this.$router);
       }
     },
     resetForm(e) {

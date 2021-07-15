@@ -32,4 +32,13 @@ export function generateDateString(inputDate) {
     const dateArr = String(new Date(inputDate)).split(' ');
   
     return `${dateArr[1]} ${dateArr[2]} ${dateArr[3]}`;
-  }
+}
+
+export function checkErrorStatus(error, cb) {
+    if (error.response.data.error === "invalid_token") {
+        if (process.server) {
+            localStorage.clear();
+        }
+        cb.push('/login')
+    }
+}

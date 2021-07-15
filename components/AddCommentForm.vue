@@ -21,7 +21,7 @@
 
 <script>
 import { axiosWithAuth } from '../util/axiosWithAuth.js';
-import { generateMinimumUserFields, generateMinimumTicketFields } from '../util/functions'
+import { generateMinimumUserFields, generateMinimumTicketFields, checkErrorStatus } from '../util/functions'
 
 export default {
     props: ['ticket', 'toggleCommentModal', 'addComment', 'cancelEdit', 'isEditing', 'commentToEdit', 'updateComments'],
@@ -29,7 +29,8 @@ export default {
         return {
             form: {
                 comment: ''
-            }
+            },
+            errMessage: ''
         }
     },
     methods: {
@@ -56,6 +57,7 @@ export default {
             } catch (err) {
                 console.dir(err);
                 this.errMessage = 'There was an error. Please try again.'
+                checkErrorStatus(err, this.$router);
             }
         },
         resetForm(e) {

@@ -35,7 +35,7 @@
 
 <script>
 import { axiosWithAuth } from '../../util/axiosWithAuth.js';
-import { generateDateString } from '../../util/functions';
+import { generateDateString, checkErrorStatus } from '../../util/functions';
 import TicketDetails from '../../components/TicketDetails.vue';
 import EditTicketForm from '../../components/EditTicketForm.vue';
 import AddCommentForm from '../../components/AddCommentForm.vue';
@@ -62,7 +62,10 @@ export default {
     created() {
         axiosWithAuth().get(this.$config.baseURL + '/tickets/ticket/' + this.$route.params.id)
             .then(res => this.ticket = res.data)
-            .catch(err => console.dir(err))
+            .catch(err => {
+                console.dir(err)
+                checkErrorStatus(err, this.$router);
+            })
     },
     computed: {
         user() {
@@ -108,6 +111,7 @@ export default {
                 this.ticket.comments = this.ticket.comments.filter(c => c.commentid !== id);
             } catch (err) {
                 console.dir(err)
+                checkErrorStatus(err, this.$router);
             }
         }
   }

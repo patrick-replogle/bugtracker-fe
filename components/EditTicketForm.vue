@@ -56,6 +56,7 @@
 
 <script>
 import { axiosWithAuth } from '../util/axiosWithAuth.js';
+import { checkErrorStatus } from '../util/functions';
 
 export default {
     props: ['toggleEditModal', 'ticket', 'setTicket'],
@@ -88,6 +89,7 @@ export default {
         this.toggleEditModal();
       } catch (err) {
         this.errMessage = 'There was an error. Please try again.'
+        checkErrorStatus(err, this.$router);
       }
     },
     resetForm(e) {

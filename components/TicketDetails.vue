@@ -1,5 +1,8 @@
 <template>
   <b-card class="card">
+    <p v-if="ticket.completed" class="completedText">
+      This Ticket Has Been Completed
+    </p>
     <h2>{{ticket.title}}</h2>
     <h3>{{ticket.description}}</h3>
     <p v-bind:style="priorityStyle" class="priorityP">
@@ -14,7 +17,7 @@
     <p v-if="!ticket.assignedUser" style="font-weight: bold;">
       No one is currently assigned to this ticket
     </p>
-    <p style="font-weight: bold;">
+    <p v-if="ticket.assignedUser" style="font-weight: bold;">
       {{ticket.assignedUser.firstname}} {{ticket.assignedUser.lastname}} is
       assigned to this ticket
     </p>
@@ -26,14 +29,16 @@
       <b-button variant="primary" @click="toggleEditModal">Edit</b-button>
       <b-button variant="primary" @click="deleteTicket">Delete</b-button>
       <b-button variant="primary" @click="assignUser">Assign Yourself</b-button>
-      <b-button variant="primary">Mark Completed</b-button>
+      <b-button variant="primary" @click="markCompleted"
+        >Mark Completed</b-button
+      >
     </div>
   </b-card>
 </template>
 
 <script>
 import { axiosWithAuth } from '../util/axiosWithAuth.js';
-import { generateDateString, generateMinimumUserFields} from '../util/functions';
+import { generateDateString, generateMinimumUserFields, checkErrorStatus } from '../util/functions';
 
 export default {
     props: ['ticket', 'toggleEditModal', 'toggleCommentModal', 'setTicket'],
@@ -55,6 +60,7 @@ export default {
               this.$router.push('/project/' + this.ticket.project.projectid);
           } catch (err) {
               console.dir(err);
+              checkErrorStatus(err, this.$router);
           }
         },
         async assignUser() {
@@ -65,6 +71,17 @@ export default {
             this.setTicket(assignedUser);
           } catch (err) {
             console.dir(err);
+            checkErrorStatus(err, this.$router);
+          }
+        },
+        async markCompleted() {
+          const body = { completed: true };
+          try {
+            await axiosWithAuth().patch(this.$config.baseURL + '/tickets/ticket/' + this.$route.params.id, body);
+            this.setTicket(body);
+          } catch (err) {
+            console.dir(err);
+            checkErrorStatus(err, this.$router);
           }
         }
     },
@@ -92,6 +109,15 @@ export default {
     @media (max-width: 600px) {
       margin: 3% 0;
     }
+  }
+
+  .completedText {
+    background-color: #28a745;
+    color: white;
+    padding: 10px;
+    margin-top: -10px;
+    text-align: center;
+    font-size: 1.6rem;
   }
 
   h2 {

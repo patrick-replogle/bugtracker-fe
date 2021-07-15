@@ -1,6 +1,6 @@
 <template>
   <div id="container">
-    <div>
+    <div class="app">
       <AuthenticatedNav />
       <Nuxt />
     </div>
