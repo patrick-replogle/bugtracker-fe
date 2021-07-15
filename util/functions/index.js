@@ -27,3 +27,9 @@ export const generateMinimumTicketFields = (ticket) => {
         priority: ticket.priority
     }
 }
+
+export function generateDateString(inputDate) {
+    const dateArr = String(new Date(inputDate)).split(' ');
+  
+    return `${dateArr[1]} ${dateArr[2]} ${dateArr[3]}`;
+  }

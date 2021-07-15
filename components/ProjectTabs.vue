@@ -11,6 +11,12 @@
             {{ticket.title.length <= 110 ? ticket.title : ticket.title.slice(0, 110) + '...'}}
           </p>
           <p style="font-weight: bold;">{{map[ticket.priority]}} Priority</p>
+          <p style="font-size: 1.2rem;">
+            Created by
+            {{ticket.ticketOwner.firstname.slice(0, 1).toUpperCase()}}.
+            {{ticket.ticketOwner.lastname}} on
+            {{generateDateString(ticket.createddate)}}
+          </p>
         </div>
 
         <div>
@@ -55,11 +61,14 @@
 </template>
 
 <script>
+import { generateDateString } from '../util/functions';
+
 export default {
     props: ['project'],
     data() {
       return {
-        map: { 'LOW': 'Low', 'MEDIUM': 'Medium', 'HIGH': 'High'}
+        map: { 'LOW': 'Low', 'MEDIUM': 'Medium', 'HIGH': 'High'},
+        generateDateString
       }
     },
     computed: {
@@ -75,8 +84,8 @@ export default {
                     id
                 }
             })
-        }
-    }
+        },
+    },
 }
 </script>
 
@@ -95,7 +104,7 @@ export default {
 
       button {
         font-size: 1.4rem;
-        margin-top: 18%;
+        margin-top: 30%;
 
         @media (max-width: 600px) {
           margin-top: 0;

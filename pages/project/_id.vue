@@ -44,7 +44,7 @@ export default {
       toggleModal() {
         this.$refs['modal'].toggle('#modal');
       }
-  }
+  },
 }
 </script>
 

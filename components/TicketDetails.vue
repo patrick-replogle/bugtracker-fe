@@ -2,36 +2,47 @@
   <b-card class="card">
     <h2>{{ticket.title}}</h2>
     <h3>{{ticket.description}}</h3>
-    <p>
-      Created by {{ticket.ticketOwner.firstname}}
-      {{ticket.ticketOwner.lastname}}
+    <p v-bind:style="priorityStyle" class="priorityP">
+      {{map[ticket.priority]}} Priority
+    </p>
+    <p style="font-size: 1.2rem;">
+      Created by {{ticket.ticketOwner.firstname.slice(0, 1).toUpperCase()}}.
+      {{ticket.ticketOwner.lastname}} on
+      {{generateDateString(ticket.createddate)}}
+    </p>
+
+    <p v-if="!ticket.assignedUser" style="font-weight: bold;">
+      No one is currently assigned to this ticket
+    </p>
+    <p style="font-weight: bold;">
+      {{ticket.assignedUser.firstname}} {{ticket.assignedUser.lastname}} is
+      assigned to this ticket
     </p>
 
     <div>
       <b-button variant="primary" @click="toggleCommentModal"
         >Add Comment</b-button
       >
-      <b-button
-        variant="primary"
-        @click="toggleEditModal"
-        v-if="user && Number(ticket.ticketOwner.userid) === Number(user.userid)"
-        >Edit</b-button
-      >
-      <b-button
-        variant="primary"
-        @click="deleteTicket()"
-        v-if="user && Number(ticket.ticketOwner.userid) === Number(user.userid)"
-        >Delete</b-button
-      >
+      <b-button variant="primary" @click="toggleEditModal">Edit</b-button>
+      <b-button variant="primary" @click="deleteTicket">Delete</b-button>
+      <b-button variant="primary" @click="assignUser">Assign Yourself</b-button>
+      <b-button variant="primary">Mark Completed</b-button>
     </div>
   </b-card>
 </template>
 
 <script>
 import { axiosWithAuth } from '../util/axiosWithAuth.js';
+import { generateDateString, generateMinimumUserFields} from '../util/functions';
 
 export default {
-    props: ['ticket', 'toggleEditModal', 'toggleCommentModal'],
+    props: ['ticket', 'toggleEditModal', 'toggleCommentModal', 'setTicket'],
+    data() {
+      return {
+        generateDateString,
+         map: { 'LOW': 'Low', 'MEDIUM': 'Medium', 'HIGH': 'High'},
+      }
+    },
     computed: {
         user() {
             return this.$store.state.user.user;
@@ -39,13 +50,34 @@ export default {
     },
     methods: {
         async deleteTicket() {
-                try {
-                    await axiosWithAuth().delete(this.$config.baseURL + '/tickets/ticket/' + this.$route.params.id);
-                    this.$router.push('/project/' + this.ticket.project.projectid);
-                } catch (err) {
-                    console.dir(err);
-                }
+          try {
+              await axiosWithAuth().delete(this.$config.baseURL + '/tickets/ticket/' + this.$route.params.id);
+              this.$router.push('/project/' + this.ticket.project.projectid);
+          } catch (err) {
+              console.dir(err);
+          }
         },
+        async assignUser() {
+
+          const assignedUser = { assignedUser: generateMinimumUserFields(this.$store.state.user.user)};
+          try {
+            await axiosWithAuth().patch(this.$config.baseURL + '/tickets/ticket/' + this.$route.params.id, assignedUser);
+            this.setTicket(assignedUser);
+          } catch (err) {
+            console.dir(err);
+          }
+        }
+    },
+    computed: {
+      priorityStyle() {
+        if (this.ticket.priority === 'HIGH' ) {
+          return {'background-color': '#dc3545', color: 'white'}
+        } else if (this.ticket.priority === 'LOW') {
+          return {'background-color': '#28a745', color: 'white'}
+        } else {
+          return {'background-color': '#ffc107', color: 'black'}
+        }
+      }
     }
 }
 </script>
@@ -72,6 +104,11 @@ export default {
 
   p {
     font-size: 1.4rem;
+  }
+
+  .priorityP {
+    padding: 10px;
+    display: inline-block;
   }
 
   button {

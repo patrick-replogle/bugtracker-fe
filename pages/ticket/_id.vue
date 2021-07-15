@@ -1,9 +1,10 @@
 <template>
-  <div v-if="ticket">
+  <div v-if="ticket" class="container">
     <TicketDetails
       :ticket="ticket"
       :toggleEditModal="toggleEditModal"
       :toggleCommentModal="toggleCommentModal"
+      :setTicket="setTicket"
     />
     <b-modal ref="edit-modal" title="Edit Ticket" hide-footer>
       <EditTicketForm
@@ -23,31 +24,29 @@
         :updateComments="updateComments"
       />
     </b-modal>
-    <div v-for="comment in ticket.comments">
-      <p>{{comment.comment}}</p>
-      <b-button variant="outline-primary" @click="toggleCommentEdit(comment)"
-        >Edit
-      </b-button>
-      <b-button
-        variant="outline-primary"
-        @click="deleteComment(comment.commentid)"
-        >Delete
-      </b-button>
-    </div>
+
+    <TicketComments
+      :ticket="ticket"
+      :toggleCommentEdit="toggleCommentEdit"
+      :deleteComment="deleteComment"
+    />
   </div>
 </template>
 
 <script>
 import { axiosWithAuth } from '../../util/axiosWithAuth.js';
+import { generateDateString } from '../../util/functions';
 import TicketDetails from '../../components/TicketDetails.vue';
 import EditTicketForm from '../../components/EditTicketForm.vue';
 import AddCommentForm from '../../components/AddCommentForm.vue';
+import TicketComments from '../../components/TicketComments.vue';
 
 export default {
     components: {
         TicketDetails,
         EditTicketForm,
-        AddCommentForm
+        AddCommentForm,
+        TicketComments
     },
 
     data() {
@@ -56,7 +55,8 @@ export default {
             isLoading: false,
             showModal: false,
             commentToEdit: null,
-            isEditing: false
+            isEditing: false,
+            generateDateString
         }
     },
     created() {
@@ -96,10 +96,10 @@ export default {
         },
         updateComments(comment) {
             this.ticket.comments = this.ticket.comments.map(c => {
-                if (c.commentid === comment.commendid) {
+                if (c.commentid === comment.commentid) {
                     return comment;
                 }
-                return comment;
+                return c;
             })
         },
         async deleteComment(id) {
@@ -114,4 +114,11 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin-top: 3%;
+}
+</style>
