@@ -93,8 +93,13 @@ export default {
     font-size: 1.4rem;
     margin: 1% 1% 1% 0;
 
+    @media (max-width: 800px) {
+      width: 20%;
+    }
+
     @media (max-width: 600px) {
-      width: 40%;
+      width: 30%;
+      font-size: 1.2rem;
     }
   }
 }

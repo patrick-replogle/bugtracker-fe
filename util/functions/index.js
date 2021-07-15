@@ -16,3 +16,14 @@ export const generateMinimumProjectFields = (project) => {
         description: project.description,
     }
 }
+
+export const generateMinimumTicketFields = (ticket) => {
+    return {
+        ticketid: ticket.ticketid,
+        title: ticket.title,
+        description: ticket.description,
+        imageurl: ticket.imageurl,
+        completed: ticket.completed,
+        priority: ticket.priority
+    }
+}
