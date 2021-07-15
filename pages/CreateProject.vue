@@ -52,12 +52,11 @@
         </div>
       </b-form-group>
     </b-form>
+    {{projectToEdit}}
   </div>
 </template>
 
 <script>
-import { axiosWithAuth } from '../util/axiosWithAuth'
-
 export default {
     data() {
         return {
@@ -88,18 +87,12 @@ export default {
 
             }
 
-            axiosWithAuth().post(this.$config.baseURL + '/projects/project', this.form )
-                .then(res => {
-                  console.log(res.data)
-                  this.$store.commit('user/addProject', res.data);
-                  this.$router.push('/projects');
-                    
-                })
-                .catch(err => {
-                  console.dir(err);
-                  this.errMessage = 'There was an error processing your request. Please try again.';
-                })
-
+            if (!this.isEditing) {
+              this.$store.dispatch('user/createProject', this.form);
+            } else {
+              console.log('here')
+              this.$store.dispatch('user/updateProject', this.form);
+            }
         },
         resetForm(e) {
             e.preventDefault();
@@ -109,6 +102,7 @@ export default {
             this.form.websiteurl = '';
             this.form.imageurl = '';
             this.errMessage = '';
+            this.$store.commit('user/cancelEdit')
         }
     },
     computed: {
@@ -117,6 +111,21 @@ export default {
       },
       isLoading() {
           return this.$store.state.user.isLoading;
+      },
+      isEditing() {
+        return this.$store.state.user.isEditing;
+      },
+      projectToEdit() {
+        return this.$store.state.user.projectToEdit;
+      }
+    },
+    mounted() {
+      if (this.isEditing) {
+        this.form.name = this.projectToEdit.name;
+        this.form.description = this.projectToEdit.description;
+        this.form.repositoryurl = this.projectToEdit.repositoryurl;
+        this.form.websiteurl = this.projectToEdit.websiteurl;
+        this.form.imageurl = this.projectToEdit.imageurl;
       }
     },
 }

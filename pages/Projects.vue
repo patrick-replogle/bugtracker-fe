@@ -61,10 +61,16 @@ export default {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
+  margin-top: 2%;
 
   .card {
     width: 30%;
     margin: 1%;
+
+    @media (max-width: 600px) {
+      width: 95%;
+      margin: 1% 0;
+    }
   }
 }
 </style>

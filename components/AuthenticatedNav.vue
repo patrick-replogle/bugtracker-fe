@@ -94,6 +94,9 @@ export default {
         user() {
             return this.$store.state.user.user;
         },
+        isLoading() {
+            return this.$store.state.user.isLoading;
+        }
     },
     async created() {
         await this.$store.dispatch('user/getInitialUserData');
