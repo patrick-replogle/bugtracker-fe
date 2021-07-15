@@ -32,6 +32,8 @@ export default {
   plugins: [
   ],
 
+  middleware: ["auth"],
+
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 

@@ -30,6 +30,7 @@ import LoadingSpinner  from '../components/LoadingSpinner.vue';
 import { generateDateString } from '../util/functions'
 
 export default {
+    middleware: "auth",
     components: {
         LoadingSpinner
     },

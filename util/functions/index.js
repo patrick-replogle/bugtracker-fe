@@ -36,7 +36,7 @@ export function generateDateString(inputDate) {
 
 export function checkErrorStatus(error, cb) {
     if (error.response.data.error === "invalid_token") {
-        if (process.server) {
+        if (!process.server) {
             localStorage.clear();
         }
         cb.push('/login')

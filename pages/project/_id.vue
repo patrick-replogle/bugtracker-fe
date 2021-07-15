@@ -21,6 +21,7 @@ import ProjectTabs from '../../components/ProjectTabs.vue';
 import AddTicketForm from '../../components/AddTicketForm.vue'
 
 export default {
+   middleware: "auth",
   components: {
     ProjectDetails,
     ProjectTabs,

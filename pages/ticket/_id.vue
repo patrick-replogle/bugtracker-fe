@@ -42,6 +42,7 @@ import AddCommentForm from '../../components/AddCommentForm.vue';
 import TicketComments from '../../components/TicketComments.vue';
 
 export default {
+    middleware: "auth",
     components: {
         TicketDetails,
         EditTicketForm,

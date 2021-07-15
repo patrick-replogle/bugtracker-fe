@@ -64,6 +64,7 @@
 import { generateMinimumUserFields } from '../util/functions';
 
 export default {
+   middleware: "auth",
     data() {
         return {
             form: {
