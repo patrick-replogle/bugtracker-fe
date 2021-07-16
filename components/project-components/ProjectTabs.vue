@@ -63,18 +63,43 @@
       </b-list-group-item>
     </b-tab>
 
-    <b-tab title="Users" class="tab">
+    <b-tab title="Users" class="tab" v-if="user">
       <b-list-group>
         <b-list-group-item
-          class="ticket"
-          v-for="user in project.users"
-          :key="user.userid"
+          class="user"
+          v-for="u in project.users"
+          :key="u.userid"
         >
-          <b-avatar class="mr-3"></b-avatar>
-          <span class="mr-auto"
-            >{{user.firstname.slice(0, 1).toUpperCase()}}.
-            {{user.lastname}}</span
+          <div style="display: flex; align-items: center;">
+            <b-avatar class="mr-3"></b-avatar>
+            <div style="display: flex; flex-direction: column;">
+              <span>{{u.firstname}} {{u.lastname}}</span>
+              <span style="font-size: 1.4rem;">{{u.email}}</span>
+            </div>
+          </div>
+
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            aria-hidden="true"
+            focusable="false"
+            width="1em"
+            height="1em"
+            style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"
+            preserveAspectRatio="xMidYMid meet"
+            viewBox="0 0 24 24"
+            class="icon"
+            v-if="user.userid !== u.userid && user.userid === project.projectOwner.userid"
+            variant="danger"
+            @click="removeUser(u)"
           >
+            <g fill="none">
+              <path
+                d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12S6.477 2 12 2zm-4.25 9.25a.75.75 0 0 0-.102 1.493l.102.007h8.5a.75.75 0 0 0 .102-1.493l-.102-.007h-8.5z"
+                fill="#dc3545"
+              />
+            </g>
+          </svg>
         </b-list-group-item>
       </b-list-group>
     </b-tab>
@@ -83,9 +108,10 @@
 
 <script>
 import { generateDateString } from '../../util/functions';
+import { axiosWithAuth } from '../../util/axiosWithAuth.js';
 
 export default {
-    props: ['project'],
+    props: ['project', 'removeUserFromProject'],
     data() {
       return {
         map: { 'LOW': 'Low', 'MEDIUM': 'Medium', 'HIGH': 'High'},
@@ -125,6 +151,17 @@ export default {
           } else {
             return 'In progress';
           }
+        },
+       async removeUser(user) {
+            try {
+                await axiosWithAuth().delete(this.$config.baseURL + `/users/user/${user.userid}/project/${this.project.projectid}`);
+                if (this.user.userid === user.userid) {
+                  this.$store.commit('user/removeProject', this.project.projectid);
+                }
+                this.removeUserFromProject(user.userid);
+            } catch (err) {
+                console.dir(err);
+            }
         }
     },
 }
@@ -153,6 +190,23 @@ export default {
 
         @media (max-width: 600px) {
           margin-top: 0;
+        }
+      }
+    }
+
+    .user {
+      display: flex;
+      justify-content: space-between;
+      border: 1px solid rgba(0, 0, 0, 0.125);
+      margin: 1% 0;
+      border-radius: 6px;
+
+      .icon {
+        font-size: 4rem;
+        cursor: pointer;
+
+        &:hover {
+          filter: brightness(0.5);
         }
       }
     }

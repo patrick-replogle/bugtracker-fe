@@ -46,6 +46,8 @@
         </b-form-select>
       </b-form-group>
 
+      <p v-if="errMessage">{{errMessage}}</p>
+
       <div class="btnContainer">
         <b-button type="submit" variant="outline-primary">Submit</b-button>
         <b-button type="reset" variant="outline-primary">Reset</b-button>
@@ -91,7 +93,8 @@ export default {
         this.toggleModal();
         this.project.tickets.push(response.data);
       } catch (err) {
-        this.errMessage = 'There was an error. Please try again.'
+        console.dir(err)
+        this.errMessage = 'There was error while processing your request. Please try again.'
         checkErrorStatus(err, this.$router);
       }
     },

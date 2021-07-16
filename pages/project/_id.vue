@@ -5,10 +5,15 @@
         :project="project"
         :toggleModal="toggleModal"
         :toggleDeleteProjectModal="toggleDeleteProjectModal"
+        :toggleSearchModal="toggleSearchModal"
+        :removeUser="removeUser"
       />
     </div>
     <div v-if="project" class="tabContainer">
-      <ProjectTabs :project="project" />
+      <ProjectTabs
+        :project="project"
+        :removeUserFromProject="removeUserFromProject"
+      />
 
       <b-modal ref="modal" title="Create a ticket" hide-footer>
         <AddTicketForm :toggleModal="toggleModal" :project="project" />
@@ -25,6 +30,16 @@
           >Close
         </b-button>
       </b-modal>
+
+      <b-modal ref="search-modal" hide-footer class="searchModal">
+        <SearchUsers
+          :project="project"
+          :addUserToProject="addUserToProject"
+          :toggleSearchModal="toggleSearchModal"
+          :removeUser="removeUser"
+          :addUser="addUser"
+        />
+      </b-modal>
     </div>
   </div>
 </template>
@@ -35,13 +50,15 @@ import { checkErrorStatus } from '../../util/functions';
 import ProjectDetails from '../../components/project-components/ProjectDetails.vue';
 import ProjectTabs from '../../components/project-components/ProjectTabs.vue';
 import AddTicketForm from '../../components/project-components/AddTicketForm.vue'
+import SearchUsers from '../../components/project-components/SearchUsers.vue';
 
 export default {
    middleware: "auth",
   components: {
     ProjectDetails,
     ProjectTabs,
-    AddTicketForm
+    AddTicketForm,
+    SearchUsers
   },
   data() {
     return {
@@ -70,9 +87,34 @@ export default {
       toggleDeleteProjectModal() {
         this.$refs['delete-modal'].toggle('#delete-modal');
       },
+      toggleSearchModal() {
+        this.$refs['search-modal'].toggle('#search-modal');
+      },
       deleteProject(id) {
         this.$store.dispatch('user/deleteProject', id);
       },
+      addUserToProject(user) {
+        this.project.users.push(user);
+      },
+      removeUserFromProject(userid) {
+        this.project.users = this.project.users.filter(u => u.userid !== userid);
+      },
+      async addUser(user) {
+          try {
+              await axiosWithAuth().post(this.$config.baseURL + `/users/user/${user.userid}/project/${this.project.projectid}`);
+              this.addUserToProject(user);
+          } catch (err) {
+              console.dir(err);
+          }
+      },
+      async removeUser(user) {
+          try {
+              await axiosWithAuth().delete(this.$config.baseURL + `/users/user/${user.userid}/project/${this.project.projectid}`);
+              this.removeUserFromProject(user.userid);
+          } catch (err) {
+              console.dir(err);
+          }
+      }
   },
 }
 </script>

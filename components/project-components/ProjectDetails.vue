@@ -23,27 +23,62 @@
     </a>
 
     <div>
-      <b-button variant="primary" @click="toggleModal">Create Ticket</b-button>
-      <b-button variant="primary">Add User</b-button>
+      <b-button
+        variant="primary"
+        @click="toggleModal"
+        v-if="project.users.find(u => u.userid === user.userid)"
+        >Create Ticket</b-button
+      >
+      <b-button
+        variant="primary"
+        v-if="user && project.projectOwner.userid === user.userid"
+        @click="toggleSearchModal"
+        >Add User</b-button
+      >
       <b-button
         variant="primary"
         @click="editProject(project)"
-        v-if="user && Number(project.projectOwner.userid) === Number(user.userid)"
+        v-if="user && project.projectOwner.userid === user.userid"
         >Edit</b-button
       >
       <b-button
         variant="primary"
         @click="toggleDeleteProjectModal"
-        v-if="user && Number(project.projectOwner.userid) === Number(user.userid)"
+        v-if="user && project.projectOwner.userid === user.userid"
         >Delete</b-button
       >
+      <b-button
+        variant="primary"
+        @click="toggleRemoveYourselfModal"
+        v-if="user && project.projectOwner.userid !== user.userid && project.users.find(u => u.userid === user.userid)"
+        >Remove Yourself</b-button
+      >
     </div>
+
+    <b-modal ref="remove-modal" hide-footer class="removeModal">
+      <p style="font-size: 1.4rem;">
+        Are you sure you want to remove yourself from this project? The project
+        creator will have to invite you back if you remove yourself.
+      </p>
+      <b-button
+        variant="primary"
+        @click="handleRemoveUser(user)"
+        style="font-size: 1.6rem;"
+        >Proceed</b-button
+      >
+      <b-button
+        variant="outline-primary"
+        @click="toggleRemoveYourselfModal"
+        style="font-size: 1.6rem;"
+        >Cancel</b-button
+      >
+    </b-modal>
   </b-card>
 </template>
 
 <script>
 export default {
-    props: ['project', 'toggleModal', 'toggleDeleteProjectModal'],
+    props: ['project', 'toggleModal', 'toggleDeleteProjectModal', 'toggleSearchModal', 'removeUser'],
     computed: {
       user() {
           return this.$store.state.user.user;
@@ -54,6 +89,13 @@ export default {
           this.$store.commit('user/toggleProjectEdit', payload);
           this.$router.push('/createproject');
       },
+      toggleRemoveYourselfModal() {
+        this.$refs['remove-modal'].toggle('#remove-modal');
+      },
+      handleRemoveUser() {
+        this.removeUser(this.user);
+        this.toggleRemoveYourselfModal();
+      }
     }
 }
 </script>
@@ -87,12 +129,12 @@ export default {
   }
 
   button {
-    width: 15%;
+    width: 18%;
     font-size: 1.4rem;
     margin: 1% 1% 1% 0;
 
     @media (max-width: 800px) {
-      width: 20%;
+      width: 25%;
     }
 
     @media (max-width: 600px) {
