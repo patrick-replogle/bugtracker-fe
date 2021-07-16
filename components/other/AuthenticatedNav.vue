@@ -84,11 +84,31 @@
     <div class="right">
       <b-nav-item to="/dashboard">Home</b-nav-item>
       <b-nav-item to="/createproject">Create</b-nav-item>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        aria-hidden="true"
+        focusable="false"
+        width="1em"
+        height="1em"
+        style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 24 24"
+        class="logout"
+        @click="logout"
+      >
+        <path
+          d="M4 18h2v2h12V4H6v2H4V3a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3zm2-7h7v2H6v3l-5-4l5-4v3z"
+          fill="white"
+        />
+      </svg>
     </div>
   </b-nav>
 </template>
 
 <script>
+import { axiosWithAuth } from '../../util/axiosWithAuth.js';
+
 export default {
     computed: {
         user() {
@@ -100,6 +120,19 @@ export default {
     },
     async created() {
         await this.$store.dispatch('user/getInitialUserData');
+    },
+    methods: {
+        async logout() {
+            try {
+              await axiosWithAuth().get(this.$config.baseURL + '/logout');
+              if (process.client) {
+                localStorage.clear();
+              }
+              this.$router.push('/login')
+            } catch (err) {
+              console.dir(err);
+            }
+        }
     }
 }
 </script>
@@ -157,6 +190,12 @@ export default {
       @media (max-width: 600px) {
         font-size: 1.6rem;
       }
+    }
+
+    .logout {
+      font-size: 3rem;
+      margin-top: 0.3%;
+      cursor: pointer;
     }
   }
 }

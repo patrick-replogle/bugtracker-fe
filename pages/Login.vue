@@ -57,7 +57,7 @@ export default {
                 })
                 .then(res => {
                     window.localStorage.setItem('token', res.data.access_token);
-                    this.$router.push('/projects');
+                    this.$router.push('/dashboard');
                 })
                 .catch(err => {
                     this.errMessage = err.response.data.detail;

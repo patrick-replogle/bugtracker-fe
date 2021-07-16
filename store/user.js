@@ -90,7 +90,7 @@ export const actions = {
         const response = await axiosWithAuth().post(this.$config.baseURL + '/projects/project', payload);
         commit('addProject', response.data)
         commit('endRequest');
-        this.$router.push('/projects');
+        this.$router.push('/project/' + response.data.projectid);
         
         } catch(err) {
             console.log(err);
@@ -115,7 +115,7 @@ export const actions = {
         try {
             await axiosWithAuth().delete(this.$config.baseURL + '/projects/project/' + id);
             commit('removeProject', id);
-            this.$router.push('/projects');
+            this.$router.push('/dashboard');
         } catch(err) {
             console.dir(err);
             checkErrorStatus(err, this.$router);
