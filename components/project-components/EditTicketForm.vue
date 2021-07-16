@@ -55,8 +55,8 @@
 </template>
 
 <script>
-import { axiosWithAuth } from '../util/axiosWithAuth.js';
-import { checkErrorStatus } from '../util/functions';
+import { axiosWithAuth } from '../../util/axiosWithAuth.js';
+import { checkErrorStatus } from '../../util/functions';
 
 export default {
     props: ['toggleEditModal', 'ticket', 'setTicket'],

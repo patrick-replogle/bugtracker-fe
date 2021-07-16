@@ -82,7 +82,7 @@
       <h3>Bugtracker</h3>
     </div>
     <div class="right">
-      <b-nav-item to="/projects">Home</b-nav-item>
+      <b-nav-item to="/dashboard">Home</b-nav-item>
       <b-nav-item to="/createproject">Create</b-nav-item>
     </div>
   </b-nav>

@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import UnauthenticedNav from '../components/UnauthenticedNav.vue'
-import Footer from '../components/Footer.vue'
+import UnauthenticedNav from '../components/other/UnauthenticedNav.vue'
+import Footer from '../components/other/Footer.vue'
 
 export default {
   components: {

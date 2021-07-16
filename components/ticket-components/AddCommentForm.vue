@@ -20,8 +20,8 @@
 </template>
 
 <script>
-import { axiosWithAuth } from '../util/axiosWithAuth.js';
-import { generateMinimumUserFields, generateMinimumTicketFields, checkErrorStatus } from '../util/functions'
+import { axiosWithAuth } from '../../util/axiosWithAuth.js';
+import { generateMinimumUserFields, generateMinimumTicketFields, checkErrorStatus } from '../../util/functions'
 
 export default {
     props: ['ticket', 'toggleCommentModal', 'addComment', 'cancelEdit', 'isEditing', 'commentToEdit', 'updateComments'],

@@ -45,8 +45,8 @@
 </template>
 
 <script>
-import { axiosWithAuth } from '../util/axiosWithAuth.js';
-import { generateDateString, generateMinimumUserFields, checkErrorStatus } from '../util/functions';
+import { axiosWithAuth } from '../../util/axiosWithAuth.js';
+import { generateDateString, generateMinimumUserFields, checkErrorStatus } from '../../util/functions';
 
 export default {
     props: ['ticket', 'toggleEditModal', 'toggleCommentModal', 'setTicket', 'toggleDeleteTicketModal'],

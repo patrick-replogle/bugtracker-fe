@@ -32,9 +32,9 @@
 <script>
 import { axiosWithAuth } from '../../util/axiosWithAuth.js';
 import { checkErrorStatus } from '../../util/functions';
-import ProjectDetails from '../../components/ProjectDetails.vue';
-import ProjectTabs from '../../components/ProjectTabs.vue';
-import AddTicketForm from '../../components/AddTicketForm.vue'
+import ProjectDetails from '../../components/project-components/ProjectDetails.vue';
+import ProjectTabs from '../../components/project-components/ProjectTabs.vue';
+import AddTicketForm from '../../components/project-components/AddTicketForm.vue'
 
 export default {
    middleware: "auth",

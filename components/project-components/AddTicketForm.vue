@@ -55,8 +55,8 @@
 </template>
 
 <script>
-import { axiosWithAuth } from '../util/axiosWithAuth.js';
-import { generateMinimumUserFields, generateMinimumProjectFields, checkErrorStatus } from '../util/functions';
+import { axiosWithAuth } from '../../util/axiosWithAuth.js';
+import { generateMinimumUserFields, generateMinimumProjectFields, checkErrorStatus } from '../../util/functions';
 
 export default {
     props: ['toggleModal', 'project'],

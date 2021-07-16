@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { generateDateString } from '../util/functions';
+import { generateDateString } from '../../util/functions';
 
 export default {
     props: ['ticket', 'toggleCommentEdit', 'deleteComment'],

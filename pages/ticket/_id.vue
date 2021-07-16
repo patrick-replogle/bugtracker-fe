@@ -49,10 +49,10 @@
 <script>
 import { axiosWithAuth } from '../../util/axiosWithAuth.js';
 import { generateDateString, checkErrorStatus } from '../../util/functions';
-import TicketDetails from '../../components/TicketDetails.vue';
-import EditTicketForm from '../../components/EditTicketForm.vue';
-import AddCommentForm from '../../components/AddCommentForm.vue';
-import TicketComments from '../../components/TicketComments.vue';
+import TicketDetails from '../../components/ticket-components/TicketDetails.vue';
+import EditTicketForm from '../../components/project-components/EditTicketForm.vue';
+import AddCommentForm from '../../components/ticket-components/AddCommentForm.vue';
+import TicketComments from '../../components/ticket-components/TicketComments.vue';
 
 export default {
     middleware: "auth",
