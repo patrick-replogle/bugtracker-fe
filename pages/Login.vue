@@ -20,7 +20,7 @@
         ></b-form-input>
       </b-form-group>
 
-        <p v-if="errMessage.length">{{ errMessage }}</p>
+        <p v-if="errMessage">{{ errMessage }}</p>
 
         <div class="btnContainer">
           <b-button type="submit" variant="outline-primary">Submit</b-button>
@@ -42,13 +42,13 @@ export default {
                 username: '',
                 password: '',
             },
-            errMessage: '',
+            errMessage: null,
         }
     },
     methods: {
         onSubmit(e) {
             e.preventDefault();
-            this.errMessage = '';
+            this.errMessage = null;
             axios.post(this.$config.baseURL + '/login', `grant_type=password&username=${this.form.username}&password=${this.form.password}`, {
                 headers: {
                     Authorization: `Basic ${btoa(`${this.$config.clientId}:${this.$config.clientSecret}`)}`,
@@ -60,7 +60,8 @@ export default {
                     this.$router.push('/dashboard');
                 })
                 .catch(err => {
-                    this.errMessage = err.response.data.detail;
+                    this.errMessage = err.response.data.error_description;
+                    console.dir(err)
                 })
 
         },

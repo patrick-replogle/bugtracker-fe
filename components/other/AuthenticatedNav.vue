@@ -82,8 +82,24 @@
       <h3>Bugtracker</h3>
     </div>
     <div class="right">
-      <b-nav-item to="/dashboard">Home</b-nav-item>
-      <b-nav-item to="/createproject">Create</b-nav-item>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        aria-hidden="true"
+        focusable="false"
+        width="1em"
+        height="1em"
+        style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 1024 1024"
+        class="icon"
+        @click="routeToDashboard"
+      >
+        <path
+          d="M946.5 505L560.1 118.8l-25.9-25.9a31.5 31.5 0 0 0-44.4 0L77.5 505a63.9 63.9 0 0 0-18.8 46c.4 35.2 29.7 63.3 64.9 63.3h42.5V940h691.8V614.3h43.4c17.1 0 33.2-6.7 45.3-18.8a63.6 63.6 0 0 0 18.7-45.3c0-17-6.7-33.1-18.8-45.2zM568 868H456V664h112v204zm217.9-325.7V868H632V640c0-22.1-17.9-40-40-40H432c-22.1 0-40 17.9-40 40v228H238.1V542.3h-96l370-369.7l23.1 23.1L882 542.3h-96.1z"
+          fill="white"
+        />
+      </svg>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -94,7 +110,53 @@
         style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"
         preserveAspectRatio="xMidYMid meet"
         viewBox="0 0 24 24"
-        class="logout"
+        class="icon"
+        @click="routeToForm"
+      >
+        <path
+          d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83l3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"
+          fill="white"
+        />
+      </svg>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        aria-hidden="true"
+        focusable="false"
+        width="1em"
+        height="1em"
+        style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 24 24"
+        class="icon"
+        @click="routeToProfile"
+      >
+        <g fill="none">
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M16 9a4 4 0 1 1-8 0a4 4 0 0 1 8 0zm-2 0a2 2 0 1 1-4 0a2 2 0 0 1 4 0z"
+            fill="white"
+          />
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M12 1C5.925 1 1 5.925 1 12s4.925 11 11 11s11-4.925 11-11S18.075 1 12 1zM3 12c0 2.09.713 4.014 1.908 5.542A8.986 8.986 0 0 1 12.065 14a8.984 8.984 0 0 1 7.092 3.458A9 9 0 1 0 3 12zm9 9a8.963 8.963 0 0 1-5.672-2.012A6.992 6.992 0 0 1 12.065 16a6.991 6.991 0 0 1 5.689 2.92A8.964 8.964 0 0 1 12 21z"
+            fill="white"
+          />
+        </g>
+      </svg>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        aria-hidden="true"
+        focusable="false"
+        width="1em"
+        height="1em"
+        style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"
+        preserveAspectRatio="xMidYMid meet"
+        viewBox="0 0 24 24"
+        class="icon"
         @click="logout"
       >
         <path
@@ -132,6 +194,15 @@ export default {
             } catch (err) {
               console.dir(err);
             }
+        },
+        routeToDashboard() {
+          this.$router.push('/dashboard');
+        },
+        routeToForm() {
+          this.$router.push('/createproject');
+        },
+        routeToProfile() {
+          this.$router.push('/profile');
         }
     }
 }
@@ -149,7 +220,7 @@ export default {
   width: 100vw;
 
   @media (max-width: 600px) {
-    padding: 10px 20px;
+    padding: 10px;
   }
 
   .left {
@@ -172,7 +243,7 @@ export default {
       font-size: 2.5rem;
 
       @media (max-width: 600px) {
-        font-size: 2rem;
+        font-size: 1.8rem;
       }
     }
   }
@@ -182,20 +253,14 @@ export default {
     display: flex;
     justify-content: flex-end;
 
-    a {
-      color: white;
-      text-decoration: none;
-      font-size: 1.6rem;
+    .icon {
+      font-size: 3rem;
+      cursor: pointer;
+      margin-left: 8%;
 
       @media (max-width: 600px) {
-        font-size: 1.6rem;
+        font-size: 2.5rem;
       }
-    }
-
-    .logout {
-      font-size: 3rem;
-      margin-top: 0.3%;
-      cursor: pointer;
     }
   }
 }

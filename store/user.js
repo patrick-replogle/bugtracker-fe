@@ -62,6 +62,9 @@ export const mutations = {
     toggleTicketEdit: (state, payload) => {
         state.isEditing = true;
         state.ticketToEdit = payload;
+    },
+    updateUser: (state, payload) => {
+        state.user = payload;
     }
 };
 
@@ -121,5 +124,15 @@ export const actions = {
             checkErrorStatus(err, this.$router);
         }
     },
+
+    async updateUser({state, commit}, payload) {
+        try {
+            const response = await axiosWithAuth().patch(this.$config.baseURL + '/users/user/' + state.user.userid, payload);
+            commit('updateUser', response.data);
+        } catch (err) {
+            console.dir(err);
+            checkErrorStatus(err, this.$router);
+        }
+    }
 };
   
