@@ -178,13 +178,12 @@ export default {
               checkErrorStatus(err, this.$router);
             }
         },
-        async unassignUser(user) {
-            const assignedUser = { assignedUser: null };
+        async unassignUser(u) {
             try {
-              await axiosWithAuth().patch(this.$config.baseURL + '/tickets/ticket/' + this.$route.params.id, assignedUser);
-              this.setTicket(assignedUser);
-              if (user.userid === this.user.userid) {
-                  this.$store.commit('user/updateTicket', {...this.ticket, ...assignedUser });
+              const res = await axiosWithAuth().patch(this.$config.baseURL + '/tickets/ticket/' + this.$route.params.id, this.ticket);
+              this.setTicket({ assignedUser: null });
+              if (u.userid === this.user.userid) {
+                  this.$store.commit('user/deleteTicket', this.ticket.ticketid);
               }
             } catch (err) {
               console.dir(err);

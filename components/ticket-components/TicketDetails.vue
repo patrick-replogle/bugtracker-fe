@@ -48,7 +48,7 @@
 
 <script>
 import { axiosWithAuth } from '../../util/axiosWithAuth.js';
-import { generateDateString, generateMinimumUserFields, checkErrorStatus } from '../../util/functions';
+import { generateDateString, checkErrorStatus } from '../../util/functions';
 
 export default {
     props: ['ticket', 'toggleEditModal', 'toggleCommentModal', 'setTicket', 'toggleDeleteTicketModal', 'toggleAssignUserModal'],
@@ -70,7 +70,6 @@ export default {
           try {
             await axiosWithAuth().patch(this.$config.baseURL + '/tickets/ticket/' + this.$route.params.id, body);
             this.setTicket(body);
-            this.$store.commit('user/updateTicket', {...this.ticket, ...body })
           } catch (err) {
             console.dir(err);
             checkErrorStatus(err, this.$router);
@@ -81,7 +80,6 @@ export default {
           try {
             await axiosWithAuth().patch(this.$config.baseURL + '/tickets/ticket/' + this.$route.params.id, body);
             this.setTicket(body);
-            this.$store.commit('user/updateTicket', {...this.ticket, ...body })
           } catch (err) {
             console.dir(err);
             checkErrorStatus(err, this.$router);

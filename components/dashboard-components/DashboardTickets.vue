@@ -111,7 +111,7 @@ export default {
     margin-top: 45%;
 
     @media (max-width: 600px) {
-      margin-top: 0;
+      margin-top: 2%;
     }
   }
 }

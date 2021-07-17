@@ -57,7 +57,7 @@ export default {
           return this.assignUser(user);
         }
         return this.unassignUser(user);
-      }
+      },
     }
 }
 </script>
