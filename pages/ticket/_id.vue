@@ -50,7 +50,7 @@
 import { axiosWithAuth } from '../../util/axiosWithAuth.js';
 import { generateDateString, checkErrorStatus } from '../../util/functions';
 import TicketDetails from '../../components/ticket-components/TicketDetails.vue';
-import EditTicketForm from '../../components/project-components/EditTicketForm.vue';
+import EditTicketForm from '../../components/ticket-components/EditTicketForm.vue';
 import AddCommentForm from '../../components/ticket-components/AddCommentForm.vue';
 import TicketComments from '../../components/ticket-components/TicketComments.vue';
 
@@ -133,10 +133,11 @@ export default {
                 checkErrorStatus(err, this.$router);
             }
         },
-        async deleteTicket() {
+        async deleteTicket(id) {
             try {
-                await axiosWithAuth().delete(this.$config.baseURL + '/tickets/ticket/' + this.$route.params.id);
+                await axiosWithAuth().delete(this.$config.baseURL + '/tickets/ticket/' + id);
                 this.$router.push('/project/' + this.ticket.project.projectid);
+                this.$store.commit('user/deleteTicket', id);
             } catch (err) {
                 console.dir(err);
                 checkErrorStatus(err, this.$router);

@@ -1,5 +1,8 @@
 <template>
   <div>
+    <p v-if="user.assignedTickets.length === 0">
+      You have no assigned tickets at this time.
+    </p>
     <b-list-group-item
       class="ticket"
       v-for="ticket in user.assignedTickets"

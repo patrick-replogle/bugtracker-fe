@@ -68,6 +68,7 @@ export default {
           try {
             await axiosWithAuth().patch(this.$config.baseURL + '/tickets/ticket/' + this.$route.params.id, assignedUser);
             this.setTicket(assignedUser);
+            this.$store.commit('user/addTicket', this.ticket);
           } catch (err) {
             console.dir(err);
             checkErrorStatus(err, this.$router);

@@ -87,6 +87,7 @@ export default {
         const response = await axiosWithAuth().patch(this.$config.baseURL + '/tickets/ticket/' + this.ticket.ticketid, this.form);
         this.setTicket(response.data);
         this.toggleEditModal();
+        this.$store.commit('user/updateTicket', { ...this.ticket, ...this.form })
       } catch (err) {
         this.errMessage = 'There was an error. Please try again.'
         checkErrorStatus(err, this.$router);

@@ -16,17 +16,16 @@
         ></b-form-input>
 
         <b-button type="submit" variant="outline-primary">Submit</b-button>
-        <p style="text-align: center; margin-top: 2%;">{{errMessage}}</p>
+        <b-button variant="outline-primary" @click="toggleSearchModal"
+          >Close</b-button
+        >
       </div>
     </b-form>
 
+    <p style="text-align: center; margin-top: 2%;">{{errMessage}}</p>
+
     <b-list-group v-if="users && users.length" style="width: 100%;">
-      <b-list-group-item
-        class="user"
-        v-for="u in users"
-        :key="u.userid"
-        v-if="u.userid"
-      >
+      <b-list-group-item class="user" v-for="u in users" :key="u.userid">
         <div style="display: flex; align-items: center;">
           <b-avatar class="mr-3"></b-avatar>
           <div style="display: flex; flex-direction: column;">
@@ -46,7 +45,7 @@
           preserveAspectRatio="xMidYMid meet"
           viewBox="0 0 24 24"
           class="icon"
-          v-if="findUser(u)"
+          v-if="findUser(u) && u.userid !== user.userid"
           @click="removeUser(u)"
         >
           <g fill="none">
@@ -68,7 +67,7 @@
           preserveAspectRatio="xMidYMid meet"
           viewBox="0 0 32 32"
           class="icon"
-          v-else
+          v-if="!findUser(u) && u.userid !== user.userid"
           @click="addUser(u)"
         >
           <path

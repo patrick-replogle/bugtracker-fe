@@ -1,6 +1,9 @@
 <template>
   <div>
     <div class="cardContainer">
+      <p v-if="user.allProjects.length === 0">
+        You have no active projects at this time
+      </p>
       <b-card
         v-for="project in user.allProjects"
         img-src="~/assets/img/placeholder.jpg"

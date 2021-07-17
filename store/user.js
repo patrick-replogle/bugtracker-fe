@@ -48,7 +48,8 @@ export const mutations = {
         state.user = {
             ...state.user,
             allProjects: state.user.allProjects.filter(p => p.projectid !== payload),
-            ownedProjects: state.user.ownedProjects.filter(p => p.projectid !== payload)
+            ownedProjects: state.user.ownedProjects.filter(p => p.projectid !== payload),
+            assignedTickets: state.user.assignedTickets.filter(t => t.project.projectid !== payload)
         }
     },
     toggleProjectEdit: (state, payload) => {
@@ -65,6 +66,23 @@ export const mutations = {
     },
     updateUser: (state, payload) => {
         state.user = payload;
+    },
+    addTicket: (state, payload) => {
+        if (state.user.assignedTickets.find(t => t.ticketid === payload.ticketid)) {
+            return;
+        }
+        state.user.assignedTickets.push(payload);
+    },
+    updateTicket: (state, payload) => {
+        for (let i = 0; i < state.user.assignedTickets.length; i++) {
+            if (state.user.assignedTickets[i].ticketid === payload.ticketid) {
+                state.user.assignedTickets[i] = payload;
+                break;
+            }
+        }
+    },
+    deleteTicket: (state, payload) => {
+        state.user.assignedTickets = state.user.assignedTickets.filter(t => t.ticketid !== payload);
     }
 };
 
