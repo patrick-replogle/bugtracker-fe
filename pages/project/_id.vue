@@ -19,7 +19,7 @@
         <AddTicketForm :toggleModal="toggleModal" :project="project" />
       </b-modal>
 
-      <b-modal ref="delete-modal" hide-footer class="deleteModal">
+      <b-modal ref="delete-modal" hide-footer hide-header class="deleteModal">
         <p>Are you sure?</p>
         <b-button
           variant="outline-primary"
@@ -31,7 +31,7 @@
         </b-button>
       </b-modal>
 
-      <b-modal ref="search-modal" hide-footer class="searchModal">
+      <b-modal ref="search-modal" hide-footer hide-header class="searchModal">
         <SearchUsers
           :project="project"
           :addUserToProject="addUserToProject"

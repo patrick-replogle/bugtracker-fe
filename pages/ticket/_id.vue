@@ -29,8 +29,12 @@
       />
     </b-modal>
 
-    <b-modal ref="delete-modal" hide-footer class="deleteModal">
-      <DeleteModalContent :deleteTicket="deleteTicket" :ticket="ticket" />
+    <b-modal ref="delete-modal" hide-footer hide-header class="deleteModal">
+      <DeleteModalContent
+        :deleteTicket="deleteTicket"
+        :ticket="ticket"
+        :toggleDeleteTicketModal="toggleDeleteTicketModal"
+      />
     </b-modal>
 
     <b-modal

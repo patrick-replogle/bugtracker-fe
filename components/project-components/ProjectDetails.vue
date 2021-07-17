@@ -4,7 +4,8 @@
     <h3>{{project.description}}</h3>
     <p>
       Created by {{project.projectOwner.firstname}}
-      {{project.projectOwner.lastname}}
+      {{project.projectOwner.lastname}} on
+      {{generateDateString(project.createddate)}}
     </p>
 
     <a
@@ -72,7 +73,14 @@
 </template>
 
 <script>
+import { generateDateString } from '../../util/functions';
+
 export default {
+    data() {
+      return {
+        generateDateString
+      }
+    },
     props: ['project', 'toggleModal', 'toggleDeleteProjectModal', 'toggleSearchModal', 'removeUser'],
     computed: {
       user() {

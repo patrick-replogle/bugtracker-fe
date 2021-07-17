@@ -12,7 +12,7 @@
 
 <script>
 export default {
-    props: ['deleteTicket', 'ticket']
+    props: ['deleteTicket', 'ticket', 'toggleDeleteTicketModal']
 }
 </script>
 

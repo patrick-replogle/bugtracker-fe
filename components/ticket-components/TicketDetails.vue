@@ -29,7 +29,6 @@
         >Add Comment</b-button
       >
       <b-button variant="primary" @click="toggleEditModal">Edit</b-button>
-      <!-- <b-button variant="primary" @click="assignUser">Assign Yourself</b-button> -->
        <b-button variant="primary" @click="toggleAssignUserModal">Assign Ticket</b-button>
       <b-button
         v-if="!ticket.completed"
@@ -66,24 +65,12 @@ export default {
         },
     },
     methods: {
-        // async assignUser(user) {
-        //   const assignedUser = { assignedUser: generateMinimumUserFields(user)};
-        //   try {
-        //     await axiosWithAuth().patch(this.$config.baseURL + '/tickets/ticket/' + this.$route.params.id, assignedUser);
-        //     this.setTicket(assignedUser);
-        //     if (user.userid === this.user.userid) {
-        //         this.$store.commit('user/addTicket', this.ticket);
-        //     }
-        //   } catch (err) {
-        //     console.dir(err);
-        //     checkErrorStatus(err, this.$router);
-        //   }
-        // },
         async markCompleted() {
           const body = { completed: true };
           try {
             await axiosWithAuth().patch(this.$config.baseURL + '/tickets/ticket/' + this.$route.params.id, body);
             this.setTicket(body);
+            this.$store.commit('user/updateTicket', {...this.ticket, ...body })
           } catch (err) {
             console.dir(err);
             checkErrorStatus(err, this.$router);
@@ -94,6 +81,7 @@ export default {
           try {
             await axiosWithAuth().patch(this.$config.baseURL + '/tickets/ticket/' + this.$route.params.id, body);
             this.setTicket(body);
+            this.$store.commit('user/updateTicket', {...this.ticket, ...body })
           } catch (err) {
             console.dir(err);
             checkErrorStatus(err, this.$router);
