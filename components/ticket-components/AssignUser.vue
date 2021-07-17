@@ -9,7 +9,7 @@
       v-for="u in ticket.project.users"
       :key="u.userid"
       style="cursor: pointer;"
-      @click="assignUser(u)"
+      @click="handleClick(u)"
     >
       <div style="display: flex; align-items: center;">
         <b-avatar class="mr-3"></b-avatar>
@@ -50,7 +50,15 @@ export default {
     components: {
         ModalHeader
     },
-    props: ['assignUser', 'ticket', 'toggleAssignUserModal']
+    props: ['assignUser', 'ticket', 'toggleAssignUserModal', 'unassignUser'],
+    methods: {
+      handleClick(user) {
+        if (!this.ticket.assignedUser || this.ticket.assignedUser.userid !== user.userid) {
+          return this.assignUser(user);
+        }
+        return this.unassignUser(user);
+      }
+    }
 }
 </script>
 

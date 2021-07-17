@@ -17,8 +17,8 @@
       No one is currently assigned to this ticket
     </p>
 
-    <div style="display: flex;">
-      <p v-if="ticket.assignedUser" style="font-weight: bold;">
+    <div style="display: flex;" v-if="ticket.assignedUser" >
+      <p style="font-weight: bold;">
         {{ticket.assignedUser.firstname}}
         {{ticket.assignedUser.lastname}} <p style="font-weight: normal;"> &nbsp;is assigned this ticket</p>
       </p>

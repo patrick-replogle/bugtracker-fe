@@ -47,6 +47,7 @@
         :assignUser="assignUser"
         :ticket="ticket"
         :toggleAssignUserModal="toggleAssignUserModal"
+        :unassignUser="unassignUser"
       />
     </b-modal>
 
@@ -171,6 +172,19 @@ export default {
                   this.$store.commit('user/addTicket', this.ticket);
               } else {
                 this.$store.commit('user/deleteTicket', this.ticket.ticketid);
+              }
+            } catch (err) {
+              console.dir(err);
+              checkErrorStatus(err, this.$router);
+            }
+        },
+        async unassignUser(user) {
+            const assignedUser = { assignedUser: null };
+            try {
+              await axiosWithAuth().patch(this.$config.baseURL + '/tickets/ticket/' + this.$route.params.id, assignedUser);
+              this.setTicket(assignedUser);
+              if (user.userid === this.user.userid) {
+                  this.$store.commit('user/updateTicket', {...this.ticket, ...assignedUser });
               }
             } catch (err) {
               console.dir(err);
