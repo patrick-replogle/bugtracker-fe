@@ -37,15 +37,6 @@
         </b-form-select>
       </b-form-group>
 
-      <b-form-group label="Completed" label-for="completed">
-        <b-form-select
-          id="completed"
-          v-model="form.completed"
-          :options="completedOptions"
-        >
-        </b-form-select>
-      </b-form-group>
-
       <p v-if="errMessage">{{errMessage}}</p>
 
       <div class="btnContainer">
@@ -71,7 +62,6 @@ export default {
               completed: false,
               priority: 'LOW'
           },
-          completedOptions: [false, true],
           priorityOptions: ['LOW', 'MEDIUM', 'HIGH'],
           errMessage: '',
           max: 255,

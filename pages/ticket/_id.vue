@@ -6,6 +6,7 @@
       :toggleCommentModal="toggleCommentModal"
       :setTicket="setTicket"
       :toggleDeleteTicketModal="toggleDeleteTicketModal"
+      :toggleAssignUserModal="toggleAssignUserModal"
     />
 
     <b-modal ref="edit-modal" title="Edit Ticket" hide-footer>
@@ -29,13 +30,20 @@
     </b-modal>
 
     <b-modal ref="delete-modal" hide-footer class="deleteModal">
-      <p>Are you sure?</p>
-      <b-button variant="outline-primary" @click="deleteTicket(ticket.ticketid)"
-        >Delete
-      </b-button>
-      <b-button variant="outline-primary" @click="toggleDeleteTicketModal"
-        >Close
-      </b-button>
+      <DeleteModalContent :deleteTicket="deleteTicket" :ticket="ticket" />
+    </b-modal>
+
+    <b-modal
+      ref="assign-user-modal"
+      hide-footer
+      hide-header
+      class="assign-user-modal"
+    >
+      <AssignUser
+        :assignUser="assignUser"
+        :ticket="ticket"
+        :toggleAssignUserModal="toggleAssignUserModal"
+      />
     </b-modal>
 
     <TicketComments
@@ -48,11 +56,13 @@
 
 <script>
 import { axiosWithAuth } from '../../util/axiosWithAuth.js';
-import { generateDateString, checkErrorStatus } from '../../util/functions';
+import { generateDateString, checkErrorStatus, generateMinimumUserFields } from '../../util/functions';
 import TicketDetails from '../../components/ticket-components/TicketDetails.vue';
 import EditTicketForm from '../../components/ticket-components/EditTicketForm.vue';
 import AddCommentForm from '../../components/ticket-components/AddCommentForm.vue';
 import TicketComments from '../../components/ticket-components/TicketComments.vue';
+import AssignUser from '../../components/ticket-components/AssignUser.vue';
+import DeleteModalContent from '../../components/ticket-components/DeleteModalContent.vue'
 
 export default {
     middleware: "auth",
@@ -61,6 +71,8 @@ export default {
         EditTicketForm,
         AddCommentForm,
         TicketComments,
+        AssignUser,
+        DeleteModalContent
     },
 
     data() {
@@ -97,6 +109,9 @@ export default {
         },
         toggleDeleteTicketModal() {
             this.$refs['delete-modal'].toggle('#delete-modal');
+        },
+        toggleAssignUserModal() {
+            this.$refs['assign-user-modal'].toggle('#assign-user-modal');
         },
         setTicket(changes) {
             this.ticket = {
@@ -143,6 +158,21 @@ export default {
                 checkErrorStatus(err, this.$router);
             }
         },
+        async assignUser(user) {
+            const assignedUser = { assignedUser: generateMinimumUserFields(user)};
+            try {
+              await axiosWithAuth().patch(this.$config.baseURL + '/tickets/ticket/' + this.$route.params.id, assignedUser);
+              this.setTicket(assignedUser);
+              if (user.userid === this.user.userid) {
+                  this.$store.commit('user/addTicket', this.ticket);
+              } else {
+                this.$store.commit('user/deleteTicket', this.ticket.ticketid);
+              }
+            } catch (err) {
+              console.dir(err);
+              checkErrorStatus(err, this.$router);
+            }
+        },
   }
 }
 </script>
@@ -153,14 +183,5 @@ export default {
   justify-content: center;
   flex-direction: column;
   margin-top: 3%;
-}
-
-p {
-  font-size: 1.6rem;
-}
-
-button {
-  font-size: 1.6rem;
-  margin-right: 1%;
 }
 </style>

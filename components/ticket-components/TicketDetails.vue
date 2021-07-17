@@ -17,17 +17,20 @@
       No one is currently assigned to this ticket
     </p>
 
-    <p v-if="ticket.assignedUser" style="font-weight: bold;">
-      {{ticket.assignedUser.firstname.toUpperCase()}}
-      {{ticket.assignedUser.lastname.toUpperCase()}} is assigned this ticket
-    </p>
+    <div style="display: flex;">
+      <p v-if="ticket.assignedUser" style="font-weight: bold;">
+        {{ticket.assignedUser.firstname}}
+        {{ticket.assignedUser.lastname}} <p style="font-weight: normal;"> &nbsp;is assigned this ticket</p>
+      </p>
+    </div>
 
     <div>
       <b-button variant="primary" @click="toggleCommentModal"
         >Add Comment</b-button
       >
       <b-button variant="primary" @click="toggleEditModal">Edit</b-button>
-      <b-button variant="primary" @click="assignUser">Assign Yourself</b-button>
+      <!-- <b-button variant="primary" @click="assignUser">Assign Yourself</b-button> -->
+       <b-button variant="primary" @click="toggleAssignUserModal">Assign Ticket</b-button>
       <b-button
         v-if="!ticket.completed"
         variant="primary"
@@ -49,7 +52,7 @@ import { axiosWithAuth } from '../../util/axiosWithAuth.js';
 import { generateDateString, generateMinimumUserFields, checkErrorStatus } from '../../util/functions';
 
 export default {
-    props: ['ticket', 'toggleEditModal', 'toggleCommentModal', 'setTicket', 'toggleDeleteTicketModal'],
+    props: ['ticket', 'toggleEditModal', 'toggleCommentModal', 'setTicket', 'toggleDeleteTicketModal', 'toggleAssignUserModal'],
     data() {
       return {
         generateDateString,
@@ -63,17 +66,19 @@ export default {
         },
     },
     methods: {
-        async assignUser() {
-          const assignedUser = { assignedUser: generateMinimumUserFields(this.$store.state.user.user)};
-          try {
-            await axiosWithAuth().patch(this.$config.baseURL + '/tickets/ticket/' + this.$route.params.id, assignedUser);
-            this.setTicket(assignedUser);
-            this.$store.commit('user/addTicket', this.ticket);
-          } catch (err) {
-            console.dir(err);
-            checkErrorStatus(err, this.$router);
-          }
-        },
+        // async assignUser(user) {
+        //   const assignedUser = { assignedUser: generateMinimumUserFields(user)};
+        //   try {
+        //     await axiosWithAuth().patch(this.$config.baseURL + '/tickets/ticket/' + this.$route.params.id, assignedUser);
+        //     this.setTicket(assignedUser);
+        //     if (user.userid === this.user.userid) {
+        //         this.$store.commit('user/addTicket', this.ticket);
+        //     }
+        //   } catch (err) {
+        //     console.dir(err);
+        //     checkErrorStatus(err, this.$router);
+        //   }
+        // },
         async markCompleted() {
           const body = { completed: true };
           try {
@@ -159,18 +164,18 @@ p {
   }
 
   button {
-    width: 15%;
+    width: 18%;
     font-size: 1.4rem;
     margin: 1% 1% 1% 0;
 
-    @media (max-width: 800px) {
-      font-size: 1.2rem;
-      width: 30%;
+    @media (max-width: 900px) {
+      width:30%;
     }
 
     @media (max-width: 600px) {
+      width: 100%;
       font-size: 1.2rem;
-      width: 30%;
+      margin: 2% 0;
     }
   }
 }

@@ -90,10 +90,10 @@ export default {
         return {
             form: {
                 search: '',
-                errMessage: ''
             },
             users: null,
             isLoading: false,
+            errMessage: ''
         }
     },
     computed: {
