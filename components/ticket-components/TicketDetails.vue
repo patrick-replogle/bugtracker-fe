@@ -162,7 +162,8 @@ p {
     margin: 1% 1% 1% 0;
 
     @media (max-width: 800px) {
-      width: 20%;
+      font-size: 1.2rem;
+      width: 30%;
     }
 
     @media (max-width: 600px) {

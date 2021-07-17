@@ -111,6 +111,9 @@ export default {
           try {
               await axiosWithAuth().delete(this.$config.baseURL + `/users/user/${user.userid}/project/${this.project.projectid}`);
               this.removeUserFromProject(user.userid);
+              if (this.user.userid === user.userid) {
+                this.$store.commit('user/removeProject', this.project.projectid);
+              }
           } catch (err) {
               console.dir(err);
           }

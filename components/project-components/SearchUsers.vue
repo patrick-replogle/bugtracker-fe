@@ -16,15 +16,16 @@
         ></b-form-input>
 
         <b-button type="submit" variant="outline-primary">Submit</b-button>
+        <p style="text-align: center; margin-top: 2%;">{{errMessage}}</p>
       </div>
     </b-form>
 
-    <b-list-group v-if="users" style="width: 100%;">
+    <b-list-group v-if="users && users.length" style="width: 100%;">
       <b-list-group-item
         class="user"
         v-for="u in users"
         :key="u.userid"
-        v-if="u.userid !== user.userid"
+        v-if="u.userid"
       >
         <div style="display: flex; align-items: center;">
           <b-avatar class="mr-3"></b-avatar>
@@ -90,6 +91,7 @@ export default {
         return {
             form: {
                 search: '',
+                errMessage: ''
             },
             users: null,
             isLoading: false,
@@ -103,7 +105,7 @@ export default {
     methods: {
         async onSubmit(e) {
             e.preventDefault();
-
+            this.errMessage = '';
             try {
                 if (this.form.search.length) {
                     const payload = this.form.search.split(' ').join('').toLowerCase().trim();
@@ -111,7 +113,9 @@ export default {
 
                     this.form.search = '';
                     this.users = response.data;
-                    console.log(response)
+                    if (response.data.length === 0) {
+                      this.errMessage = 'No results found'
+                    }
                 }
             } catch (err) {
                 console.dir(err)
@@ -178,15 +182,15 @@ export default {
     margin: 1% 0;
     border-radius: 6px;
 
-    @media (max-width: 600px) {
-      flex-direction: column;
-      justify-content: flex-start;
-    }
-
     .icon {
       font-size: 4rem;
       margin-top: 1%;
       cursor: pointer;
+
+      @media (max-width: 600px) {
+        font-size: 3rem;
+        margin-top: 3%;
+      }
 
       &:hover {
         filter: brightness(0.5);

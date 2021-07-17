@@ -22,13 +22,8 @@
       >Deployed URL
     </a>
 
-    <div>
-      <b-button
-        variant="primary"
-        @click="toggleModal"
-        v-if="project.users.find(u => u.userid === user.userid)"
-        >Create Ticket</b-button
-      >
+    <div v-if="project.users.find(u => u.userid === user.userid)">
+      <b-button variant="primary" @click="toggleModal">Create Ticket</b-button>
       <b-button
         variant="primary"
         v-if="user && project.projectOwner.userid === user.userid"
@@ -50,7 +45,7 @@
       <b-button
         variant="primary"
         @click="toggleRemoveYourselfModal"
-        v-if="user && project.projectOwner.userid !== user.userid && project.users.find(u => u.userid === user.userid)"
+        v-if="user && project.projectOwner.userid !== user.userid"
         >Remove Yourself</b-button
       >
     </div>

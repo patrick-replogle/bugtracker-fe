@@ -75,7 +75,9 @@ export default {
     },
     created() {
         axiosWithAuth().get(this.$config.baseURL + '/tickets/ticket/' + this.$route.params.id)
-            .then(res => this.ticket = res.data)
+            .then(res =>{
+              this.ticket = res.data;
+            })
             .catch(err => {
                 console.dir(err)
                 checkErrorStatus(err, this.$router);

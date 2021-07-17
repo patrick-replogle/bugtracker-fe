@@ -204,6 +204,10 @@ export default {
       .icon {
         font-size: 4rem;
         cursor: pointer;
+        @media (max-width: 600px) {
+          font-size: 3rem;
+          margin-top: 3%;
+        }
 
         &:hover {
           filter: brightness(0.5);
