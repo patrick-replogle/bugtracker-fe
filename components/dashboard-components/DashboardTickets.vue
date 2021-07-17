@@ -31,6 +31,17 @@
             </g>
           </svg>
         </p>
+
+        <p style="font-size: 1.2rem;">
+          Created by
+          {{ticket.ticketOwner.firstname.slice(0, 1).toUpperCase()}}.
+          {{ticket.ticketOwner.lastname}} on
+          {{generateDateString(ticket.createddate)}}
+        </p>
+
+        <nuxt-link :to="`/project/${ticket.project.projectid}`">
+          {{ticket.project.name.length <= 30 ? ticket.project.name : ticket.project.name.slice(0, 30) + '...'}}
+        </nuxt-link>
       </div>
 
       <div>
@@ -94,7 +105,7 @@ export default {
 
   button {
     font-size: 1.4rem;
-    margin-top: 25%;
+    margin-top: 45%;
 
     @media (max-width: 600px) {
       margin-top: 0;

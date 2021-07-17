@@ -54,6 +54,7 @@ export default {
       return {
         generateDateString,
          map: { 'LOW': 'Low', 'MEDIUM': 'Medium', 'HIGH': 'High'},
+         isLoading: false
       }
     },
     computed: {
@@ -106,7 +107,7 @@ export default {
           return {'background-color': '#ffc107', color: 'black'}
         }
       }
-    }
+    },
 }
 </script>
 

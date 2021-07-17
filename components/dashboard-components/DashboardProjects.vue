@@ -11,7 +11,7 @@
         :key="project.projectid"
       >
         <h3>
-          {{project.name.length <= 28 ? project.name : project.name.slice(0, 28)}}
+          {{ project.name.length <= 28 ? project.name : project.name.slice(0, 28) + '...' }}
         </h3>
 
         <p>Modified on {{generateDateString(project.lastmodifieddate)}}</p>
