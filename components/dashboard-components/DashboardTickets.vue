@@ -44,7 +44,7 @@
         </div>
 
         <nuxt-link :to="`/project/${ticket.project.projectid}`">
-          View Project Details
+          Open Project
         </nuxt-link>
       </div>
 
@@ -121,7 +121,7 @@ export default {
     margin-top: 45%;
 
     @media (max-width: 600px) {
-      margin-top: 2%;
+      margin-top: 3%;
     }
   }
 }
