@@ -163,16 +163,14 @@ export default {
                 checkErrorStatus(err, this.$router);
             }
         },
-        async assignUser(user) {
-            const assignedUser = { assignedUser: generateMinimumUserFields(user)};
+        async assignUser(u) {
+            const assignedUser = { assignedUser: generateMinimumUserFields(u)};
             try {
-              await axiosWithAuth().patch(this.$config.baseURL + '/tickets/ticket/' + this.$route.params.id, assignedUser);
-              this.setTicket(assignedUser);
-              if (user.userid === this.user.userid) {
-                  this.$store.commit('user/addTicket', this.ticket);
-              } else {
-                this.$store.commit('user/deleteTicket', this.ticket.ticketid);
+              const res = await axiosWithAuth().patch(this.$config.baseURL + '/tickets/ticket/' + this.$route.params.id, assignedUser);
+              if (u.userid === this.user.userid) {
+                  this.$store.commit('user/addTicket', res.data);
               }
+              this.setTicket(assignedUser);
             } catch (err) {
               console.dir(err);
               checkErrorStatus(err, this.$router);
@@ -180,7 +178,7 @@ export default {
         },
         async unassignUser(u) {
             try {
-              const res = await axiosWithAuth().patch(this.$config.baseURL + '/tickets/ticket/' + this.$route.params.id, this.ticket);
+              await axiosWithAuth().patch(this.$config.baseURL + '/tickets/ticket/' + this.$route.params.id, this.ticket);
               this.setTicket({ assignedUser: null });
               if (u.userid === this.user.userid) {
                   this.$store.commit('user/deleteTicket', this.ticket.ticketid);

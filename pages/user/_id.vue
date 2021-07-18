@@ -40,7 +40,12 @@
         <p>Company</p>
         <p>{{user.company}}</p>
       </div>
-      <b-button variant="primary" @click="toggleEditModal">Edit </b-button>
+      <b-button
+        variant="primary"
+        @click="toggleEditModal"
+        v-if="storeUser && user.userid === storeUser.userid"
+        >Edit
+      </b-button>
     </div>
 
     <div class="projectContainer" v-if="user.allProjects.length > 0">
@@ -102,7 +107,7 @@ export default {
     },
     computed: {
         storeUser() {
-            return this.$store.user.user
+            return this.$store.state.user.user;
         }
     }
 }
@@ -113,7 +118,6 @@ export default {
   display: flex;
   justify-content: center;
   flex-direction: column;
-  width: 100%;
 
   .icon {
     font-size: 12rem;
@@ -125,14 +129,12 @@ export default {
     display: flex;
     flex-direction: column;
     font-size: 1.6rem;
-    width: 100%;
     border-radius: 10px;
 
     .rows {
       display: flex;
       align-items: center;
       border-bottom: 1px solid rgba(0, 0, 0, 0.125);
-      width: 100%;
       padding: 10px;
       margin-top: 0.3%;
 
@@ -161,7 +163,7 @@ export default {
     button {
       width: 10%;
       font-size: 1.6rem;
-      margin: 0 0 1% 10px;
+      margin: 0 0 2% 1.5%;
 
       @media (max-width: 600px) {
         width: 30%;

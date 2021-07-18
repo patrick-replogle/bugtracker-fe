@@ -74,8 +74,12 @@ export const mutations = {
         state.user.assignedTickets.push(payload);
     },
     updateTicket: (state, payload) => {
-        const ticket = state.user.assignedTickets.find(t => t.ticketid === payload.ticketid);
-        Object.assign(ticket, payload);
+        state.user.assignedTickets = state.user.assignedTickets.map(t => {
+            if (t.ticketid === payload.ticketid) {
+                return payload;
+            }
+            return t;
+        })
     },
     deleteTicket: (state, payload) => {
         state.user.assignedTickets = state.user.assignedTickets.filter(t => t.ticketid !== payload);

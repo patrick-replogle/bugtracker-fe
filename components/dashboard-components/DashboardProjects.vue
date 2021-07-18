@@ -61,7 +61,7 @@ export default {
     width: 30%;
     margin: 1%;
 
-    @media (max-width: 800px) {
+    @media (max-width: 1000px) {
       width: 45%;
     }
 
