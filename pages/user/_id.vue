@@ -19,6 +19,8 @@
       />
     </svg>
 
+    <p>Details</p>
+
     <div class="card">
       <div class="rows">
         <p>Email</p>
@@ -49,7 +51,7 @@
     </div>
 
     <div class="projectContainer" v-if="user.allProjects.length > 0">
-      <p>{{user.firstname}}'s Projects</p>
+      <p>Projects</p>
       <b-list-group-item
         v-for="project in user.allProjects"
         :key="project.projectid"
@@ -125,6 +127,12 @@ export default {
     margin: 1% 0;
   }
 
+  p {
+    font-size: 1.6rem;
+    color: #6c757d;
+    font-weight: bold;
+  }
+
   .card {
     display: flex;
     flex-direction: column;
@@ -176,6 +184,8 @@ export default {
 
     p {
       font-size: 1.6rem;
+      color: #6c757d;
+      font-weight: bold;
     }
 
     .project {
@@ -191,6 +201,8 @@ export default {
 
       p {
         font-size: 1.4rem;
+        font-weight: normal;
+        color: black;
       }
 
       a {
