@@ -29,7 +29,7 @@ export const generateMinimumTicketFields = (ticket) => {
 }
 
 export function generateDateString(inputDate) {
-    const dateArr = String(new Date(inputDate)).split(' ');
+    const dateArr = String(new Date(inputDate.replace(' ', 'T'))).split(' ');
   
     return `${dateArr[1]} ${dateArr[2]} ${dateArr[3]}`;
 }

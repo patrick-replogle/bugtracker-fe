@@ -39,8 +39,8 @@
           <p>
           Created by&nbsp;
           <p style="cursor: pointer;" @click="routeToUser(ticket.ticketOwner.userid)">
-          {{ticket.ticketOwner.firstname}} {{ticket.ticketOwner.lastname}}</p>&nbsp;on
-          {{generateDateString(ticket.createddate)}}</p>
+          {{ticket.ticketOwner.firstname}} {{ticket.ticketOwner.lastname}}</p><p class="hide">&nbsp;on
+          {{generateDateString(ticket.createddate)}}</p></p>
         </div>
 
         <nuxt-link :to="`/project/${ticket.project.projectid}`">
@@ -108,6 +108,12 @@ export default {
 
   @media (max-width: 600px) {
     flex-direction: column;
+  }
+
+  .hide {
+    @media (max-width: 600px) {
+      display: none;
+    }
   }
 
   button {

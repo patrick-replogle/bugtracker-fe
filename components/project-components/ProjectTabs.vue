@@ -32,12 +32,14 @@
               </g>
             </svg>
           </p>
-          <p style="font-size: 1.2rem;">
+          <div style="font-size: 1.2rem; display: flex;">
+          <p>
             Created by
             {{ticket.ticketOwner.firstname.slice(0, 1).toUpperCase()}}.
-            {{ticket.ticketOwner.lastname}} on
-            {{generateDateString(ticket.createddate)}}
+            {{ticket.ticketOwner.lastname}}<p class="hide">&nbsp;on
+            {{generateDateString(ticket.createddate)}}</p>
           </p>
+          </div>
         </div>
 
         <div>
@@ -184,6 +186,12 @@ export default {
       border: 1px solid rgba(0, 0, 0, 0.125);
       margin: 1% 0;
       border-radius: 6px;
+
+      .hide {
+        @media (max-width: 600px) {
+          display: none;
+        }
+      }
 
       @media (max-width: 600px) {
         flex-direction: column;

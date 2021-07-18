@@ -3,10 +3,10 @@
     <h2>{{project.name}}</h2>
     <h3>{{project.description}}</h3>
     <div style="display: flex; align-items: center;">
-      <p>Created by &nbsp;
+      <p>Created by&nbsp;
       <p @click="routeToUser(user.userid)" style="cursor: pointer;">{{project.projectOwner.firstname}}
         {{project.projectOwner.lastname}}</p> &nbsp;
-        <p>on {{generateDateString(project.createddate)}}</p>
+        <p class="hide">on {{generateDateString(project.createddate)}}</p>
       </p>
     </div>
 
@@ -134,6 +134,12 @@ export default {
 
   a {
     font-size: 1.4rem;
+  }
+
+  .hide {
+    @media (max-width: 600px) {
+      display: none;
+    }
   }
 
   button {
