@@ -7,7 +7,11 @@
       focusable="false"
       width="1em"
       height="1em"
-      style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"
+      style="
+        -ms-transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+      "
       preserveAspectRatio="xMidYMid meet"
       viewBox="0 0 32 32"
       class="icon"
@@ -24,23 +28,23 @@
     <div class="card">
       <div class="rows">
         <p>Email</p>
-        <p>{{user.email}}</p>
+        <p>{{ user.email }}</p>
       </div>
       <div class="rows">
         <p>Username</p>
-        <p>{{user.username}}</p>
+        <p>{{ user.username }}</p>
       </div>
       <div class="rows">
         <p>First Name</p>
-        <p>{{user.firstname}}</p>
+        <p>{{ user.firstname }}</p>
       </div>
       <div class="rows">
         <p>Last Name</p>
-        <p>{{user.lastname}}</p>
+        <p>{{ user.lastname }}</p>
       </div>
       <div class="rows last" v-if="user.company">
         <p>Company</p>
-        <p>{{user.company}}</p>
+        <p>{{ user.company }}</p>
       </div>
       <b-button
         variant="primary"
@@ -57,8 +61,8 @@
         :key="project.projectid"
         class="project"
       >
-        <h3 @click="routeToProject(project.projectid)">{{project.name}}</h3>
-        <p>{{project.description}}</p>
+        <h3 @click="routeToProject(project.projectid)">{{ project.name }}</h3>
+        <p>{{ project.description }}</p>
         <a href="" target="_blank" v-if="project.repositoryurl">View Code</a>
         <a href="" target="_blank" v-if="project.websiteurl">View Website</a>
       </b-list-group-item>
@@ -71,49 +75,50 @@
 </template>
 
 <script>
-import { axiosWithAuth } from '../../util/axiosWithAuth.js';
-import ProfileEditForm from '../../components/other/ProfileEditForm.vue';
+import { axiosWithAuth } from "../../util/axiosWithAuth.js";
+import ProfileEditForm from "../../components/other/ProfileEditForm.vue";
 
 export default {
-    middleware: "auth",
-    components: {
-        ProfileEditForm
+  middleware: "auth",
+  components: {
+    ProfileEditForm
+  },
+  data() {
+    return {
+      user: null
+    };
+  },
+  methods: {
+    routeToProject(id) {
+      this.$router.push(`/project/${id}`);
     },
-    data() {
-        return {
-            user: null
-        }
+    toggleEditModal() {
+      this.$refs["edit-modal"].toggle("#edit-modal");
     },
-    methods: {
-        routeToProject(id) {
-            this.$router.push(`/project/${id}`);
-        },
-        toggleEditModal() {
-            this.$refs['edit-modal'].toggle('#edit-modal');
-        },
-        setUser(changes) {
-            this.user = {
-                ...this.user,
-                ...changes
-            }
-        }
-    },
-    created() {
-        axiosWithAuth().get(this.$config.baseURL + '/users/user/' + this.$route.params.id)
-            .then(res =>{
-              this.user = res.data;
-            })
-            .catch(err => {
-                console.dir(err)
-                checkErrorStatus(err, this.$router);
-            })
-    },
-    computed: {
-        storeUser() {
-            return this.$store.state.user.user;
-        }
+    setUser(changes) {
+      this.user = {
+        ...this.user,
+        ...changes
+      };
     }
-}
+  },
+  created() {
+    axiosWithAuth()
+      .get(this.$config.baseURL + "/users/user/" + this.$route.params.id)
+      .then((res) => {
+        this.user = res.data;
+      })
+      .catch((err) => {
+        console.dir(err);
+        checkErrorStatus(err, this.$router);
+      });
+  },
+  computed: {
+    storeUser() {
+      return this.$store.state.user.user;
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -198,6 +203,7 @@ export default {
       h3 {
         cursor: pointer;
         font-weight: bold;
+        margin-bottom: 1%;
       }
 
       p {
