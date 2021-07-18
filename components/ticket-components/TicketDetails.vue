@@ -17,7 +17,7 @@
       No one is currently assigned to this ticket
     </p>
 
-    <div style="display: flex;" v-if="ticket.assignedUser" >
+    <div style="display: flex; cursor: pointer;" v-if="ticket.assignedUser" @click="routeToUser(ticket.assignedUser.userid)">
       <p style="font-weight: bold;">
         {{ticket.assignedUser.firstname}}
         {{ticket.assignedUser.lastname}} <p style="font-weight: normal;"> &nbsp;is assigned this ticket</p>
@@ -87,6 +87,9 @@ export default {
         },
         pushToProject(id) {
           this.$router.push(`/project/${id}`);
+        },
+        routeToUser(id) {
+          this.$router.push(`/user/${id}`);
         }
     },
     computed: {

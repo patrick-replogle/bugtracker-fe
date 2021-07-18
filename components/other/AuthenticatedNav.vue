@@ -202,7 +202,7 @@ export default {
           this.$router.push('/createproject');
         },
         routeToProfile() {
-          this.$router.push('/profile');
+          this.$router.push(`/user/${this.user.userid}`);
         }
     }
 }

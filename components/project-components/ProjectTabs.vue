@@ -73,7 +73,9 @@
           <div style="display: flex; align-items: center;">
             <b-avatar class="mr-3"></b-avatar>
             <div style="display: flex; flex-direction: column;">
-              <span>{{u.firstname}} {{u.lastname}}</span>
+              <span style="cursor: pointer;" @click="routeToUser(u.userid)"
+                >{{u.firstname}} {{u.lastname}}</span
+              >
               <span style="font-size: 1.4rem;">{{u.email}}</span>
             </div>
           </div>
@@ -162,6 +164,9 @@ export default {
             } catch (err) {
                 console.dir(err);
             }
+        },
+        routeToUser(id) {
+          this.$router.push(`/user/${id}`);
         }
     },
 }

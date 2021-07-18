@@ -1,47 +1,46 @@
 <template>
-    <div>
-        <div class="container" v-if="user">
-            <b-form @submit="onSubmit" @reset="resetForm">
-                <b-form-group label="First Name" label-for="firstname">
-                    <b-form-input
-                    id="firstname"
-                    v-model="form.firstname"
-                    type="text"
-                    required
-                    ></b-form-input>
-                </b-form-group>
+    <div class="formContainer" v-if="user">
+        <b-form @submit="onSubmit" @reset="resetForm">
+            <b-form-group label="First Name" label-for="firstname">
+                <b-form-input
+                id="firstname"
+                v-model="form.firstname"
+                type="text"
+                required
+                ></b-form-input>
+            </b-form-group>
 
-                <b-form-group label="Last Name" label-for="lastname">
-                    <b-form-input
-                    id="lastname"
-                    v-model="form.lastname"
-                    type="text"
-                    required
-                    ></b-form-input>
-                </b-form-group>
+            <b-form-group label="Last Name" label-for="lastname">
+                <b-form-input
+                id="lastname"
+                v-model="form.lastname"
+                type="text"
+                required
+                ></b-form-input>
+            </b-form-group>
 
-                <b-form-group label="Company" label-for="company">
-                    <b-form-input
-                    id="company"
-                    v-model="form.company"
-                    type="text"
-                    required
-                    ></b-form-input>
-                </b-form-group>
+            <b-form-group label="Company" label-for="company">
+                <b-form-input
+                id="company"
+                v-model="form.company"
+                type="text"
+                required
+                ></b-form-input>
+            </b-form-group>
 
-                <div class="btnContainer">
-                    <b-button type="submit" variant="outline-primary">Submit</b-button>
-                    <b-button type="reset" variant="outline-primary">Reset</b-button>
-                </div>
-                <p v-if="message">{{ message }}</p>
-                </b-form-group>
-            </b-form>
-        </div>
+            <div class="btnContainer">
+                <b-button type="submit" variant="outline-primary">Submit</b-button>
+                <b-button type="reset" variant="outline-primary">Reset</b-button>
+                <b-button  variant="outline-primary" @click="toggleEditModal">Cancel</b-button>
+            </div>
+            </b-form-group>
+        </b-form>
     </div>
 </template>
 
 <script>
 export default {
+    props: ['setUser', 'toggleEditModal'],
     data() {
         return {
             form: {
@@ -49,7 +48,6 @@ export default {
                 lastname: '',
                 company: '',
             },
-            message: null
         }
     },
     computed: {
@@ -63,7 +61,8 @@ export default {
 
             try {
                 await this.$store.dispatch('user/updateUser', this.form);
-                this.message = 'Your account was successfully updated';
+                this.setUser(this.form);
+                this.toggleEditModal();
             } catch (err) {
                 console.dir(err);
             }
@@ -99,14 +98,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.container {
+.formContainer {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   font-size: 1.6rem;
-  margin-top: 2%;
 
   h2 {
     margin: 2% 0;
@@ -124,17 +122,13 @@ export default {
       font-weight: 600;
     }
 
-    input {
+    input,
+    select {
       padding: 10px;
       height: 40px;
       font-size: 1.6rem;
     }
 
-    textarea {
-            padding: 10px;
-      height: 100px;
-      font-size: 1.6rem;
-    }
 
     .btnContainer {
       display: flex;
@@ -157,11 +151,6 @@ export default {
           margin: 4% 0;
         }
       }
-    }
-    p {
-      font-size: 1.4rem;
-      text-align: center;
-      margin-top: 1%;
     }
   }
 }

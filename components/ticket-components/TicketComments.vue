@@ -5,7 +5,10 @@
       class="comment"
       :key="comment.commentid"
     >
-      <p style="font-size: 1.4rem; font-weight: bold;">
+      <p
+        style="font-size: 1.4rem; font-weight: bold; cursor: pointer;"
+        @click="routeToUser(comment.commentOwner.userid)"
+      >
         <b-avatar class="mr-3"></b-avatar>
         {{comment.commentOwner.firstname}}
         {{comment.commentOwner.lastname}}
@@ -37,6 +40,11 @@ export default {
         return {
             generateDateString
         }
+    },
+    methods: {
+      routeToUser(id) {
+        this.$router.push(`/user/${id}`);
+      }
     }
 }
 </script>

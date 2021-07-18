@@ -35,15 +35,16 @@
           </svg>
         </p>
 
-        <p style="font-size: 1.2rem;">
-          Created by
-          {{ticket.ticketOwner.firstname.slice(0, 1).toUpperCase()}}.
-          {{ticket.ticketOwner.lastname}} on
-          {{generateDateString(ticket.createddate)}}
-        </p>
+        <div style="display: flex; font-size: 1.4rem;">
+          <p>
+          Created by&nbsp;
+          <p style="cursor: pointer;" @click="routeToUser(ticket.ticketOwner.userid)">
+          {{ticket.ticketOwner.firstname}} {{ticket.ticketOwner.lastname}}</p>&nbsp;on
+          {{generateDateString(ticket.createddate)}}</p>
+        </div>
 
         <nuxt-link :to="`/project/${ticket.project.projectid}`">
-          {{ticket.project.name.length <= 30 ? ticket.project.name : ticket.project.name.slice(0, 30) + '...'}}
+          View Project Details
         </nuxt-link>
       </div>
 
@@ -89,6 +90,9 @@ export default {
     methods: {
         routeToTicket(id) {
           this.$router.push(`/ticket/${id}`)
+        },
+        routeToUser(id) {
+          this.$router.push(`/user/${id}`);
         }
     }
 }

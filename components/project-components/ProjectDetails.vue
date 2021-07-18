@@ -2,25 +2,27 @@
   <b-card class="card">
     <h2>{{project.name}}</h2>
     <h3>{{project.description}}</h3>
-    <p>
-      Created by {{project.projectOwner.firstname}}
-      {{project.projectOwner.lastname}} on
-      {{generateDateString(project.createddate)}}
-    </p>
+    <div style="display: flex; align-items: center;">
+      <p>Created by &nbsp;
+      <p @click="routeToUser(user.userid)" style="cursor: pointer;">{{project.projectOwner.firstname}}
+        {{project.projectOwner.lastname}}</p> &nbsp;
+        <p>on {{generateDateString(project.createddate)}}</p>
+      </p>
+    </div>
 
     <a
       v-if="project.repositoryurl"
       v-bind:href="project.repositoryurl"
       class="card-link"
       target="_blank"
-      >Repository URL
+      >View Code
     </a>
     <a
       v-if="project.websiteurl"
       v-bind:href="project.websiteurl"
       class="card-link"
       target="_blank"
-      >Deployed URL
+      >View Website
     </a>
 
     <div v-if="project.users.find(u => u.userid === user.userid)">
@@ -98,6 +100,9 @@ export default {
       handleRemoveUser() {
         this.removeUser(this.user);
         this.toggleRemoveYourselfModal();
+      },
+      routeToUser(id) {
+        this.$router.push(`/user/${id}`);
       }
     }
 }
