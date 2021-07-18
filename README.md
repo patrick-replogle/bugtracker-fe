@@ -12,7 +12,9 @@ Basic features include:
 - Comment on tickets
 
 Deployed site: https://bugtracker-frontend.netlify.app
+
 Backend base url: https://bugtracker-back-end.herokuapp.com
+
 Backend repo url: https://github.com/patrick-replogle/bugtracker-be
 
 ## Tech Stack
