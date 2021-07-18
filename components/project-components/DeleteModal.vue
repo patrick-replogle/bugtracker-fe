@@ -3,14 +3,15 @@
     <p>Are you sure?</p>
     <b-button
       v-if="!isLoading"
+      type="submit"
       variant="outline-primary"
-      @click="deleteTicket(ticket.ticketid)"
-      >Delete</b-button
+      @click="deleteProject(project.projectid)"
+      >delete</b-button
     >
     <b-button v-if="isLoading" disabled variant="outline-primary">
       <b-spinner variant="primary" label="Spinning" class="spinner"></b-spinner
     ></b-button>
-    <b-button variant="outline-primary" @click="toggleDeleteTicketModal"
+    <b-button variant="outline-primary" @click="toggleDeleteProjectModal"
       >Close
     </b-button>
   </div>
@@ -18,7 +19,8 @@
 
 <script>
 export default {
-    props: ['deleteTicket', 'ticket', 'toggleDeleteTicketModal', 'isLoading']
+    props: ['deleteProject', 'toggleDeleteProjectModal', 'isLoading', 'project'],
+
 }
 </script>
 
@@ -26,10 +28,8 @@ export default {
 p {
   font-size: 1.6rem;
 }
-
 button {
   font-size: 1.6rem;
   margin-right: 1%;
-  width: 30%;
 }
 </style>

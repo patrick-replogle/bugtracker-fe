@@ -15,7 +15,16 @@
           required
         ></b-form-input>
 
-        <b-button type="submit" variant="outline-primary">Submit</b-button>
+        <b-button v-if="!isLoading" type="submit" variant="outline-primary"
+          >Submit</b-button
+        >
+        <b-button v-if="isLoading" disabled variant="outline-primary">
+          <b-spinner
+            variant="primary"
+            label="Spinning"
+            class="spinner"
+          ></b-spinner
+        ></b-button>
         <b-button variant="outline-primary" @click="toggleSearchModal"
           >Close</b-button
         >
@@ -104,12 +113,13 @@ export default {
     methods: {
         async onSubmit(e) {
             e.preventDefault();
+            this.isLoading = true;
             this.errMessage = '';
             try {
                 if (this.form.search.length) {
                     const payload = this.form.search.split(' ').join('').toLowerCase().trim();
                     const response = await axiosWithAuth().get(this.$config.baseURL + '/users/user/search/' + payload);
-
+                    this.isLoading = false;
                     this.form.search = '';
                     this.users = response.data;
                     if (response.data.length === 0) {
@@ -118,6 +128,7 @@ export default {
                 }
             } catch (err) {
                 console.dir(err)
+                this.isLoading = false;
                 checkErrorStatus(err, this.$router);
             }
         },

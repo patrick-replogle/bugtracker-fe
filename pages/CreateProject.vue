@@ -52,7 +52,16 @@
         <p v-if="errMessage.length">{{ errMessage }}</p>
 
         <div class="btnContainer">
-          <b-button type="submit" variant="outline-primary">Submit</b-button>
+          <b-button v-if="!isLoading" type="submit" variant="outline-primary"
+            >Submit</b-button
+          >
+          <b-button v-if="isLoading" disabled variant="outline-primary">
+            <b-spinner
+              variant="primary"
+              label="Spinning"
+              class="spinner"
+            ></b-spinner
+          ></b-button>
           <b-button type="reset" variant="outline-primary">Reset</b-button>
         </div>
       </b-form-group>
@@ -75,24 +84,31 @@ export default {
                 imageurl: '',
             },
             errMessage: '',
-            max: 255
+            max: 255,
+            isLoading: false
         }
     },
     methods: {
-        onSubmit(e) {
-            e.preventDefault();
-            this.errMessage = '';
-
+        async onSubmit(e) {
             if (!this.user) return;
 
-            this.form.projectOwner = generateMinimumUserFields(this.user);
+            try {
+              e.preventDefault();
+              this.isLoading = true;
+              this.errMessage = '';
+              this.form.projectOwner = generateMinimumUserFields(this.user);
 
-            if (!this.isEditing) {
-              this.$store.dispatch('user/createProject', this.form);
-            } else {
-              console.log('here')
-              this.$store.dispatch('user/updateProject', this.form);
+              if (!this.isEditing) {
+                await this.$store.dispatch('user/createProject', this.form);
+                this.isLoading = false;
+              } else {
+                await this.$store.dispatch('user/updateProject', this.form);
+                this.isLoading = false;
+              }
+            } catch (err) {
+                this.isLoading = false;
             }
+  
         },
         resetForm(e) {
             e.preventDefault();
@@ -108,9 +124,6 @@ export default {
     computed: {
       user() {
           return this.$store.state.user.user;
-      },
-      isLoading() {
-          return this.$store.state.user.isLoading;
       },
       isEditing() {
         return this.$store.state.user.isEditing;

@@ -40,7 +40,16 @@
       <p v-if="errMessage">{{errMessage}}</p>
 
       <div class="btnContainer">
-        <b-button type="submit" variant="outline-primary">Submit</b-button>
+        <b-button v-if="!isLoading" type="submit" variant="outline-primary"
+          >Submit</b-button
+        >
+        <b-button v-if="isLoading" disabled variant="outline-primary">
+          <b-spinner
+            variant="primary"
+            label="Spinning"
+            class="spinner"
+          ></b-spinner
+        ></b-button>
         <b-button type="reset" variant="outline-primary">Reset</b-button>
       </div>
     </b-form>
@@ -65,6 +74,7 @@ export default {
           priorityOptions: ['LOW', 'MEDIUM', 'HIGH'],
           errMessage: '',
           max: 255,
+          isLoading: false
       }
   },
   methods: {
@@ -72,6 +82,7 @@ export default {
 
       try {
         e.preventDefault();
+        this.isLoading = true;
         this.errMessage = '';
 
         if (!this.user) return;
@@ -80,10 +91,12 @@ export default {
         this.form.project = generateMinimumProjectFields(this.project);
 
         const response = await axiosWithAuth().post(this.$config.baseURL + '/tickets/ticket', this.form);
+        this.isLoading = false;
         this.toggleModal();
         this.project.tickets.push(response.data);
       } catch (err) {
         console.dir(err)
+        this.isLoading = false;
         this.errMessage = 'There was error while processing your request. Please try again.'
         checkErrorStatus(err, this.$router);
       }

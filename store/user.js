@@ -90,9 +90,8 @@ export const actions = {
     async getInitialUserData({ state, commit}) {
         if (state.user) return;
 
-        commit('startRequest');
-
         try {
+            commit('startRequest');
             const response = await axiosWithAuth().get(this.$config.baseURL + '/users/user/token')
             commit('endRequest');
             commit('requestSuccess', response.data);
@@ -105,17 +104,14 @@ export const actions = {
     },
 
     async createProject({state, commit }, payload) {
-        commit('startRequest');
   
         try {
-        const response = await axiosWithAuth().post(this.$config.baseURL + '/projects/project', payload);
-        commit('addProject', response.data)
-        commit('endRequest');
-        this.$router.push('/project/' + response.data.projectid);
+            const response = await axiosWithAuth().post(this.$config.baseURL + '/projects/project', payload);
+            commit('addProject', response.data)
+            this.$router.push('/project/' + response.data.projectid);
         
         } catch(err) {
             console.log(err);
-            commit('endRequest');
             checkErrorStatus(err, this.$router);
         }
     },

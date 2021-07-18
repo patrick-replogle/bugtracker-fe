@@ -57,7 +57,16 @@
         <p v-if="errMessage.length">{{ errMessage }}</p>
 
         <div class="btnContainer">
-          <b-button type="submit" variant="outline-primary">Submit</b-button>
+          <b-button v-if="!isLoading" type="submit" variant="outline-primary"
+            >Submit</b-button
+          >
+          <b-button v-if="isLoading" disabled variant="outline-primary">
+            <b-spinner
+              variant="primary"
+              label="Spinning"
+              class="spinner"
+            ></b-spinner
+          ></b-button>
           <b-button type="reset" variant="outline-primary">Reset</b-button>
         </div>
       </b-form-group>
@@ -81,18 +90,22 @@ export default {
                 password: '',
             },
             errMessage: '',
+            isLoading: false
         }
     },
     methods: {
         onSubmit(e) {
             e.preventDefault();
+            this.isLoading = true;
             this.errMessage = '';
 
             axios.post(this.$config.baseURL + '/auth/register', this.form)
                 .then(res => {
+                    this.isLoading = false;
                     this.$router.push('/login');
                 })
                 .catch(err => {
+                    this.isLoading = false;
                     this.errMessage = err.response.data.detail;
                 })
 

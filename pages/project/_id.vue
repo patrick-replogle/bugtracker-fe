@@ -20,15 +20,12 @@
       </b-modal>
 
       <b-modal ref="delete-modal" hide-footer hide-header class="deleteModal">
-        <p>Are you sure?</p>
-        <b-button
-          variant="outline-primary"
-          @click="deleteProject(project.projectid)"
-          >Delete
-        </b-button>
-        <b-button variant="outline-primary" @click="toggleDeleteProjectModal"
-          >Close
-        </b-button>
+        <DeleteModal
+          :deleteProject="deleteProject"
+          :toggleDeleteProjectModal="toggleDeleteProjectModal"
+          :isLoading="isLoading"
+          :project="project"
+        />
       </b-modal>
 
       <b-modal ref="search-modal" hide-footer hide-header class="searchModal">
@@ -51,6 +48,7 @@ import ProjectDetails from '../../components/project-components/ProjectDetails.v
 import ProjectTabs from '../../components/project-components/ProjectTabs.vue';
 import AddTicketForm from '../../components/project-components/AddTicketForm.vue'
 import SearchUsers from '../../components/project-components/SearchUsers.vue';
+import DeleteModal from '../../components/project-components/DeleteModal.vue';
 
 export default {
    middleware: "auth",
@@ -58,7 +56,8 @@ export default {
     ProjectDetails,
     ProjectTabs,
     AddTicketForm,
-    SearchUsers
+    SearchUsers,
+    DeleteModal
   },
   data() {
     return {

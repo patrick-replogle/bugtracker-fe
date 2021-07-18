@@ -75,6 +75,7 @@ import { axiosWithAuth } from '../../util/axiosWithAuth.js';
 import ProfileEditForm from '../../components/other/ProfileEditForm.vue';
 
 export default {
+    middleware: "auth",
     components: {
         ProfileEditForm
     },

@@ -29,7 +29,14 @@
             </b-form-group>
 
             <div class="btnContainer">
-                <b-button type="submit" variant="outline-primary">Submit</b-button>
+                <b-button v-if="!isLoading" type="submit" variant="outline-primary"
+                >Submit</b-button>
+                <b-button v-if="isLoading" disabled variant="outline-primary">
+                    <b-spinner
+                    variant="primary"
+                    label="Spinning"
+                    class="spinner"></b-spinner
+                ></b-button>
                 <b-button type="reset" variant="outline-primary">Reset</b-button>
                 <b-button  variant="outline-primary" @click="toggleEditModal">Cancel</b-button>
             </div>
@@ -48,6 +55,7 @@ export default {
                 lastname: '',
                 company: '',
             },
+            isLoading: false
         }
     },
     computed: {
@@ -58,12 +66,15 @@ export default {
     methods: {
         async onSubmit(e) {
             e.preventDefault();
+            this.isLoading = true;
 
             try {
                 await this.$store.dispatch('user/updateUser', this.form);
+                this.isLoading = false;
                 this.setUser(this.form);
                 this.toggleEditModal();
             } catch (err) {
+                this.isLoading = false;
                 console.dir(err);
             }
 

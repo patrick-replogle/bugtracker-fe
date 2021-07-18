@@ -23,7 +23,16 @@
         <p v-if="errMessage">{{ errMessage }}</p>
 
         <div class="btnContainer">
-          <b-button type="submit" variant="outline-primary">Submit</b-button>
+          <b-button v-if="!isLoading" type="submit" variant="outline-primary"
+            >Submit</b-button
+          >
+          <b-button v-if="isLoading" disabled variant="outline-primary">
+            <b-spinner
+              variant="primary"
+              label="Spinning"
+              class="spinner"
+            ></b-spinner
+          ></b-button>
           <b-button type="reset" variant="outline-primary">Reset</b-button>
         </div>
       </b-form-group>
@@ -43,12 +52,14 @@ export default {
                 password: '',
             },
             errMessage: null,
+            isLoading: false
         }
     },
     methods: {
         onSubmit(e) {
             e.preventDefault();
             this.errMessage = null;
+            this.isLoading = true;
             axios.post(this.$config.baseURL + '/login', `grant_type=password&username=${this.form.username}&password=${this.form.password}`, {
                 headers: {
                     Authorization: `Basic ${btoa(`${this.$config.clientId}:${this.$config.clientSecret}`)}`,
@@ -56,10 +67,12 @@ export default {
                     }
                 })
                 .then(res => {
+                    this.isLoading = false;
                     window.localStorage.setItem('token', res.data.access_token);
                     this.$router.push('/dashboard');
                 })
                 .catch(err => {
+                    this.isLoading = false;
                     this.errMessage = err.response.data.error_description;
                     console.dir(err)
                 })

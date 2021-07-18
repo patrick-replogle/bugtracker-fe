@@ -34,6 +34,7 @@
         :deleteTicket="deleteTicket"
         :ticket="ticket"
         :toggleDeleteTicketModal="toggleDeleteTicketModal"
+        :isLoading="isLoading"
       />
     </b-modal>
 
@@ -146,10 +147,13 @@ export default {
         },
         async deleteComment(id) {
             try {
+                this.isLoading = true;
                 await axiosWithAuth().delete(this.$config.baseURL + '/comments/comment/' + id);
+                this.isLoading = false;
                 this.ticket.comments = this.ticket.comments.filter(c => c.commentid !== id);
             } catch (err) {
                 console.dir(err)
+                this.isLoading = false;
                 checkErrorStatus(err, this.$router);
             }
         },
