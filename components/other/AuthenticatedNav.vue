@@ -228,6 +228,9 @@ export default {
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    @media (max-width: 600px) {
+      width: 30%;
+    }
 
     .icon {
       font-size: 2.5rem;
@@ -252,6 +255,9 @@ export default {
     width: 60%;
     display: flex;
     justify-content: flex-end;
+    @media (max-width: 600px) {
+      width: 70%;
+    }
 
     .icon {
       font-size: 3rem;
@@ -259,7 +265,9 @@ export default {
       margin-left: 8%;
 
       @media (max-width: 600px) {
-        font-size: 2.5rem;
+        font-size: 2rem;
+        margin-left: 15%;
+        margin-bottom: 3%;
       }
     }
   }
