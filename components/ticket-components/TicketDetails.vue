@@ -66,9 +66,10 @@ export default {
     },
     methods: {
         async markCompleted() {
-          const body = { completed: true };
+          const body = { ticketid: Number(this.$route.params.id), completed: true };
           try {
             await axiosWithAuth().patch(this.$config.baseURL + '/tickets/ticket/' + this.$route.params.id, body);
+            this.$store.commit('user/updateTicket', body);
             this.setTicket(body);
           } catch (err) {
             console.dir(err);
@@ -76,9 +77,10 @@ export default {
           }
         },
         async reopenTicket() {
-          const body = { completed: false };
+          const body = { ticketid: Number(this.$route.params.id), completed: false };
           try {
             await axiosWithAuth().patch(this.$config.baseURL + '/tickets/ticket/' + this.$route.params.id, body);
+            this.$store.commit('user/updateTicket', body);
             this.setTicket(body);
           } catch (err) {
             console.dir(err);

@@ -61,139 +61,156 @@
 </template>
 
 <script>
-import { axiosWithAuth } from '../../util/axiosWithAuth.js';
-import { generateDateString, checkErrorStatus, generateMinimumUserFields } from '../../util/functions';
-import TicketDetails from '../../components/ticket-components/TicketDetails.vue';
-import EditTicketForm from '../../components/ticket-components/EditTicketForm.vue';
-import AddCommentForm from '../../components/ticket-components/AddCommentForm.vue';
-import TicketComments from '../../components/ticket-components/TicketComments.vue';
-import AssignUser from '../../components/ticket-components/AssignUser.vue';
-import DeleteModalContent from '../../components/ticket-components/DeleteModalContent.vue'
+import { axiosWithAuth } from "../../util/axiosWithAuth.js";
+import {
+  generateDateString,
+  checkErrorStatus,
+  generateMinimumUserFields
+} from "../../util/functions";
+import TicketDetails from "../../components/ticket-components/TicketDetails.vue";
+import EditTicketForm from "../../components/ticket-components/EditTicketForm.vue";
+import AddCommentForm from "../../components/ticket-components/AddCommentForm.vue";
+import TicketComments from "../../components/ticket-components/TicketComments.vue";
+import AssignUser from "../../components/ticket-components/AssignUser.vue";
+import DeleteModalContent from "../../components/ticket-components/DeleteModalContent.vue";
 
 export default {
-    middleware: "auth",
-    components: {
-        TicketDetails,
-        EditTicketForm,
-        AddCommentForm,
-        TicketComments,
-        AssignUser,
-        DeleteModalContent
-    },
+  middleware: "auth",
+  components: {
+    TicketDetails,
+    EditTicketForm,
+    AddCommentForm,
+    TicketComments,
+    AssignUser,
+    DeleteModalContent
+  },
 
-    data() {
-        return {
-            ticket: null,
-            isLoading: false,
-            showModal: false,
-            commentToEdit: null,
-            isEditing: false,
-            generateDateString
+  data() {
+    return {
+      ticket: null,
+      isLoading: false,
+      showModal: false,
+      commentToEdit: null,
+      isEditing: false,
+      generateDateString
+    };
+  },
+  created() {
+    axiosWithAuth()
+      .get(this.$config.baseURL + "/tickets/ticket/" + this.$route.params.id)
+      .then((res) => {
+        this.ticket = res.data;
+      })
+      .catch((err) => {
+        console.dir(err);
+        checkErrorStatus(err, this.$router);
+      });
+  },
+  computed: {
+    user() {
+      return this.$store.state.user.user;
+    }
+  },
+  methods: {
+    toggleEditModal() {
+      this.$refs["edit-modal"].toggle("#edit-modal");
+    },
+    toggleCommentModal() {
+      this.$refs["comment-modal"].toggle("#comment-modal");
+    },
+    toggleDeleteTicketModal() {
+      this.$refs["delete-modal"].toggle("#delete-modal");
+    },
+    toggleAssignUserModal() {
+      this.$refs["assign-user-modal"].toggle("#assign-user-modal");
+    },
+    setTicket(changes) {
+      this.ticket = {
+        ...this.ticket,
+        ...changes
+      };
+    },
+    addComment(comment) {
+      this.ticket.comments.push(comment);
+    },
+    toggleCommentEdit(comment) {
+      this.commentToEdit = comment;
+      this.isEditing = true;
+      this.toggleCommentModal();
+    },
+    cancelEdit() {
+      this.commentToEdit = null;
+      this.isEditing = false;
+    },
+    updateComments(comment) {
+      this.ticket.comments = this.ticket.comments.map((c) => {
+        if (c.commentid === comment.commentid) {
+          return comment;
         }
+        return c;
+      });
     },
-    created() {
-        axiosWithAuth().get(this.$config.baseURL + '/tickets/ticket/' + this.$route.params.id)
-            .then(res =>{
-              this.ticket = res.data;
-            })
-            .catch(err => {
-                console.dir(err)
-                checkErrorStatus(err, this.$router);
-            })
+    async deleteComment(id) {
+      try {
+        this.isLoading = true;
+        await axiosWithAuth().delete(
+          this.$config.baseURL + "/comments/comment/" + id
+        );
+        this.isLoading = false;
+        this.ticket.comments = this.ticket.comments.filter(
+          (c) => c.commentid !== id
+        );
+      } catch (err) {
+        console.dir(err);
+        this.isLoading = false;
+        checkErrorStatus(err, this.$router);
+      }
     },
-    computed: {
-        user() {
-            return this.$store.state.user.user;
-        },
+    async deleteTicket(id) {
+      try {
+        await axiosWithAuth().delete(
+          this.$config.baseURL + "/tickets/ticket/" + id
+        );
+        this.$store.commit("user/deleteTicket", id);
+        this.$router.push("/project/" + this.ticket.project.projectid);
+      } catch (err) {
+        console.dir(err);
+        checkErrorStatus(err, this.$router);
+      }
     },
-    methods: {
-        toggleEditModal() {
-            this.$refs['edit-modal'].toggle('#edit-modal');
-        },
-        toggleCommentModal() {
-            this.$refs['comment-modal'].toggle('#comment-modal');
-        },
-        toggleDeleteTicketModal() {
-            this.$refs['delete-modal'].toggle('#delete-modal');
-        },
-        toggleAssignUserModal() {
-            this.$refs['assign-user-modal'].toggle('#assign-user-modal');
-        },
-        setTicket(changes) {
-            this.ticket = {
-                ...this.ticket,
-                ...changes
-            }
-        },
-        addComment(comment) {
-            this.ticket.comments.push(comment);
-        },
-        toggleCommentEdit(comment) {
-            this.commentToEdit = comment;
-            this.isEditing = true;
-            this.toggleCommentModal();
-        },
-        cancelEdit() {
-            this.commentToEdit = null;
-            this.isEditing = false;
-        },
-        updateComments(comment) {
-            this.ticket.comments = this.ticket.comments.map(c => {
-                if (c.commentid === comment.commentid) {
-                    return comment;
-                }
-                return c;
-            })
-        },
-        async deleteComment(id) {
-            try {
-                this.isLoading = true;
-                await axiosWithAuth().delete(this.$config.baseURL + '/comments/comment/' + id);
-                this.isLoading = false;
-                this.ticket.comments = this.ticket.comments.filter(c => c.commentid !== id);
-            } catch (err) {
-                console.dir(err)
-                this.isLoading = false;
-                checkErrorStatus(err, this.$router);
-            }
-        },
-        async deleteTicket(id) {
-            try {
-                await axiosWithAuth().delete(this.$config.baseURL + '/tickets/ticket/' + id);
-                this.$router.push('/project/' + this.ticket.project.projectid);
-                this.$store.commit('user/deleteTicket', id);
-            } catch (err) {
-                console.dir(err);
-                checkErrorStatus(err, this.$router);
-            }
-        },
-        async assignUser(u) {
-            const assignedUser = { assignedUser: generateMinimumUserFields(u)};
-            try {
-              const res = await axiosWithAuth().patch(this.$config.baseURL + '/tickets/ticket/' + this.$route.params.id, assignedUser);
-              if (u.userid === this.user.userid) {
-                  this.$store.commit('user/addTicket', res.data);
-              }
-              this.setTicket(assignedUser);
-            } catch (err) {
-              console.dir(err);
-              checkErrorStatus(err, this.$router);
-            }
-        },
-        async unassignUser(u) {
-            try {
-              await axiosWithAuth().patch(this.$config.baseURL + '/tickets/ticket/' + this.$route.params.id, this.ticket);
-              this.setTicket({ assignedUser: null });
-              if (u.userid === this.user.userid) {
-                  this.$store.commit('user/deleteTicket', this.ticket.ticketid);
-              }
-            } catch (err) {
-              console.dir(err);
-              checkErrorStatus(err, this.$router);
-            }
-        },
+    async assignUser(u) {
+      const assignedUser = { assignedUser: generateMinimumUserFields(u) };
+      try {
+        const res = await axiosWithAuth().patch(
+          this.$config.baseURL + "/tickets/ticket/" + this.$route.params.id,
+          assignedUser
+        );
+        if (u.userid === this.user.userid) {
+          this.$store.commit("user/addTicket", res.data);
+        }
+        this.setTicket(assignedUser);
+      } catch (err) {
+        console.dir(err);
+        checkErrorStatus(err, this.$router);
+      }
+    },
+    async unassignUser(u) {
+      try {
+        await axiosWithAuth().patch(
+          this.$config.baseURL + "/tickets/ticket/" + this.$route.params.id,
+          this.ticket
+        );
+        this.setTicket({ assignedUser: null });
+        if (u.userid === this.user.userid) {
+          this.$store.commit("user/deleteTicket", this.ticket.ticketid);
+        }
+      } catch (err) {
+        console.dir(err);
+        checkErrorStatus(err, this.$router);
+      }
+    }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
