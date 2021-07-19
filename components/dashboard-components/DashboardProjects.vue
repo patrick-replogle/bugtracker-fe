@@ -6,18 +6,29 @@
       </p>
       <b-card
         v-for="project in user.allProjects"
-        img-src="~/assets/img/placeholder.jpg"
-        img-alt="Image"
-        img-top
         tag="article"
         class="card"
         :key="project.projectid"
       >
+        <img
+          v-if="project.imageurl"
+          :src="project.imageurl"
+          alt="uploaded project avatar"
+        />
+        <img
+          v-else
+          src="~/assets/img/placeholder.jpg"
+          alt="stock project avatar"
+        />
         <h3>
-          {{ project.name.length <= 28 ? project.name : project.name.slice(0, 28) + '...' }}
+          {{
+            project.name.length <= 28
+              ? project.name
+              : project.name.slice(0, 28) + "..."
+          }}
         </h3>
 
-        <p>Modified on {{generateDateString(project.lastmodifieddate)}}</p>
+        <p>Modified on {{ generateDateString(project.lastmodifieddate) }}</p>
 
         <b-button variant="primary" @click="routeToProject(project.projectid)"
           >Open Project</b-button
@@ -28,28 +39,29 @@
 </template>
 
 <script>
-import { generateDateString } from '../../util/functions';
+import { generateDateString } from "../../util/functions";
 
 export default {
-    data() {
-        return {
-            generateDateString
-        }
+  data() {
+    return {
+      generateDateString,
+      imagePlaceholder: "~/assets/img/placeholder.jpg"
+    };
+  },
+  computed: {
+    user() {
+      return this.$store.state.user.user;
     },
-    computed: {
-        user() {
-            return this.$store.state.user.user;
-        },
-        isLoading() {
-            return this.$store.state.user.isLoading;
-        },
-    },
-    methods: {
-        routeToProject(id) {
-            this.$router.push(`/project/${id}`)
-        },
+    isLoading() {
+      return this.$store.state.user.isLoading;
     }
-}
+  },
+  methods: {
+    routeToProject(id) {
+      this.$router.push(`/project/${id}`);
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -58,8 +70,9 @@ export default {
   flex-wrap: wrap;
 
   .card {
-    width: 30%;
+    width: 31%;
     margin: 1%;
+    border-radius: 6px;
 
     @media (max-width: 1000px) {
       width: 45%;
@@ -68,6 +81,13 @@ export default {
     @media (max-width: 600px) {
       width: 98%;
       margin: 1% 0;
+    }
+
+    img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      margin-bottom: 2%;
     }
 
     h3 {

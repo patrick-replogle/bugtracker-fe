@@ -168,13 +168,16 @@ export default {
     },
     async deleteTicket(id) {
       try {
+        this.isLoading = true;
         await axiosWithAuth().delete(
           this.$config.baseURL + "/tickets/ticket/" + id
         );
+        this.isLoading = false;
         this.$store.commit("user/deleteTicket", id);
         this.$router.push("/project/" + this.ticket.project.projectid);
       } catch (err) {
         console.dir(err);
+        this.isLoading = false;
         checkErrorStatus(err, this.$router);
       }
     },

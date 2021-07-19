@@ -73,8 +73,14 @@
           :key="u.userid"
         >
           <div style="display: flex; align-items: center;">
-            <b-avatar class="mr-3"></b-avatar>
-            <div style="display: flex; flex-direction: column;">
+            <img
+              v-if="u.imageurl"
+              :src="u.imageurl"
+              alt="uploaded project avatar"
+              class="avatar"
+            />
+            <b-avatar v-else  class="avatar"></b-avatar>
+            <div style="display: flex; flex-direction: column; margin-left: 2%; width: 80%;">
               <span style="cursor: pointer;" @click="routeToUser(u.userid)"
                 >{{u.firstname}} {{u.lastname}}</span
               >
@@ -213,6 +219,13 @@ export default {
       border: 1px solid rgba(0, 0, 0, 0.125);
       margin: 1% 0;
       border-radius: 6px;
+
+      .avatar {
+        width: 30px;
+        height: 30px;
+        object-fit: cover;
+        border-radius: 50%;
+      }
 
       .icon {
         font-size: 4rem;

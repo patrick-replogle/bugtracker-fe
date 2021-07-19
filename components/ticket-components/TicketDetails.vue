@@ -3,6 +3,11 @@
     <p v-if="ticket.completed" class="completedText">
       This Ticket Has Been Completed
     </p>
+    <img
+      v-if="ticket.imageurl"
+      :src="ticket.imageurl"
+      alt="uploaded project avatar"
+    />
     <h2>{{ticket.title}}</h2>
     <h3>{{ticket.description}}</h3>
     <p v-bind:style="priorityStyle" class="priorityP">
@@ -118,6 +123,12 @@ p {
 .card {
   display: flex;
   flex-direction: column;
+
+  img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
 
   @media (max-width: 600px) {
     margin: 3% 0;

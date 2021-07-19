@@ -40,13 +40,16 @@
         ></b-form-input>
       </b-form-group>
 
-      <b-form-group label="Image URL" label-for="imageurl">
-        <b-form-input
-          id="imageurl"
-          v-model="form.imageurl"
-          :maxlength="max"
-          type="text"
-        ></b-form-input>
+      <b-form-group label="Upload Image" label-for="imageurl">
+        <b-form-file
+        id="imageurl" 
+        @change="handleFileChange"
+        v-model="imageInput"
+        placeholder="Choose an image"
+        drop-placeholder="Drop file here..."
+        accept=".jpg, .png, .gif"
+        >
+      </b-form-file>
       </b-form-group>
 
         <p v-if="errMessage.length">{{ errMessage }}</p>
@@ -81,11 +84,13 @@ export default {
                 description: '',
                 repositoryurl: '',
                 websiteurl: '',
-                imageurl: '',
+                imageurl: null
             },
             errMessage: '',
             max: 255,
-            isLoading: false
+            isLoading: false,
+            imageInput: null,
+            imageSizeLimit: 1500000
         }
     },
     methods: {
@@ -108,7 +113,19 @@ export default {
             } catch (err) {
                 this.isLoading = false;
             }
-  
+        },
+        handleFileChange(e) {
+          if (e.target.files[0]) {
+            if (e.target.files[0].size > this.imageSizeLimit) {
+              alert('File size too large.')
+            } else {
+              var reader = new FileReader()
+              reader.readAsDataURL(e.target.files[0])
+              reader.onload = ()=> {
+                this.form.imageurl = reader.result;
+              };
+            }
+          }
         },
         resetForm(e) {
             e.preventDefault();
@@ -118,6 +135,7 @@ export default {
             this.form.websiteurl = '';
             this.form.imageurl = '';
             this.errMessage = '';
+            this.imageInput = null;
             this.$store.commit('user/cancelEdit');
         }
     },

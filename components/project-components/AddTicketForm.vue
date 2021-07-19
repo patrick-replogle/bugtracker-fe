@@ -20,12 +20,16 @@
         ></b-form-textarea>
       </b-form-group>
 
-      <b-form-group label="Image" label-for="imageurl">
-        <b-form-input
+      <b-form-group label="Upload Image" label-for="imageurl">
+        <b-form-file
           id="imageurl"
-          v-model="form.imageurl"
-          type="text"
-        ></b-form-input>
+          @change="handleFileChange"
+          v-model="imageInput"
+          placeholder="Choose an image"
+          drop-placeholder="Drop file here..."
+          accept=".jpg, .png, .gif"
+        >
+        </b-form-file>
       </b-form-group>
 
       <b-form-group label="Priority" label-for="priority">
@@ -37,7 +41,7 @@
         </b-form-select>
       </b-form-group>
 
-      <p v-if="errMessage">{{errMessage}}</p>
+      <p v-if="errMessage">{{ errMessage }}</p>
 
       <div class="btnContainer">
         <b-button v-if="!isLoading" type="submit" variant="outline-primary"
@@ -57,65 +61,87 @@
 </template>
 
 <script>
-import { axiosWithAuth } from '../../util/axiosWithAuth.js';
-import { generateMinimumUserFields, generateMinimumProjectFields, checkErrorStatus } from '../../util/functions';
+import { axiosWithAuth } from "../../util/axiosWithAuth.js";
+import {
+  generateMinimumUserFields,
+  generateMinimumProjectFields,
+  checkErrorStatus
+} from "../../util/functions";
 
 export default {
-    props: ['toggleModal', 'project'],
-    data() {
-      return {
-          form: {
-              title: '',
-              description: '',
-              imageurl: '',
-              completed: false,
-              priority: 'LOW'
-          },
-          priorityOptions: ['LOW', 'MEDIUM', 'HIGH'],
-          errMessage: '',
-          max: 255,
-          isLoading: false
-      }
+  props: ["toggleModal", "project"],
+  data() {
+    return {
+      form: {
+        title: "",
+        description: "",
+        imageurl: null,
+        completed: false,
+        priority: "LOW"
+      },
+      priorityOptions: ["LOW", "MEDIUM", "HIGH"],
+      errMessage: "",
+      max: 255,
+      isLoading: false,
+      imageInput: null,
+      imageSizeLimit: 15000000
+    };
   },
   methods: {
     async onSubmit(e) {
-
       try {
         e.preventDefault();
         this.isLoading = true;
-        this.errMessage = '';
+        this.errMessage = "";
 
         if (!this.user) return;
 
         this.form.ticketOwner = generateMinimumUserFields(this.user);
         this.form.project = generateMinimumProjectFields(this.project);
 
-        const response = await axiosWithAuth().post(this.$config.baseURL + '/tickets/ticket', this.form);
+        const response = await axiosWithAuth().post(
+          this.$config.baseURL + "/tickets/ticket",
+          this.form
+        );
         this.isLoading = false;
         this.toggleModal();
         this.project.tickets.push(response.data);
       } catch (err) {
-        console.dir(err)
+        console.dir(err);
         this.isLoading = false;
-        this.errMessage = 'There was error while processing your request. Please try again.'
+        this.errMessage =
+          "There was error while processing your request. Please try again.";
         checkErrorStatus(err, this.$router);
       }
     },
     resetForm(e) {
       e.preventDefault();
-      this.form.title =  '',
-      this.form.description=  '',
-      this.form.imageurl = '',
-      this.form.completed = false,
-      this.form.priority = 'LOW'
+      (this.form.title = ""),
+        (this.form.description = ""),
+        (this.form.imageurl = ""),
+        (this.form.completed = false),
+        (this.form.priority = "LOW");
+    },
+    handleFileChange(e) {
+      if (e.target.files[0]) {
+        if (e.target.files[0].size > this.imageSizeLimit) {
+          alert("File size too large.");
+        } else {
+          var reader = new FileReader();
+          reader.readAsDataURL(e.target.files[0]);
+          reader.onload = () => {
+            this.form.imageurl = reader.result;
+          };
+        }
+      }
     }
   },
   computed: {
     user() {
-        return this.$store.state.user.user;
-    },
-  },
-}
+      return this.$store.state.user.user;
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>

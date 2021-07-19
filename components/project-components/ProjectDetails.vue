@@ -1,5 +1,15 @@
 <template>
   <b-card class="card">
+    <img
+      v-if="project.imageurl"
+      :src="project.imageurl"
+      alt="uploaded project avatar"
+    />
+    <!-- <img
+      v-else
+      src="~/assets/img/placeholder.jpg"
+      alt="stock project avatar"
+    /> -->
     <h2>{{project.name}}</h2>
     <h3>{{project.description}}</h3>
     <div style="display: flex; align-items: center;">
@@ -118,6 +128,12 @@ export default {
     @media (max-width: 600px) {
       margin: 3% 0;
     }
+  }
+
+  img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
   }
 
   h2 {

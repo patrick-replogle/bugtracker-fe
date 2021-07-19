@@ -42,16 +42,16 @@
 </template>
 
 <script>
-import { axiosWithAuth } from '../../util/axiosWithAuth.js';
-import { checkErrorStatus } from '../../util/functions';
-import ProjectDetails from '../../components/project-components/ProjectDetails.vue';
-import ProjectTabs from '../../components/project-components/ProjectTabs.vue';
-import AddTicketForm from '../../components/project-components/AddTicketForm.vue'
-import SearchUsers from '../../components/project-components/SearchUsers.vue';
-import DeleteModal from '../../components/project-components/DeleteModal.vue';
+import { axiosWithAuth } from "../../util/axiosWithAuth.js";
+import { checkErrorStatus } from "../../util/functions";
+import ProjectDetails from "../../components/project-components/ProjectDetails.vue";
+import ProjectTabs from "../../components/project-components/ProjectTabs.vue";
+import AddTicketForm from "../../components/project-components/AddTicketForm.vue";
+import SearchUsers from "../../components/project-components/SearchUsers.vue";
+import DeleteModal from "../../components/project-components/DeleteModal.vue";
 
 export default {
-   middleware: "auth",
+  middleware: "auth",
   components: {
     ProjectDetails,
     ProjectTabs,
@@ -61,64 +61,85 @@ export default {
   },
   data() {
     return {
-        project: null,
-        isLoading: false,
-        showModal: false,
-    }
+      project: null,
+      showModal: false,
+      isLoading: false
+    };
   },
   created() {
-      axiosWithAuth().get(this.$config.baseURL + '/projects/project/' + this.$route.params.id)
-          .then(res => this.project = res.data)
-          .catch(err => {
-            console.dir(err);
-            checkErrorStatus(err, this.$router);
-          })
+    axiosWithAuth()
+      .get(this.$config.baseURL + "/projects/project/" + this.$route.params.id)
+      .then((res) => (this.project = res.data))
+      .catch((err) => {
+        console.dir(err);
+        checkErrorStatus(err, this.$router);
+      });
   },
   computed: {
-      user() {
-          return this.$store.state.user.user;
-      },
+    user() {
+      return this.$store.state.user.user;
+    }
   },
   methods: {
-      toggleModal() {
-        this.$refs['modal'].toggle('#modal');
-      },
-      toggleDeleteProjectModal() {
-        this.$refs['delete-modal'].toggle('#delete-modal');
-      },
-      toggleSearchModal() {
-        this.$refs['search-modal'].toggle('#search-modal');
-      },
-      deleteProject(id) {
-        this.$store.dispatch('user/deleteProject', id);
-      },
-      addUserToProject(user) {
-        this.project.users.push(user);
-      },
-      removeUserFromProject(userid) {
-        this.project.users = this.project.users.filter(u => u.userid !== userid);
-      },
-      async addUser(user) {
-          try {
-              await axiosWithAuth().post(this.$config.baseURL + `/users/user/${user.userid}/project/${this.project.projectid}`);
-              this.addUserToProject(user);
-          } catch (err) {
-              console.dir(err);
-          }
-      },
-      async removeUser(user) {
-          try {
-              await axiosWithAuth().delete(this.$config.baseURL + `/users/user/${user.userid}/project/${this.project.projectid}`);
-              this.removeUserFromProject(user.userid);
-              if (this.user.userid === user.userid) {
-                this.$store.commit('user/removeProject', this.project.projectid);
-              }
-          } catch (err) {
-              console.dir(err);
-          }
+    toggleModal() {
+      this.$refs["modal"].toggle("#modal");
+    },
+    toggleDeleteProjectModal() {
+      this.$refs["delete-modal"].toggle("#delete-modal");
+    },
+    toggleSearchModal() {
+      this.$refs["search-modal"].toggle("#search-modal");
+    },
+    async deleteProject(id) {
+      try {
+        this.isLoading = true;
+        await axiosWithAuth().delete(
+          this.$config.baseURL + "/projects/project/" + id
+        );
+        this.$store.commit("user/removeProject", id);
+        this.isLoading = false;
+        this.$router.push("/dashboard");
+      } catch (err) {
+        console.dir(err);
+        this.isLoading = false;
+        checkErrorStatus(err, this.$router);
       }
-  },
-}
+    },
+    addUserToProject(user) {
+      this.project.users.push(user);
+    },
+    removeUserFromProject(userid) {
+      this.project.users = this.project.users.filter(
+        (u) => u.userid !== userid
+      );
+    },
+    async addUser(user) {
+      try {
+        await axiosWithAuth().post(
+          this.$config.baseURL +
+            `/users/user/${user.userid}/project/${this.project.projectid}`
+        );
+        this.addUserToProject(user);
+      } catch (err) {
+        console.dir(err);
+      }
+    },
+    async removeUser(user) {
+      try {
+        await axiosWithAuth().delete(
+          this.$config.baseURL +
+            `/users/user/${user.userid}/project/${this.project.projectid}`
+        );
+        this.removeUserFromProject(user.userid);
+        if (this.user.userid === user.userid) {
+          this.$store.commit("user/removeProject", this.project.projectid);
+        }
+      } catch (err) {
+        console.dir(err);
+      }
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>

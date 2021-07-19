@@ -1,6 +1,12 @@
 <template>
   <div class="container" v-if="user">
+    <img
+      v-if="user.imageurl"
+      :src="user.imageurl"
+      alt="uploaded project avatar"
+    />
     <svg
+      v-else
       xmlns="http://www.w3.org/2000/svg"
       xmlns:xlink="http://www.w3.org/1999/xlink"
       aria-hidden="true"
@@ -92,9 +98,18 @@ export default {
   flex-direction: column;
 
   .icon {
-    font-size: 12rem;
+    font-size: 16rem;
     align-self: center;
     margin: 1% 0;
+  }
+
+  img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    align-self: center;
+    border-radius: 50%;
+    margin: 2% 0 1% 0;
   }
 
   p {

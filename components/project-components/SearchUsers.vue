@@ -31,15 +31,21 @@
       </div>
     </b-form>
 
-    <p style="text-align: center; margin-top: 2%;">{{errMessage}}</p>
+    <p style="text-align: center; margin-top: 2%">{{ errMessage }}</p>
 
-    <b-list-group v-if="users && users.length" style="width: 100%;">
+    <b-list-group v-if="users && users.length" style="width: 100%">
       <b-list-group-item class="user" v-for="u in users" :key="u.userid">
-        <div style="display: flex; align-items: center;">
-          <b-avatar class="mr-3"></b-avatar>
-          <div style="display: flex; flex-direction: column;">
-            <span>{{u.firstname}} {{u.lastname}}</span>
-            <span style="font-size: 1.4rem;">{{u.email}}</span>
+        <div style="display: flex; align-items: center">
+          <img
+            v-if="u.imageurl"
+            :src="u.imageurl"
+            alt="uploaded project avatar"
+            class="avatar"
+          />
+          <b-avatar v-else class="avatar"></b-avatar>
+          <div style="display: flex; flex-direction: column; margin-left: 3%">
+            <span>{{ u.firstname }} {{ u.lastname }}</span>
+            <span style="font-size: 1.4rem">{{ u.email }}</span>
           </div>
         </div>
 
@@ -50,7 +56,11 @@
           focusable="false"
           width="1em"
           height="1em"
-          style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"
+          style="
+            -ms-transform: rotate(360deg);
+            -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+          "
           preserveAspectRatio="xMidYMid meet"
           viewBox="0 0 24 24"
           class="icon"
@@ -72,7 +82,11 @@
           focusable="false"
           width="1em"
           height="1em"
-          style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"
+          style="
+            -ms-transform: rotate(360deg);
+            -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+          "
           preserveAspectRatio="xMidYMid meet"
           viewBox="0 0 32 32"
           class="icon"
@@ -90,53 +104,59 @@
 </template>
 
 <script>
-import { axiosWithAuth } from '../../util/axiosWithAuth.js';
-import { checkErrorStatus } from '../../util/functions'
+import { axiosWithAuth } from "../../util/axiosWithAuth.js";
+import { checkErrorStatus } from "../../util/functions";
 
 export default {
-    props: ['project', 'toggleSearchModal', 'removeUser', 'addUser'],
-    data() {
-        return {
-            form: {
-                search: '',
-            },
-            users: null,
-            isLoading: false,
-            errMessage: ''
-        }
-    },
-    computed: {
-        user() {
-            return this.$store.state.user.user;
-        },
-    },
-    methods: {
-        async onSubmit(e) {
-            e.preventDefault();
-            this.isLoading = true;
-            this.errMessage = '';
-            try {
-                if (this.form.search.length) {
-                    const payload = this.form.search.split(' ').join('').toLowerCase().trim();
-                    const response = await axiosWithAuth().get(this.$config.baseURL + '/users/user/search/' + payload);
-                    this.isLoading = false;
-                    this.form.search = '';
-                    this.users = response.data;
-                    if (response.data.length === 0) {
-                      this.errMessage = 'No results found'
-                    }
-                }
-            } catch (err) {
-                console.dir(err)
-                this.isLoading = false;
-                checkErrorStatus(err, this.$router);
-            }
-        },
-        findUser(user) {
-            return this.project.users.find(u => u.userid === user.userid);
-        },
+  props: ["project", "toggleSearchModal", "removeUser", "addUser"],
+  data() {
+    return {
+      form: {
+        search: ""
+      },
+      users: null,
+      isLoading: false,
+      errMessage: ""
+    };
+  },
+  computed: {
+    user() {
+      return this.$store.state.user.user;
     }
-}
+  },
+  methods: {
+    async onSubmit(e) {
+      e.preventDefault();
+      this.isLoading = true;
+      this.errMessage = "";
+      try {
+        if (this.form.search.length) {
+          const payload = this.form.search
+            .split(" ")
+            .join("")
+            .toLowerCase()
+            .trim();
+          const response = await axiosWithAuth().get(
+            this.$config.baseURL + "/users/user/search/" + payload
+          );
+          this.isLoading = false;
+          this.form.search = "";
+          this.users = response.data;
+          if (response.data.length === 0) {
+            this.errMessage = "No results found";
+          }
+        }
+      } catch (err) {
+        console.dir(err);
+        this.isLoading = false;
+        checkErrorStatus(err, this.$router);
+      }
+    },
+    findUser(user) {
+      return this.project.users.find((u) => u.userid === user.userid);
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -191,6 +211,13 @@ export default {
     border: 1px solid rgba(0, 0, 0, 0.125);
     margin: 1% 0;
     border-radius: 6px;
+
+    .avatar {
+      width: 30px;
+      height: 30px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
 
     .icon {
       font-size: 4rem;

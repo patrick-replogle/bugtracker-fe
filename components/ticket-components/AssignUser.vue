@@ -1,5 +1,5 @@
 <template>
-  <b-list-group style="width: 100%;" v-if="ticket">
+  <b-list-group style="width: 100%" v-if="ticket">
     <ModalHeader
       text="Assign a user to this ticket"
       :toggle="toggleAssignUserModal"
@@ -8,14 +8,20 @@
       class="user"
       v-for="u in ticket.project.users"
       :key="u.userid"
-      style="cursor: pointer;"
+      style="cursor: pointer"
       @click="handleClick(u)"
     >
-      <div style="display: flex; align-items: center;">
-        <b-avatar class="mr-3"></b-avatar>
-        <div style="display: flex; flex-direction: column;">
-          <span style="font-size: 1.6rem;">{{u.firstname}} {{u.lastname}}</span>
-          <span style="font-size: 1.4rem;">{{u.email}}</span>
+      <div class="left">
+        <img
+          v-if="u.imageurl"
+          :src="u.imageurl"
+          alt="uploaded project avatar"
+          class="avatar"
+        />
+        <b-avatar v-else class="avatar"></b-avatar>
+        <div class="middle">
+          <span>{{ u.firstname }} {{ u.lastname }}</span>
+          <span>{{ u.email }}</span>
         </div>
       </div>
 
@@ -27,7 +33,11 @@
         focusable="false"
         width="2em"
         height="2em"
-        style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"
+        style="
+          -ms-transform: rotate(360deg);
+          -webkit-transform: rotate(360deg);
+          transform: rotate(360deg);
+        "
         preserveAspectRatio="xMidYMid meet"
         viewBox="0 0 12 12"
         class="icon"
@@ -44,22 +54,25 @@
 </template>
 
 <script>
-import ModalHeader from '../other/ModalHeader.vue';
+import ModalHeader from "../other/ModalHeader.vue";
 
 export default {
-    components: {
-        ModalHeader
-    },
-    props: ['assignUser', 'ticket', 'toggleAssignUserModal', 'unassignUser'],
-    methods: {
-      handleClick(user) {
-        if (!this.ticket.assignedUser || this.ticket.assignedUser.userid !== user.userid) {
-          return this.assignUser(user);
-        }
-        return this.unassignUser(user);
-      },
+  components: {
+    ModalHeader
+  },
+  props: ["assignUser", "ticket", "toggleAssignUserModal", "unassignUser"],
+  methods: {
+    handleClick(user) {
+      if (
+        !this.ticket.assignedUser ||
+        this.ticket.assignedUser.userid !== user.userid
+      ) {
+        return this.assignUser(user);
+      }
+      return this.unassignUser(user);
     }
-}
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -69,6 +82,40 @@ export default {
   border: 1px solid rgba(0, 0, 0, 0.125);
   margin: 1% 0;
   border-radius: 6px;
+
+  .left {
+    display: flex;
+    align-items: center;
+
+    .middle {
+      display: flex;
+      flex-direction: column;
+      margin-left: 2%;
+      width: 70%;
+
+      :first-child {
+        font-size: 1.6rem;
+
+        @media (max-width: 600px) {
+          font-size: 1.4rem;
+        }
+      }
+
+      :nth-child(2) {
+        font-size: 1.4rem;
+        @media (max-width: 600px) {
+          font-size: 1.2rem;
+        }
+      }
+    }
+  }
+
+  .avatar {
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
 
   .icon {
     font-size: 2rem;

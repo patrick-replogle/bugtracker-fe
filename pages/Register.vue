@@ -54,6 +54,18 @@
           type="text"
         ></b-form-input>
 
+        <b-form-group label="Upload Image" label-for="imageurl">
+          <b-form-file
+            id="imageurl"
+            @change="handleFileChange"
+            v-model="imageInput"
+            placeholder="Choose an image"
+            drop-placeholder="Drop file here..."
+            accept=".jpg, .png, .gif"
+          >
+          </b-form-file>
+        </b-form-group>
+
         <p v-if="errMessage.length">{{ errMessage }}</p>
 
         <div class="btnContainer">
@@ -75,53 +87,69 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
-  layout: 'unauthenticated',
-    data() {
-        return {
-            form: {
-                email: '',
-                firstname: '',
-                lastname: '',
-                company: '',
-                username: '',
-                password: '',
-            },
-            errMessage: '',
-            isLoading: false
-        }
-    },
-    methods: {
-        onSubmit(e) {
-            e.preventDefault();
-            this.isLoading = true;
-            this.errMessage = '';
+  layout: "unauthenticated",
+  data() {
+    return {
+      form: {
+        email: "",
+        firstname: "",
+        lastname: "",
+        company: "",
+        username: "",
+        password: "",
+        imageurl: null
+      },
+      errMessage: "",
+      isLoading: false,
+      imageInput: null,
+      imageSizeLimit: 1500000
+    };
+  },
+  methods: {
+    onSubmit(e) {
+      e.preventDefault();
+      this.isLoading = true;
+      this.errMessage = "";
 
-            axios.post(this.$config.baseURL + '/auth/register', this.form)
-                .then(res => {
-                    this.isLoading = false;
-                    this.$router.push('/login');
-                })
-                .catch(err => {
-                    this.isLoading = false;
-                    this.errMessage = err.response.data.detail;
-                })
-
-        },
-        resetForm(e) {
-            e.preventDefault();
-            this.form.email = '';
-            this.form.username = '';
-            this.form.firstname = '';
-            this.form.lastname = '';
-            this.form.password = '';
-            this.form.company = '';
-            this.errMessage = '';
-        }
+      axios
+        .post(this.$config.baseURL + "/auth/register", this.form)
+        .then((res) => {
+          this.isLoading = false;
+          this.$router.push("/login");
+        })
+        .catch((err) => {
+          this.isLoading = false;
+          this.errMessage = err.response.data.detail;
+        });
     },
-}
+    resetForm(e) {
+      e.preventDefault();
+      this.form.email = "";
+      this.form.username = "";
+      this.form.firstname = "";
+      this.form.lastname = "";
+      this.form.password = "";
+      this.form.company = "";
+      this.errMessage = "";
+    },
+    handleFileChange(e) {
+      if (e.target.files[0]) {
+        if (e.target.files[0].size > this.imageSizeLimit) {
+          alert("File size too large.");
+        } else {
+          var reader = new FileReader();
+          reader.readAsDataURL(e.target.files[0]);
+          reader.onload = () => {
+            this.form.imageurl = reader.result;
+          };
+        }
+      }
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>

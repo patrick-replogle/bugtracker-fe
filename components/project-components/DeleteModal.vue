@@ -19,9 +19,8 @@
 
 <script>
 export default {
-    props: ['deleteProject', 'toggleDeleteProjectModal', 'isLoading', 'project'],
-
-}
+  props: ["deleteProject", "toggleDeleteProjectModal", "isLoading", "project"]
+};
 </script>
 
 <style lang="scss" scoped>
@@ -31,5 +30,6 @@ p {
 button {
   font-size: 1.6rem;
   margin-right: 1%;
+  width: 30%;
 }
 </style>

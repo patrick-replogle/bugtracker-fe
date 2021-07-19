@@ -6,16 +6,23 @@
       :key="comment.commentid"
     >
       <p
-        style="font-size: 1.4rem; font-weight: bold; cursor: pointer;"
+        style="font-size: 1.4rem; font-weight: bold; cursor: pointer"
         @click="routeToUser(comment.commentOwner.userid)"
       >
-        <b-avatar class="mr-3"></b-avatar>
-        {{comment.commentOwner.firstname}}
-        {{comment.commentOwner.lastname}}
+        <img
+          v-if="comment.commentOwner.imageurl"
+          :src="comment.commentOwner.imageurl"
+          alt="uploaded project avatar"
+          class="avatar"
+        />
+        <b-avatar v-else class="avatar"></b-avatar>
+
+        {{ comment.commentOwner.firstname }}
+        {{ comment.commentOwner.lastname }}
       </p>
-      <p style="font-size: 1.6rem;">{{comment.comment}}</p>
-      <p style="font-size: 1.2rem;">
-        Last updated {{generateDateString(ticket.lastmodifieddate)}}
+      <p style="font-size: 1.6rem">{{ comment.comment }}</p>
+      <p style="font-size: 1.2rem">
+        Last updated {{ generateDateString(ticket.lastmodifieddate) }}
       </p>
       <div class="btnContainer">
         <b-button variant="outline-primary" @click="toggleCommentEdit(comment)"
@@ -32,21 +39,21 @@
 </template>
 
 <script>
-import { generateDateString } from '../../util/functions';
+import { generateDateString } from "../../util/functions";
 
 export default {
-    props: ['ticket', 'toggleCommentEdit', 'deleteComment'],
-    data() {
-        return {
-            generateDateString
-        }
-    },
-    methods: {
-      routeToUser(id) {
-        this.$router.push(`/user/${id}`);
-      }
+  props: ["ticket", "toggleCommentEdit", "deleteComment"],
+  data() {
+    return {
+      generateDateString
+    };
+  },
+  methods: {
+    routeToUser(id) {
+      this.$router.push(`/user/${id}`);
     }
-}
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -58,6 +65,13 @@ export default {
   margin: 0.5% 0;
   border-radius: 6px;
   font-size: 1.6rem;
+
+  .avatar {
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
 
   .btnContainer {
     button {
