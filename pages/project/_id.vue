@@ -139,6 +139,7 @@ export default {
         this.removeUserFromProject(user.userid);
         if (this.user.userid === user.userid) {
           this.$store.commit("user/removeProject", this.project.projectid);
+          this.$router.push("/dashboard");
         }
       } catch (err) {
         console.dir(err);
