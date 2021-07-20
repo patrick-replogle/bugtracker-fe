@@ -40,14 +40,26 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
-  layout: 'unauthenticated',
+  layout: "unauthenticated",
   methods: {
-    handleClick: function(route) {
-      this.$router.push(route)
+    handleClick: function (route) {
+      this.$router.push(route);
     }
+  },
+  created() {
+    axios
+      .get(this.$config.baseURL + "/wakeup/heroku")
+      .then((res) => {
+        console.log("server awake");
+      })
+      .catch((err) => {
+        console.dir(err);
+      });
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
