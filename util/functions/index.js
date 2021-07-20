@@ -5,7 +5,8 @@ export const generateMinimumUserFields = (user) => {
     email: user.email,
     firstname: user.firstname,
     lastname: user.lastname,
-    company: user.company
+    company: user.company,
+    imageurl: user.imageurl
   };
 };
 
