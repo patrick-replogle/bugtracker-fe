@@ -44,7 +44,7 @@
         </div>
 
         <nuxt-link :to="`/project/${ticket.project.projectid}`">
-          Open Project
+          {{ticket.project.name}}
         </nuxt-link>
       </div>
 
