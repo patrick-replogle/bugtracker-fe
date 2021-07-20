@@ -20,14 +20,6 @@
         ></b-form-textarea>
       </b-form-group>
 
-      <b-form-group label="Image" label-for="imageurl">
-        <b-form-input
-          id="imageurl"
-          v-model="form.imageurl"
-          type="text"
-        ></b-form-input>
-      </b-form-group>
-
       <b-form-group label="Priority" label-for="priority">
         <b-form-select
           id="priority"
@@ -44,6 +36,17 @@
           :options="completedOptions"
         >
         </b-form-select>
+      </b-form-group>
+
+      <b-form-group label="Upload Image" label-for="imageurl">
+        <b-form-file
+          id="imageurl"
+          @change="handleFileChange"
+          v-model="imageInput"
+          :placeholder="form.imageurl ? form.imageurl : ''"
+          accept=".jpg, .png, .gif"
+        >
+        </b-form-file>
       </b-form-group>
 
       <div class="btnContainer">
@@ -64,73 +67,95 @@
 </template>
 
 <script>
-import { axiosWithAuth } from '../../util/axiosWithAuth.js';
-import { checkErrorStatus } from '../../util/functions';
+import { axiosWithAuth } from "../../util/axiosWithAuth.js";
+import { checkErrorStatus } from "../../util/functions";
 
 export default {
-    props: ['toggleEditModal', 'ticket', 'setTicket'],
-    data() {
-      return {
-          form: {
-              title: '',
-              description: '',
-              imageurl: '',
-              completed: false,
-              priority: 'LOW'
-          },
-          completedOptions: [false, true],
-          priorityOptions: ['LOW', 'MEDIUM', 'HIGH'],
-          errMessage: '',
-          max: 255,
-          isLoading: false
-      }
+  props: ["toggleEditModal", "ticket", "setTicket"],
+  data() {
+    return {
+      form: {
+        title: "",
+        description: "",
+        imageurl: "",
+        completed: false,
+        priority: "LOW"
+      },
+      completedOptions: [false, true],
+      priorityOptions: ["LOW", "MEDIUM", "HIGH"],
+      errMessage: "",
+      max: 255,
+      isLoading: false,
+      imageInput: [],
+      imageSizeLimit: 1500000
+    };
   },
   methods: {
     async onSubmit(e) {
-
       try {
         e.preventDefault();
         this.isLoading = true;
-        this.errMessage = '';
+        this.errMessage = "";
 
         if (!this.user) return;
 
-          const response = await axiosWithAuth().patch(this.$config.baseURL + '/tickets/ticket/' + this.ticket.ticketid, this.form);
-          this.isLoading = false;
-          this.setTicket(response.data);
-          this.toggleEditModal();
-        if (this.user.assignedTickets.find(t => t.ticketid === this.ticket.ticketid)) {
-            this.$store.commit('user/updateTicket', response.data)
+        const response = await axiosWithAuth().patch(
+          this.$config.baseURL + "/tickets/ticket/" + this.ticket.ticketid,
+          this.form
+        );
+        this.isLoading = false;
+        this.setTicket(response.data);
+        this.toggleEditModal();
+        if (
+          this.user.assignedTickets.find(
+            (t) => t.ticketid === this.ticket.ticketid
+          )
+        ) {
+          this.$store.commit("user/updateTicket", response.data);
         }
       } catch (err) {
-          console.dir(err)
-          this.isLoading = false;
-          this.errMessage = 'There was an error. Please try again.'
-          checkErrorStatus(err, this.$router);
+        console.dir(err);
+        this.isLoading = false;
+        this.errMessage = "There was an error. Please try again.";
+        checkErrorStatus(err, this.$router);
       }
     },
     resetForm(e) {
-        e.preventDefault();
-        this.form.title =  '',
-        this.form.description=  '',
-        this.form.imageurl = '',
-        this.form.completed = false,
-        this.form.priority = 'LOW'
+      e.preventDefault();
+      (this.form.title = ""),
+        (this.form.description = ""),
+        (this.form.imageurl = ""),
+        (this.form.completed = false),
+        (this.form.priority = "LOW");
+    },
+    handleFileChange(e) {
+      if (e.target.files[0]) {
+        if (e.target.files[0].size > this.imageSizeLimit) {
+          alert("File size too large.");
+        } else {
+          var reader = new FileReader();
+          reader.readAsDataURL(e.target.files[0]);
+          reader.onload = () => {
+            this.form.imageurl = reader.result;
+          };
         }
-    },
-    computed: {
-        user() {
-            return this.$store.state.user.user;
-        },
-    },
-    mounted() {
-        this.form.title = this.ticket.title;
-        this.form.description = this.ticket.description;
-        this.form.imageurl = this.ticket.imageurl;
-        this.form.completed = this.ticket.completed;
-        this.form.priority = this.ticket.priority;
-    },
-}
+      }
+    }
+  },
+  computed: {
+    user() {
+      return this.$store.state.user.user;
+    }
+  },
+  mounted() {
+    this.form.title = this.ticket.title;
+    this.form.description = this.ticket.description;
+    this.form.imageurl = this.ticket.imageurl;
+    this.form.completed = this.ticket.completed;
+    this.form.priority = this.ticket.priority;
+    this.form.imageurl = this.ticket.imageurl;
+  }
+};
 </script>
 
 <style lang="scss" scoped>

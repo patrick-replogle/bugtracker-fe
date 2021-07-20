@@ -1,6 +1,7 @@
 <template>
   <div class="formContainer">
-    <h2>Create a new project</h2>
+    <h2 v-if="!isEditing">Create a new project</h2>
+    <h2 v-else>Edit a project</h2>
     <b-form @submit="onSubmit" @reset="resetForm">
       <b-form-group label="Name" label-for="name">
         <b-form-input
@@ -42,12 +43,11 @@
 
       <b-form-group label="Upload Image" label-for="imageurl">
         <b-form-file
-        id="imageurl" 
-        @change="handleFileChange"
-        v-model="imageInput"
-        placeholder="Choose an image"
-        drop-placeholder="Drop file here..."
-        accept=".jpg, .png, .gif"
+          id="imageurl" 
+          @change="handleFileChange"
+          v-model="imageInput"
+          :placeholder="form.imageurl ? form.imageurl : ''"
+          accept=".jpg, .png, .gif"
         >
       </b-form-file>
       </b-form-group>
@@ -89,7 +89,7 @@ export default {
             errMessage: '',
             max: 255,
             isLoading: false,
-            imageInput: null,
+            imageInput: [],
             imageSizeLimit: 1500000
         }
     },

@@ -5,11 +5,6 @@
       :src="project.imageurl"
       alt="uploaded project avatar"
     />
-    <!-- <img
-      v-else
-      src="~/assets/img/placeholder.jpg"
-      alt="stock project avatar"
-    /> -->
     <h2>{{project.name}}</h2>
     <h3>{{project.description}}</h3>
     <div style="display: flex; align-items: center;">

@@ -28,6 +28,17 @@
                 ></b-form-input>
             </b-form-group>
 
+            <b-form-group label="Upload Image" label-for="imageurl">
+                <b-form-file
+                    id="imageurl"
+                    @change="handleFileChange"
+                    v-model="imageInput"
+                    :placeholder="form.imageurl ? form.imageurl : ''"
+                    accept=".jpg, .png, .gif"
+                >
+            </b-form-file>
+      </b-form-group>
+
             <div class="btnContainer">
                 <b-button v-if="!isLoading" type="submit" variant="outline-primary"
                 >Submit</b-button>
@@ -54,8 +65,11 @@ export default {
                 firstname: '',
                 lastname: '',
                 company: '',
+                imageurl: null
             },
-            isLoading: false
+            isLoading: false,
+            imageInput: [],
+            imageSizeLimit: 1500000
         }
     },
     computed: {
@@ -67,7 +81,6 @@ export default {
         async onSubmit(e) {
             e.preventDefault();
             this.isLoading = true;
-
             try {
                 await this.$store.dispatch('user/updateUser', this.form);
                 this.isLoading = false;
@@ -77,13 +90,25 @@ export default {
                 this.isLoading = false;
                 console.dir(err);
             }
-
         },
         resetForm(e) {
             e.preventDefault();
             this.form.firstname = this.user.firstname;
             this.form.lastname = this.user.lastname;
             this.form.company = this.user.company;
+        },
+        handleFileChange(e) {
+            if (e.target.files[0]) {
+                if (e.target.files[0].size > this.imageSizeLimit) {
+                    alert("File size too large.");
+                    } else {
+                    var reader = new FileReader();
+                    reader.readAsDataURL(e.target.files[0]);
+                    reader.onload = () => {
+                        this.form.imageurl = reader.result;
+                    };
+                }
+            }
         }
     },
     mounted() {
@@ -91,6 +116,7 @@ export default {
             this.form.firstname = this.user.firstname;
             this.form.lastname = this.user.lastname;
             this.form.company = this.user.company;
+            this.form.imageurl = this.user.imageurl;
         }
     },
     async created() {
@@ -100,6 +126,7 @@ export default {
                 this.form.firstname = this.user.firstname;
                 this.form.lastname = this.user.lastname;
                 this.form.company = this.user.company;
+                this.form.imageurl = this.user.imageurl;
             } catch (err) {
                 console.dir(err);
             }

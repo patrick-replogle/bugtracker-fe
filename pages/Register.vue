@@ -54,13 +54,16 @@
           type="text"
         ></b-form-input>
 
-        <b-form-group label="Upload Image" label-for="imageurl">
+        <b-form-group
+          label="Upload Image"
+          label-for="imageurl"
+          style="margin-top: 1%"
+        >
           <b-form-file
             id="imageurl"
             @change="handleFileChange"
             v-model="imageInput"
-            placeholder="Choose an image"
-            drop-placeholder="Drop file here..."
+            placeholder=""
             accept=".jpg, .png, .gif"
           >
           </b-form-file>

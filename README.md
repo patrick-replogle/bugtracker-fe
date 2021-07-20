@@ -25,6 +25,7 @@ Backend repo url: https://github.com/patrick-replogle/bugtracker-be
 - Maven
 - H2
 - PostgreSQL
+- Cloudinary
 - Heroku
 - Vue
 - Nuxt
