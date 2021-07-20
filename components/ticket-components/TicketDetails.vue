@@ -29,7 +29,7 @@
       </p>
     </div>
 
-    <div>
+    <div v-if="user && ticket.project.users.find(u => u.userid === user.userid)">
       <b-button variant="primary" @click="toggleCommentModal"
         >Add Comment</b-button
       >
@@ -64,11 +64,6 @@ export default {
          isLoading: false
       }
     },
-    computed: {
-        user() {
-            return this.$store.state.user.user;
-        },
-    },
     methods: {
         async markCompleted() {
           const body = { ticketid: Number(this.$route.params.id), completed: true };
@@ -100,6 +95,9 @@ export default {
         }
     },
     computed: {
+      user: function() {
+          return this.$store.state.user.user;
+      },
       priorityStyle() {
         if (this.ticket.priority === 'HIGH' ) {
           return {'background-color': '#dc3545', color: 'white'}

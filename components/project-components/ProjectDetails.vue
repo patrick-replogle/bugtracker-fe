@@ -30,7 +30,7 @@
       >View Website
     </a>
 
-    <div v-if="project.users.find(u => u.userid === user.userid)">
+    <div v-if="user && project.users.find(u => u.userid === user.userid)">
       <b-button variant="primary" @click="toggleModal">Create Ticket</b-button>
       <b-button
         variant="primary"

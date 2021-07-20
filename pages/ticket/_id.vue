@@ -95,11 +95,12 @@ export default {
       generateDateString
     };
   },
-  created() {
+  async created() {
     axiosWithAuth()
       .get(this.$config.baseURL + "/tickets/ticket/" + this.$route.params.id)
       .then((res) => {
         this.ticket = res.data;
+        this.ticket.comments.sort((a, b) => a.createddate - b.createddate);
       })
       .catch((err) => {
         console.dir(err);

@@ -28,7 +28,7 @@
           }}
         </h3>
 
-        <p>Modified on {{ generateDateString(project.lastmodifieddate) }}</p>
+        <p>Created on {{ generateDateString(project.createddate) }}</p>
 
         <b-button variant="primary" @click="routeToProject(project.projectid)"
           >Open Project</b-button

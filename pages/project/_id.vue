@@ -35,6 +35,7 @@
           :toggleSearchModal="toggleSearchModal"
           :removeUser="removeUser"
           :addUser="addUser"
+          :comparator="comparator"
         />
       </b-modal>
     </div>
@@ -69,7 +70,11 @@ export default {
   created() {
     axiosWithAuth()
       .get(this.$config.baseURL + "/projects/project/" + this.$route.params.id)
-      .then((res) => (this.project = res.data))
+      .then((res) => {
+        this.project = res.data;
+        this.project.tickets.sort((a, b) => a.createddate - b.createddate);
+        this.project.users.sort(this.comparator);
+      })
       .catch((err) => {
         console.dir(err);
         checkErrorStatus(err, this.$router);
@@ -107,6 +112,7 @@ export default {
     },
     addUserToProject(user) {
       this.project.users.push(user);
+      this.project.users.sort(this.comparator);
     },
     removeUserFromProject(userid) {
       this.project.users = this.project.users.filter(
@@ -137,6 +143,12 @@ export default {
       } catch (err) {
         console.dir(err);
       }
+    },
+    comparator(a, b) {
+      if (a.lastname < b.lastname) return -1;
+      if (a.lastname > b.lastname) return 1;
+      if (a.firstname < b.firstname) return -1;
+      if (a.firstname > b.firstname) return 1;
     }
   }
 };

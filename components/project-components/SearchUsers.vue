@@ -108,7 +108,13 @@ import { axiosWithAuth } from "../../util/axiosWithAuth.js";
 import { checkErrorStatus } from "../../util/functions";
 
 export default {
-  props: ["project", "toggleSearchModal", "removeUser", "addUser"],
+  props: [
+    "project",
+    "toggleSearchModal",
+    "removeUser",
+    "addUser",
+    "comparator"
+  ],
   data() {
     return {
       form: {
@@ -141,9 +147,10 @@ export default {
           );
           this.isLoading = false;
           this.form.search = "";
-          this.users = response.data;
           if (response.data.length === 0) {
             this.errMessage = "No results found";
+          } else {
+            this.users = response.data.sort(this.comparator);
           }
         }
       } catch (err) {

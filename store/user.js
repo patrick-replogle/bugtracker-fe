@@ -1,5 +1,9 @@
 import { axiosWithAuth } from "../util/axiosWithAuth";
-import { checkErrorStatus } from "../util/functions";
+import {
+  checkErrorStatus,
+  projectComparator,
+  ticketComparator
+} from "../util/functions";
 
 export const state = () => ({
   user: null,
@@ -18,6 +22,8 @@ export const mutations = {
   },
   requestSuccess: (state, payload) => {
     state.user = payload;
+    state.user.allProjects.sort(projectComparator);
+    state.user.assignedTickets.sort(ticketComparator);
     state.isEditing = false;
     state.isLoading = false;
   },

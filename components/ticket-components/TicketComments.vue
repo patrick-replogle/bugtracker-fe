@@ -22,9 +22,12 @@
       </p>
       <p style="font-size: 1.6rem">{{ comment.comment }}</p>
       <p style="font-size: 1.2rem">
-        Last updated {{ generateDateString(ticket.lastmodifieddate) }}
+        {{ generateDateString(ticket.createddate) }}
       </p>
-      <div class="btnContainer">
+      <div
+        class="btnContainer"
+        v-if="user && comment.commentOwner.userid === user.userid"
+      >
         <b-button variant="outline-primary" @click="toggleCommentEdit(comment)"
           >Edit
         </b-button>
@@ -51,6 +54,11 @@ export default {
   methods: {
     routeToUser(id) {
       this.$router.push(`/user/${id}`);
+    }
+  },
+  computed: {
+    user() {
+      return this.$store.state.user.user;
     }
   }
 };
