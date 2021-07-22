@@ -63,7 +63,6 @@ export default {
   data() {
     return {
       project: null,
-      showModal: false,
       isLoading: false
     };
   },

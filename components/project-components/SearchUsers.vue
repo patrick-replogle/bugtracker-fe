@@ -35,7 +35,7 @@
 
     <b-list-group v-if="users && users.length" style="width: 100%">
       <b-list-group-item class="user" v-for="u in users" :key="u.userid">
-        <div style="display: flex; align-items: center">
+        <div style="display: flex; align-items: center; width: 100%;">
           <img
             v-if="u.imageurl"
             :src="u.imageurl"
@@ -43,9 +43,9 @@
             class="avatar"
           />
           <b-avatar v-else class="avatar"></b-avatar>
-          <div style="display: flex; flex-direction: column; margin-left: 3%">
+          <div class="text">
             <span>{{ u.firstname }} {{ u.lastname }}</span>
-            <span style="font-size: 1.4rem">{{ u.email }}</span>
+            <span>{{ u.email }}</span>
           </div>
         </div>
 
@@ -218,6 +218,7 @@ export default {
     border: 1px solid rgba(0, 0, 0, 0.125);
     margin: 1% 0;
     border-radius: 6px;
+    width: 100%;
 
     .avatar {
       width: 30px;
@@ -238,6 +239,26 @@ export default {
 
       &:hover {
         filter: brightness(0.5);
+      }
+    }
+
+    .text {
+      display: flex; 
+      flex-direction: column; 
+      margin-left: 3%;
+
+      :first-child {
+        font-size: 1.6rem;
+        @media (max-width: 600px) {
+          font-size: 1.6rem;
+        }
+      }
+
+      :nth-child(2) {
+        font-size: 1.4rem;
+          @media (max-width: 600px) {
+            font-size: 1.2rem;
+        }
       }
     }
   }

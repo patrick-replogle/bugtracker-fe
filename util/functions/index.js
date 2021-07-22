@@ -36,7 +36,7 @@ export const generateDateString = (inputDate) => {
 };
 
 export const checkErrorStatus = (error, cb) => {
-  if (error.response.data.error === "invalid_token") {
+  if (error.response.data.error && error.response.data.error === "invalid_token") {
     if (!process.server) {
       localStorage.clear();
     }
