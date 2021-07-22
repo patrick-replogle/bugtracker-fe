@@ -48,6 +48,7 @@
           v-model="imageInput"
           :placeholder="form.imageurl ? form.imageurl : ''"
           accept=".jpg, .png, .gif"
+          ref="file-input"
         >
       </b-form-file>
       </b-form-group>
@@ -117,7 +118,10 @@ export default {
         handleFileChange(e) {
           if (e.target.files[0]) {
             if (e.target.files[0].size > this.imageSizeLimit) {
-              alert('File size too large.')
+              alert('File size too large.');
+              this.imageInput = null;
+              this.imageurl = null;
+              this.clearFiles();
             } else {
               var reader = new FileReader()
               reader.readAsDataURL(e.target.files[0])
@@ -136,7 +140,11 @@ export default {
             this.form.imageurl = '';
             this.errMessage = '';
             this.imageInput = null;
+            this.clearFiles();
             this.$store.commit('user/cancelEdit');
+        },
+        clearFiles() {
+            this.$refs['file-input'].reset()
         }
     },
     computed: {

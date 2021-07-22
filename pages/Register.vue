@@ -65,6 +65,7 @@
             v-model="imageInput"
             placeholder=""
             accept=".jpg, .png, .gif"
+            ref="file-input"
           >
           </b-form-file>
         </b-form-group>
@@ -137,11 +138,15 @@ export default {
       this.form.password = "";
       this.form.company = "";
       this.errMessage = "";
+      this.clearFiles();
     },
     handleFileChange(e) {
       if (e.target.files[0]) {
         if (e.target.files[0].size > this.imageSizeLimit) {
           alert("File size too large.");
+          this.imageInput = null;
+          this.imageurl = null;
+          this.clearFiles();
         } else {
           var reader = new FileReader();
           reader.readAsDataURL(e.target.files[0]);
@@ -150,6 +155,9 @@ export default {
           };
         }
       }
+    },
+    clearFiles() {
+      this.$refs['file-input'].reset()
     }
   }
 };

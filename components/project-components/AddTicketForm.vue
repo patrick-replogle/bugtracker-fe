@@ -25,9 +25,9 @@
           id="imageurl"
           @change="handleFileChange"
           v-model="imageInput"
-          placeholder="Choose an image"
-          drop-placeholder="Drop file here..."
+          placeholder=""
           accept=".jpg, .png, .gif"
+          ref="file-input"
         >
         </b-form-file>
       </b-form-group>
@@ -84,7 +84,7 @@ export default {
       max: 255,
       isLoading: false,
       imageInput: null,
-      imageSizeLimit: 15000000
+      imageSizeLimit: 1500000
     };
   },
   methods: {
@@ -116,16 +116,20 @@ export default {
     },
     resetForm(e) {
       e.preventDefault();
-      (this.form.title = ""),
-        (this.form.description = ""),
-        (this.form.imageurl = ""),
-        (this.form.completed = false),
-        (this.form.priority = "LOW");
+      this.form.title = "";
+      this.form.description = "";
+      this.form.imageurl = "";
+      this.form.completed = false;
+      this.form.priority = "LOW";
+      this.clearFiles();
     },
     handleFileChange(e) {
       if (e.target.files[0]) {
         if (e.target.files[0].size > this.imageSizeLimit) {
           alert("File size too large.");
+          this.imageInput = null;
+          this.imageurl = null;
+          this.clearFiles();
         } else {
           var reader = new FileReader();
           reader.readAsDataURL(e.target.files[0]);
@@ -134,6 +138,9 @@ export default {
           };
         }
       }
+    },
+    clearFiles() {
+      this.$refs['file-input'].reset()
     }
   },
   computed: {
