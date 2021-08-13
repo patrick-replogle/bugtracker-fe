@@ -1,6 +1,6 @@
 <template>
   <b-card class="card">
-    <p v-if="ticket.completed" class="completedText">
+    <p v-if="ticket.completed" class="alert alert-success completedText">
       This Ticket Has Been Completed
     </p>
     <img
@@ -138,8 +138,6 @@ p {
   }
 
   .completedText {
-    background-color: #6c757d;
-    color: white;
     padding: 10px;
     margin-top: -10px;
     text-align: center;

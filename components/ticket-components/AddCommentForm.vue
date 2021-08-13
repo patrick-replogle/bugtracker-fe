@@ -6,8 +6,8 @@
           id="comment"
           v-model="form.comment"
           type="text"
-          required
         ></b-form-input>
+        <p class="validationError" v-if="errors.comment">{{errors.comment}}</p>
       </b-form-group>
 
       <p v-if="errMessage">{{errMessage}}</p>
@@ -40,13 +40,16 @@ export default {
                 comment: ''
             },
             errMessage: '',
-            isLoading: false
+            isLoading: false,
+            errors: {},
+            requiredFields: new Set(['comment'])
         }
     },
     methods: {
         async onSubmit(e) {
             try {
                 e.preventDefault();
+                if (this.hasErrors()) return;
                 this.isLoading = true;
                 this.errMessage = '';
 
@@ -77,7 +80,17 @@ export default {
         resetForm(e) {
             e.preventDefault();
             this.form.comment = '';
-        }
+        },
+        hasErrors() {
+            this.errors = {};
+            for (let field of this.requiredFields) {
+              if (!this.form[field].trim().length) {
+                this.errors[field] = `${field.charAt(0).toUpperCase() + field.slice(1)} is required`;
+              }
+            }
+
+            return Object.keys(this.errors).length !== 0;
+      },
     },
     computed: {
         user() {
@@ -155,6 +168,10 @@ export default {
       font-size: 1.4rem;
       text-align: center;
       margin-top: 1%;
+    }
+
+    .validationError {
+      margin-bottom: -2%;
     }
   }
 }

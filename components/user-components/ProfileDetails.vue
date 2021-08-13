@@ -74,7 +74,7 @@ export default {
   button {
     width: 10%;
     font-size: 1.6rem;
-    margin: 0 0 2% 1.5%;
+    margin: 1% 0 2% 1.5%;
 
     @media (max-width: 600px) {
       width: 30%;

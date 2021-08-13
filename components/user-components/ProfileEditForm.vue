@@ -6,8 +6,8 @@
                 id="firstname"
                 v-model="form.firstname"
                 type="text"
-                required
                 ></b-form-input>
+                <p class="validationError" v-if="errors.firstname">{{errors.firstname}}</p>
             </b-form-group>
 
             <b-form-group label="Last Name" label-for="lastname">
@@ -15,8 +15,8 @@
                 id="lastname"
                 v-model="form.lastname"
                 type="text"
-                required
                 ></b-form-input>
+                <p class="validationError" v-if="errors.lastname">{{errors.lastname}}</p>
             </b-form-group>
 
             <b-form-group label="Company" label-for="company">
@@ -24,7 +24,6 @@
                 id="company"
                 v-model="form.company"
                 type="text"
-                required
                 ></b-form-input>
             </b-form-group>
 
@@ -37,21 +36,21 @@
                     accept=".jpg, .png, .gif"
                     ref="file-input"
                 >
-            </b-form-file>
-      </b-form-group>
-
-            <div class="btnContainer">
-                <b-button v-if="!isLoading" type="submit" variant="outline-primary"
-                >Submit</b-button>
-                <b-button v-if="isLoading" disabled variant="outline-primary">
-                    <b-spinner
-                    variant="primary"
-                    label="Spinning"
-                    class="spinner"></b-spinner
-                ></b-button>
-                <b-button type="reset" variant="outline-primary">Reset</b-button>
-                <b-button  variant="outline-primary" @click="toggleEditModal">Cancel</b-button>
-            </div>
+                </b-form-file>
+            </b-form-group>
+            <b-form-group>
+                <div class="btnContainer">
+                    <b-button v-if="!isLoading" type="submit" variant="outline-primary"
+                    >Submit</b-button>
+                    <b-button v-if="isLoading" disabled variant="outline-primary">
+                        <b-spinner
+                        variant="primary"
+                        label="Spinning"
+                        class="spinner"></b-spinner
+                    ></b-button>
+                    <b-button type="reset" variant="outline-primary">Reset</b-button>
+                    <b-button  variant="outline-primary" @click="toggleEditModal">Cancel</b-button>
+                </div>
             </b-form-group>
         </b-form>
     </div>
@@ -70,7 +69,9 @@ export default {
             },
             isLoading: false,
             imageInput: [],
-            imageSizeLimit: 1500000
+            imageSizeLimit: 1500000,
+            errors: {},
+            requiredFields: new Set(['firstname', 'lastname'])
         }
     },
     computed: {
@@ -81,6 +82,7 @@ export default {
     methods: {
         async onSubmit(e) {
             e.preventDefault();
+            if (this.hasErrors()) return;
             this.isLoading = true;
             try {
                 await this.$store.dispatch('user/updateUser', this.form);
@@ -115,7 +117,17 @@ export default {
         },
         clearFiles() {
             this.$refs['file-input'].reset()
-        }
+        },
+        hasErrors() {
+            this.errors = {};
+            for (let field of this.requiredFields) {
+              if (!this.form[field].trim().length) {
+                this.errors[field] = `${field.charAt(0).toUpperCase() + field.slice(1)} is required`;
+              }
+            }
+
+            return Object.keys(this.errors).length !== 0;
+        },
     },
     mounted() {
         if (this.user) {
@@ -195,6 +207,17 @@ export default {
           margin: 4% 0;
         }
       }
+    }
+
+    p {
+      color: crimson;
+      font-size: 1.4rem;
+      text-align: center;
+      margin-top: 1%;
+    }
+
+    .validationError {
+      margin-bottom: -2%;
     }
   }
 }

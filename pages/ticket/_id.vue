@@ -1,62 +1,70 @@
 <template>
-  <div v-if="ticket" class="container">
-    <TicketDetails
-      :ticket="ticket"
-      :toggleEditModal="toggleEditModal"
-      :toggleCommentModal="toggleCommentModal"
-      :setTicket="setTicket"
-      :toggleDeleteTicketModal="toggleDeleteTicketModal"
-      :toggleAssignUserModal="toggleAssignUserModal"
-    />
-
-    <b-modal ref="edit-modal" title="Edit Ticket" hide-footer>
-      <EditTicketForm
+  <div>
+    <div v-if="isLoading">
+      <LoadingSpinner />
+    </div>
+    <div v-else-if="!isLoading && !ticket">
+      <NotFound />
+    </div>
+    <div v-else class="container">
+      <TicketDetails
+        :ticket="ticket"
         :toggleEditModal="toggleEditModal"
-        :ticket="ticket"
-        :setTicket="setTicket"
-      />
-    </b-modal>
-
-    <b-modal ref="comment-modal" title="Add Comment" hide-footer>
-      <AddCommentForm
         :toggleCommentModal="toggleCommentModal"
-        :ticket="ticket"
-        :addComment="addComment"
-        :cancelEdit="cancelEdit"
-        :isEditing="isEditing"
-        :commentToEdit="commentToEdit"
-        :updateComments="updateComments"
-      />
-    </b-modal>
-
-    <b-modal ref="delete-modal" hide-footer hide-header class="deleteModal">
-      <DeleteModalContent
-        :deleteTicket="deleteTicket"
-        :ticket="ticket"
+        :setTicket="setTicket"
         :toggleDeleteTicketModal="toggleDeleteTicketModal"
-        :isLoading="isLoading"
-      />
-    </b-modal>
-
-    <b-modal
-      ref="assign-user-modal"
-      hide-footer
-      hide-header
-      class="assign-user-modal"
-    >
-      <AssignUser
-        :assignUser="assignUser"
-        :ticket="ticket"
         :toggleAssignUserModal="toggleAssignUserModal"
-        :unassignUser="unassignUser"
       />
-    </b-modal>
 
-    <TicketComments
-      :ticket="ticket"
-      :toggleCommentEdit="toggleCommentEdit"
-      :deleteComment="deleteComment"
-    />
+      <b-modal ref="edit-modal" title="Edit Ticket" hide-footer>
+        <EditTicketForm
+          :toggleEditModal="toggleEditModal"
+          :ticket="ticket"
+          :setTicket="setTicket"
+        />
+      </b-modal>
+
+      <b-modal ref="comment-modal" title="Add Comment" hide-footer>
+        <AddCommentForm
+          :toggleCommentModal="toggleCommentModal"
+          :ticket="ticket"
+          :addComment="addComment"
+          :cancelEdit="cancelEdit"
+          :isEditing="isEditing"
+          :commentToEdit="commentToEdit"
+          :updateComments="updateComments"
+        />
+      </b-modal>
+
+      <b-modal ref="delete-modal" hide-footer hide-header class="deleteModal">
+        <DeleteModalContent
+          :deleteTicket="deleteTicket"
+          :ticket="ticket"
+          :toggleDeleteTicketModal="toggleDeleteTicketModal"
+          :isLoading="isLoading"
+        />
+      </b-modal>
+
+      <b-modal
+        ref="assign-user-modal"
+        hide-footer
+        hide-header
+        class="assign-user-modal"
+      >
+        <AssignUser
+          :assignUser="assignUser"
+          :ticket="ticket"
+          :toggleAssignUserModal="toggleAssignUserModal"
+          :unassignUser="unassignUser"
+        />
+      </b-modal>
+
+      <TicketComments
+        :ticket="ticket"
+        :toggleCommentEdit="toggleCommentEdit"
+        :deleteComment="deleteComment"
+      />
+    </div>
   </div>
 </template>
 
@@ -73,6 +81,8 @@ import AddCommentForm from "../../components/ticket-components/AddCommentForm.vu
 import TicketComments from "../../components/ticket-components/TicketComments.vue";
 import AssignUser from "../../components/ticket-components/AssignUser.vue";
 import DeleteModalContent from "../../components/ticket-components/DeleteModalContent.vue";
+import LoadingSpinner from '../../components/other/LoadingSpinner.vue';
+import NotFound from '../../components/other/NotFound.vue';
 
 export default {
   middleware: "auth",
@@ -82,7 +92,9 @@ export default {
     AddCommentForm,
     TicketComments,
     AssignUser,
-    DeleteModalContent
+    DeleteModalContent,
+    LoadingSpinner,
+    NotFound
   },
 
   data() {
@@ -96,14 +108,17 @@ export default {
     };
   },
   async created() {
+    this.isLoading = true;
     axiosWithAuth()
       .get(this.$config.baseURL + "/tickets/ticket/" + this.$route.params.id)
       .then((res) => {
+        this.isLoading = false;
         this.ticket = res.data;
         this.ticket.comments.sort((a, b) => a.createddate - b.createddate);
       })
       .catch((err) => {
         console.dir(err);
+        this.isLoading = false;
         checkErrorStatus(err, this.$router);
       });
   },
@@ -222,6 +237,5 @@ export default {
   display: flex;
   justify-content: center;
   flex-direction: column;
-  margin-top: 3%;
 }
 </style>
