@@ -7,16 +7,14 @@
       <NotFound />
     </div>
     <div v-else class="container">
-      <div v-if="project" class="card" id="modal">
-        <ProjectDetails
-          :project="project"
-          :toggleModal="toggleModal"
-          :toggleDeleteProjectModal="toggleDeleteProjectModal"
-          :toggleSearchModal="toggleSearchModal"
-          :removeUser="removeUser"
-        />
-      </div>
-      <div v-if="project" class="tabContainer">
+      <ProjectDetails
+        :project="project"
+        :toggleModal="toggleModal"
+        :toggleDeleteProjectModal="toggleDeleteProjectModal"
+        :toggleSearchModal="toggleSearchModal"
+        :removeUser="removeUser"
+      />
+      <div class="tabContainer">
         <ProjectTabs
           :project="project"
           :removeUserFromProject="removeUserFromProject"
@@ -177,7 +175,6 @@ export default {
   justify-content: center;
   flex-direction: column;
   width: 100%;
-  margin-top: 2%;
 
   .card,
   .tabContainer {

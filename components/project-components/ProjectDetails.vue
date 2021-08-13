@@ -114,16 +114,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.card {
-  h2,
-  h3,
-  p {
+.card, h2, h3, p {
     margin: 1.5% 0;
 
     @media (max-width: 600px) {
       margin: 3% 0;
     }
-  }
+}
+.card {
+  margin-top: 2%;
 
   img {
     width: 100%;

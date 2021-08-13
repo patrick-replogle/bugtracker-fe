@@ -237,6 +237,5 @@ export default {
   display: flex;
   justify-content: center;
   flex-direction: column;
-  margin-top: 3%;
 }
 </style>
