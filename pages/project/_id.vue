@@ -1,43 +1,51 @@
 <template>
-  <div class="container">
-    <div v-if="project" class="card" id="modal">
-      <ProjectDetails
-        :project="project"
-        :toggleModal="toggleModal"
-        :toggleDeleteProjectModal="toggleDeleteProjectModal"
-        :toggleSearchModal="toggleSearchModal"
-        :removeUser="removeUser"
-      />
+  <div>
+    <div v-if="isLoading">
+      <LoadingSpinner />
     </div>
-    <div v-if="project" class="tabContainer">
-      <ProjectTabs
-        :project="project"
-        :removeUserFromProject="removeUserFromProject"
-      />
-
-      <b-modal ref="modal" title="Create a ticket" hide-footer>
-        <AddTicketForm :toggleModal="toggleModal" :project="project" />
-      </b-modal>
-
-      <b-modal ref="delete-modal" hide-footer hide-header class="deleteModal">
-        <DeleteModal
-          :deleteProject="deleteProject"
+    <div v-else-if="!isLoading && !project">
+      <NotFound />
+    </div>
+    <div v-else class="container">
+      <div v-if="project" class="card" id="modal">
+        <ProjectDetails
+          :project="project"
+          :toggleModal="toggleModal"
           :toggleDeleteProjectModal="toggleDeleteProjectModal"
-          :isLoading="isLoading"
-          :project="project"
-        />
-      </b-modal>
-
-      <b-modal ref="search-modal" hide-footer hide-header class="searchModal">
-        <SearchUsers
-          :project="project"
-          :addUserToProject="addUserToProject"
           :toggleSearchModal="toggleSearchModal"
           :removeUser="removeUser"
-          :addUser="addUser"
-          :comparator="comparator"
         />
-      </b-modal>
+      </div>
+      <div v-if="project" class="tabContainer">
+        <ProjectTabs
+          :project="project"
+          :removeUserFromProject="removeUserFromProject"
+        />
+
+        <b-modal ref="modal" title="Create a ticket" hide-footer>
+          <AddTicketForm :toggleModal="toggleModal" :project="project" />
+        </b-modal>
+
+        <b-modal ref="delete-modal" hide-footer hide-header class="deleteModal">
+          <DeleteModal
+            :deleteProject="deleteProject"
+            :toggleDeleteProjectModal="toggleDeleteProjectModal"
+            :isLoading="isLoading"
+            :project="project"
+          />
+        </b-modal>
+
+        <b-modal ref="search-modal" hide-footer hide-header class="searchModal">
+          <SearchUsers
+            :project="project"
+            :addUserToProject="addUserToProject"
+            :toggleSearchModal="toggleSearchModal"
+            :removeUser="removeUser"
+            :addUser="addUser"
+            :comparator="comparator"
+          />
+        </b-modal>
+      </div>
     </div>
   </div>
 </template>
@@ -50,6 +58,8 @@ import ProjectTabs from "../../components/project-components/ProjectTabs.vue";
 import AddTicketForm from "../../components/project-components/AddTicketForm.vue";
 import SearchUsers from "../../components/project-components/SearchUsers.vue";
 import DeleteModal from "../../components/project-components/DeleteModal.vue";
+import NotFound from '../../components/other/NotFound.vue';
+import LoadingSpinner from '../../components/other/LoadingSpinner.vue';
 
 export default {
   middleware: "auth",
@@ -58,7 +68,9 @@ export default {
     ProjectTabs,
     AddTicketForm,
     SearchUsers,
-    DeleteModal
+    DeleteModal,
+    NotFound,
+    LoadingSpinner
   },
   data() {
     return {
@@ -67,14 +79,18 @@ export default {
     };
   },
   created() {
+    this.isLoading = true;
+
     axiosWithAuth()
       .get(this.$config.baseURL + "/projects/project/" + this.$route.params.id)
       .then((res) => {
+        this.isLoading = false;
         this.project = res.data;
         this.project.tickets.sort((a, b) => a.createddate - b.createddate);
         this.project.users.sort(this.comparator);
       })
       .catch((err) => {
+        this.isLoading = false;
         console.dir(err);
         checkErrorStatus(err, this.$router);
       });

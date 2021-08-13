@@ -7,8 +7,8 @@
           id="email"
           v-model="form.email"
           type="email"
-          required
         ></b-form-input>
+        <p class="validationError" v-if="errors.email">{{errors.email}}</p>
       </b-form-group>
 
       <b-form-group label="Username" label-for="username">
@@ -16,8 +16,8 @@
           id="username"
           v-model="form.username"
           type="text"
-          required
         ></b-form-input>
+        <p class="validationError" v-if="errors.username">{{errors.username}}</p>
       </b-form-group>
 
       <b-form-group label="Password" label-for="password">
@@ -25,8 +25,8 @@
           id="password"
           v-model="form.password"
           type="password"
-          required
         ></b-form-input>
+        <p class="validationError" v-if="errors.password">{{errors.password}}</p>
       </b-form-group>
 
       <b-form-group label="First Name" label-for="firstname">
@@ -34,8 +34,8 @@
           id="firstName"
           v-model="form.firstname"
           type="text"
-          required
         ></b-form-input>
+        <p class="validationError" v-if="errors.firstname">{{errors.firstname}}</p>
       </b-form-group>
 
       <b-form-group label="Last Name" label-for="lastname">
@@ -43,8 +43,8 @@
           id="lastname"
           v-model="form.lastname"
           type="text"
-          required
         ></b-form-input>
+        <p class="validationError" v-if="errors.lastname">{{errors.lastname}}</p>
       </b-form-group>
 
       <b-form-group label="Company Name" label-for="company">
@@ -109,12 +109,15 @@ export default {
       errMessage: "",
       isLoading: false,
       imageInput: null,
-      imageSizeLimit: 1500000
+      imageSizeLimit: 1500000,
+      errors: {},
+      requiredFields: new Set(['username', 'password', 'email', 'firstname', 'lastname'])
     };
   },
   methods: {
     onSubmit(e) {
       e.preventDefault();
+      if (this.hasErrors()) return;
       this.isLoading = true;
       this.errMessage = "";
 
@@ -128,6 +131,16 @@ export default {
           this.isLoading = false;
           this.errMessage = err.response.data.detail;
         });
+    },
+    hasErrors() {
+      this.errors = {};
+      for (let field of this.requiredFields) {
+        if (!this.form[field].trim().length) {
+          this.errors[field] = `${field.charAt(0).toUpperCase() + field.slice(1)} is required`;
+        }
+      }
+
+      return Object.keys(this.errors).length !== 0;
     },
     resetForm(e) {
       e.preventDefault();
@@ -221,6 +234,10 @@ export default {
       font-size: 1.4rem;
       text-align: center;
       margin-top: 1%;
+    }
+
+    .validationError {
+      margin-bottom: -2%;
     }
   }
 }

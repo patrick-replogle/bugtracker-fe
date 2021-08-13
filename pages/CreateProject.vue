@@ -9,8 +9,8 @@
           v-model="form.name"
           type="text"
           :maxlength="max"
-          required
         ></b-form-input>
+        <p class="validationError" v-if="errors.name">{{errors.name}}</p>
       </b-form-group>
 
       <b-form-group label="Description" label-for="description">
@@ -19,8 +19,8 @@
           v-model="form.description"
           type="text"
           :maxlength="max"
-          required
         ></b-form-textarea>
+        <p class="validationError" v-if="errors.description">{{errors.description}}</p>
       </b-form-group>
 
       <b-form-group label="Repository URL" label-for="respositoryurl">
@@ -91,7 +91,9 @@ export default {
             max: 255,
             isLoading: false,
             imageInput: [],
-            imageSizeLimit: 1500000
+            imageSizeLimit: 1500000,
+            errors: {},
+            requiredFields: new Set(['name', 'description'])
         }
     },
     methods: {
@@ -100,6 +102,7 @@ export default {
 
             try {
               e.preventDefault();
+              if (this.hasErrors()) return;
               this.isLoading = true;
               this.errMessage = '';
               this.form.projectOwner = generateMinimumUserFields(this.user);
@@ -145,7 +148,17 @@ export default {
         },
         clearFiles() {
             this.$refs['file-input'].reset()
-        }
+        },
+        hasErrors() {
+            this.errors = {};
+            for (let field of this.requiredFields) {
+              if (!this.form[field].trim().length) {
+                this.errors[field] = `${field.charAt(0).toUpperCase() + field.slice(1)} is required`;
+              }
+            }
+
+            return Object.keys(this.errors).length !== 0;
+        },
     },
     computed: {
       user() {
@@ -237,6 +250,9 @@ export default {
       font-size: 1.4rem;
       text-align: center;
       margin-top: 1%;
+    }
+    .validationError {
+      margin-bottom: -2%;
     }
   }
 }

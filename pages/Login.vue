@@ -7,8 +7,8 @@
           id="username"
           v-model="form.username"
           type="text"
-          required
         ></b-form-input>
+        <p class="validationError" v-if="errors.username">{{errors.username}}</p>
       </b-form-group>
 
       <b-form-group label="Password" label-for="password">
@@ -16,12 +16,11 @@
           id="password"
           v-model="form.password"
           type="password"
-          required
         ></b-form-input>
+        <p class="validationError" v-if="errors.password">{{errors.password}}</p>
       </b-form-group>
-
+      <b-form-group>
         <p v-if="errMessage">{{ errMessage }}</p>
-
         <div class="btnContainer">
           <b-button v-if="!isLoading" type="submit" variant="outline-primary"
             >Submit</b-button
@@ -52,14 +51,18 @@ export default {
                 password: '',
             },
             errMessage: null,
-            isLoading: false
+            isLoading: false,
+            errors: {},
+            requiredFields: new Set(['username', 'password'])
         }
     },
     methods: {
         onSubmit(e) {
             e.preventDefault();
+            if (this.hasErrors()) return;
             this.errMessage = null;
             this.isLoading = true;
+
             axios.post(this.$config.baseURL + '/login', `grant_type=password&username=${this.form.username}&password=${this.form.password}`, {
                 headers: {
                     Authorization: `Basic ${btoa(`${this.$config.clientId}:${this.$config.clientSecret}`)}`,
@@ -77,6 +80,16 @@ export default {
                     console.dir(err)
                 })
 
+        },
+        hasErrors() {
+            this.errors = {};
+            for (let field of this.requiredFields) {
+              if (!this.form[field].trim().length) {
+                this.errors[field] = `${field.charAt(0).toUpperCase() + field.slice(1)} is required`;
+              }
+            }
+
+            return Object.keys(this.errors).length !== 0;
         },
         resetForm(e) {
             e.preventDefault();
@@ -115,6 +128,7 @@ export default {
 
     label {
       font-weight: 600;
+      display: flex;
     }
 
     input {
@@ -150,6 +164,10 @@ export default {
       font-size: 1.4rem;
       text-align: center;
       margin-top: 1%;
+    }
+
+    .validationError {
+      margin-bottom: -2%;
     }
   }
 }
