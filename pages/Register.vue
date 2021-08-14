@@ -125,7 +125,8 @@ export default {
         .post(this.$config.baseURL + "/auth/register", this.form)
         .then((res) => {
           this.isLoading = false;
-          this.$router.push("/login");
+          window.localStorage.setItem('token', res.data.access_token);
+          this.$router.push('/dashboard');
         })
         .catch((err) => {
           this.isLoading = false;
