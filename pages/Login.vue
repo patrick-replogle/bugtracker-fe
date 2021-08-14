@@ -63,12 +63,7 @@ export default {
             this.errMessage = null;
             this.isLoading = true;
 
-            axios.post(this.$config.baseURL + '/login', `grant_type=password&username=${this.form.username}&password=${this.form.password}`, {
-                headers: {
-                    Authorization: `Basic ${btoa(`${this.$config.clientId}:${this.$config.clientSecret}`)}`,
-                    "Content-Type": "application/x-www-form-urlencoded"
-                    }
-                })
+            axios.post(this.$config.baseURL + '/auth/login', this.form)
                 .then(res => {
                     this.isLoading = false;
                     window.localStorage.setItem('token', res.data.access_token);
@@ -76,7 +71,7 @@ export default {
                 })
                 .catch(err => {
                     this.isLoading = false;
-                    this.errMessage = err.response.data.error_description;
+                    this.errMessage = "Invalid username or password";
                     console.dir(err)
                 })
 
