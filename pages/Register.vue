@@ -25,6 +25,7 @@
           id="password"
           v-model="form.password"
           type="password"
+          minlength="8"
         ></b-form-input>
         <p class="validationError" v-if="errors.password">{{errors.password}}</p>
       </b-form-group>
