@@ -4,7 +4,7 @@
       <LoadingSpinner />
     </div>
     <div v-else-if="!isLoading && !project">
-      <NotFound />
+      <Error />
     </div>
     <div v-else class="container">
       <ProjectDetails
@@ -56,8 +56,8 @@ import ProjectTabs from "../../components/project-components/ProjectTabs.vue";
 import AddTicketForm from "../../components/project-components/AddTicketForm.vue";
 import SearchUsers from "../../components/project-components/SearchUsers.vue";
 import DeleteModal from "../../components/project-components/DeleteModal.vue";
-import NotFound from '../../components/other/NotFound.vue';
 import LoadingSpinner from '../../components/other/LoadingSpinner.vue';
+import Error from '../../layouts/error.vue';
 
 export default {
   middleware: "auth",
@@ -67,7 +67,7 @@ export default {
     AddTicketForm,
     SearchUsers,
     DeleteModal,
-    NotFound,
+    Error,
     LoadingSpinner
   },
   data() {

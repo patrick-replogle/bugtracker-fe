@@ -4,7 +4,7 @@
       <LoadingSpinner />
     </div>
     <div v-else-if="!isLoading && !ticket">
-      <NotFound />
+      <Error />
     </div>
     <div v-else class="container">
       <TicketDetails
@@ -82,7 +82,7 @@ import TicketComments from "../../components/ticket-components/TicketComments.vu
 import AssignUser from "../../components/ticket-components/AssignUser.vue";
 import DeleteModalContent from "../../components/ticket-components/DeleteModalContent.vue";
 import LoadingSpinner from '../../components/other/LoadingSpinner.vue';
-import NotFound from '../../components/other/NotFound.vue';
+import Error from '../../layouts/error.vue';
 
 export default {
   middleware: "auth",
@@ -94,7 +94,7 @@ export default {
     AssignUser,
     DeleteModalContent,
     LoadingSpinner,
-    NotFound
+    Error
   },
 
   data() {
@@ -237,5 +237,6 @@ export default {
   display: flex;
   justify-content: center;
   flex-direction: column;
+  width: 100%;
 }
 </style>

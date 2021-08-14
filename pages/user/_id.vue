@@ -4,7 +4,7 @@
       <LoadingSpinner />
     </div>
     <div v-else-if="!isLoading && !user">
-      <NotFound />
+      <Error />
     </div>
     <div class="container" v-else>
       <img
@@ -57,7 +57,7 @@ import ProfileEditForm from "../../components/user-components/ProfileEditForm.vu
 import ProfileProjects from "../../components/user-components/ProfileProjects.vue";
 import ProfileDetails from "../../components/user-components/ProfileDetails.vue";
 import LoadingSpinner from '../../components/other/LoadingSpinner.vue';
-import NotFound from '../../components/other/NotFound.vue';
+import Error from '../../layouts/error.vue';
 
 export default {
   middleware: "auth",
@@ -66,7 +66,7 @@ export default {
     ProfileProjects,
     ProfileDetails,
     LoadingSpinner,
-    NotFound
+    Error
   },
   data() {
     return {
