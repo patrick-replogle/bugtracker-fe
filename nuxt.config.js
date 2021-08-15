@@ -57,8 +57,6 @@ export default {
 
   publicRuntimeConfig: {
     baseURL: process.env.BACKEND_BASE_URL,
-    clientId: process.env.OAUTHCLIENTID,
-    clientSecret: process.env.OAUTHCLIENTSECRET
   },
   privateRuntimeConfig: {}
 }
