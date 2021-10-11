@@ -1,7 +1,10 @@
 <template>
   <div class="formContainer">
     <b-form @submit="onSubmit" @reset="resetForm">
-      <b-form-group label="Comment" label-for="comment">
+      <b-form-group label-for="comment">
+        <template v-slot:label>
+          Comment <span class="text-danger">*</span>
+        </template>
         <b-form-input
           id="comment"
           v-model="form.comment"

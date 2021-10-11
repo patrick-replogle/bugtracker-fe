@@ -2,7 +2,10 @@
   <div class="formContainer">
     <h2>Login Below</h2>
     <b-form @submit="onSubmit" @reset="resetForm">
-      <b-form-group label="Username" label-for="username">
+      <b-form-group label-for="username">
+        <template v-slot:label>
+          Username <span class="text-danger">*</span>
+        </template>
         <b-form-input
           id="username"
           v-model="form.username"
@@ -11,7 +14,10 @@
         <p class="validationError" v-if="errors.username">{{errors.username}}</p>
       </b-form-group>
 
-      <b-form-group label="Password" label-for="password">
+      <b-form-group label-for="password">
+        <template v-slot:label>
+          Password <span class="text-danger">*</span>
+        </template>
         <b-form-input
           id="password"
           v-model="form.password"

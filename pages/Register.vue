@@ -2,7 +2,10 @@
   <div class="formContainer">
     <h2>Register a new account below</h2>
     <b-form @submit="onSubmit" @reset="resetForm">
-      <b-form-group label="Email" label-for="email">
+      <b-form-group label-for="email">
+        <template v-slot:label>
+          Email <span class="text-danger">*</span>
+        </template>
         <b-form-input
           id="email"
           v-model="form.email"
@@ -11,7 +14,10 @@
         <p class="validationError" v-if="errors.email">{{errors.email}}</p>
       </b-form-group>
 
-      <b-form-group label="Username" label-for="username">
+      <b-form-group label-for="username">
+        <template v-slot:label>
+          Username <span class="text-danger">*</span>
+        </template>
         <b-form-input
           id="username"
           v-model="form.username"
@@ -20,7 +26,10 @@
         <p class="validationError" v-if="errors.username">{{errors.username}}</p>
       </b-form-group>
 
-      <b-form-group label="Password" label-for="password">
+      <b-form-group label-for="password">
+        <template v-slot:label>
+          Password <span class="text-danger">*</span>
+        </template>
         <b-form-input
           id="password"
           v-model="form.password"
@@ -30,7 +39,10 @@
         <p class="validationError" v-if="errors.password">{{errors.password}}</p>
       </b-form-group>
 
-      <b-form-group label="First Name" label-for="firstname">
+      <b-form-group label-for="firstname">
+        <template v-slot:label>
+          First Name <span class="text-danger">*</span>
+        </template>
         <b-form-input
           id="firstName"
           v-model="form.firstname"
@@ -39,7 +51,10 @@
         <p class="validationError" v-if="errors.firstname">{{errors.firstname}}</p>
       </b-form-group>
 
-      <b-form-group label="Last Name" label-for="lastname">
+      <b-form-group label-for="lastname">
+        <template v-slot:label>
+          Last Name <span class="text-danger">*</span>
+        </template>
         <b-form-input
           id="lastname"
           v-model="form.lastname"

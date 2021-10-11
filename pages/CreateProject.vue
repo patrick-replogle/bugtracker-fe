@@ -1,9 +1,12 @@
 <template>
   <div class="formContainer">
-    <h2 v-if="!isEditing">Create a new project</h2>
+    <h2 v-if="!isEditing">Create a New Project</h2>
     <h2 v-else>Edit a project</h2>
     <b-form @submit="onSubmit" @reset="resetForm">
-      <b-form-group label="Name" label-for="name">
+      <b-form-group label-for="name">
+        <template v-slot:label>
+          Project Name <span class="text-danger">*</span>
+        </template>
         <b-form-input
           id="name"
           v-model="form.name"
@@ -13,7 +16,10 @@
         <p class="validationError" v-if="errors.name">{{errors.name}}</p>
       </b-form-group>
 
-      <b-form-group label="Description" label-for="description">
+      <b-form-group label-for="description">
+        <template v-slot:label>
+          Description <span class="text-danger">*</span>
+        </template>
         <b-form-textarea
           id="description"
           v-model="form.description"

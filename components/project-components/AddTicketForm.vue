@@ -1,7 +1,10 @@
 <template>
   <div class="formContainer">
     <b-form @submit="onSubmit" @reset="resetForm">
-      <b-form-group label="Title" label-for="title">
+      <b-form-group label-for="title">
+        <template v-slot:label>
+          Title <span class="text-danger">*</span>
+        </template>
         <b-form-input
           id="title"
           v-model="form.title"
@@ -10,7 +13,10 @@
         <p class="validationError" v-if="errors.title">{{errors.title}}</p>
       </b-form-group>
 
-      <b-form-group label="Description" label-for="description">
+      <b-form-group label-for="description">
+        <template v-slot:label>
+          Description <span class="text-danger">*</span>
+        </template>
         <b-form-textarea
           id="description"
           v-model="form.description"
