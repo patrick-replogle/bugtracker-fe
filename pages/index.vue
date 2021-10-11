@@ -123,11 +123,11 @@ export default {
       img {
         object-fit: cover;
         width: 100%;
-        max-height: 300px;
-        min-height: 300px;
-        @media (max-width: 920px) {
-          max-height: 330px;
-          min-height: 330px;
+        max-height: 330px;
+        min-height: 330px;
+        @media (max-width: 940px) {
+          max-height: 380px;
+          min-height: 360px;
         }
       }
     }
@@ -135,11 +135,11 @@ export default {
     .right {
       width: 50%;
       padding: 10px;
-      line-height: 1.4;
+      line-height: 1.8;
       margin-top: 10px;
       @media (max-width: 800px) {
         width: 100%;
-        margin-top: 5px;
+        margin-top: 0;
       }
       .title {
         font-size: 4rem;
@@ -151,9 +151,6 @@ export default {
       .text {
         font-size: 1.6rem;
         margin: 3.5% 0;
-        @media (max-width: 800px) {
-          font-size: 1.4rem;
-        }
       }
 
       p {
@@ -164,10 +161,6 @@ export default {
         width: 46%;
         font-size: 1.6rem;
         margin-right: 1%;
-
-        @media (max-width: 800px) {
-          font-size: 1.4rem;
-        }
       }
     }
   }
