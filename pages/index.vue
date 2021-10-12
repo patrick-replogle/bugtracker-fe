@@ -109,6 +109,7 @@ export default {
     margin-top: 5vh;
     @media (max-width: 800px) {
       flex-direction: column;
+      margin-top: 2vh;
     }
 
     .left {
@@ -123,11 +124,15 @@ export default {
       img {
         object-fit: cover;
         width: 100%;
-        max-height: 330px;
-        min-height: 330px;
+        max-height: 310px;
+        min-height: 310px;
         @media (max-width: 940px) {
           max-height: 380px;
-          min-height: 360px;
+          min-height: 380px;
+        }
+        @media (max-width: 600px) {
+          max-height: 260px;
+          min-height: 260px;
         }
       }
     }
@@ -135,14 +140,18 @@ export default {
     .right {
       width: 50%;
       padding: 10px;
-      line-height: 1.8;
+      line-height: 1.6;
       margin-top: 10px;
       @media (max-width: 800px) {
         width: 100%;
         margin-top: 0;
       }
+      @media (max-width: 600px) {
+        line-height: 1.4;
+      }
       .title {
         font-size: 4rem;
+        font-weight: bold;
         @media (max-width: 800px) {
           font-size: 2.5rem;
         }
@@ -151,6 +160,9 @@ export default {
       .text {
         font-size: 1.6rem;
         margin: 3.5% 0;
+        @media (max-width: 800px) {
+          margin: 2% 0 3% 0;
+        }
       }
 
       p {
