@@ -84,7 +84,7 @@ export default {
       .then((res) => {
         this.isLoading = false;
         this.project = res.data;
-        this.project.tickets.sort((a, b) => a.createddate - b.createddate);
+        this.project.tickets.sort((a, b) => new Date(a.createddate) - new Date(b.createddate));
         this.project.users.sort(this.comparator);
       })
       .catch((err) => {
