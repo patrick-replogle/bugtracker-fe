@@ -1,10 +1,10 @@
 <template>
   <b-card class="card">
-    <img
+    <!-- <img
       v-if="project.imageurl"
       :src="project.imageurl"
       alt="uploaded project avatar"
-    />
+    /> -->
     <h2>{{project.name}}</h2>
     <h3>{{project.description}}</h3>
     <div style="display: flex; align-items: center;">
