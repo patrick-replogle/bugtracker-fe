@@ -7,7 +7,7 @@
     /> -->
     <h2>{{project.name}}</h2>
     <h3>{{project.description}}</h3>
-    <div style="display: flex; align-items: center;">
+    <div style="display: flex; align-items: center; margin-top: -1%;">
       <p>Created by&nbsp;
       <p @click="routeToUser(user.userid)" style="cursor: pointer;">{{project.projectOwner.firstname}}
         {{project.projectOwner.lastname}}</p> &nbsp;
